@@ -24,10 +24,12 @@ namespace SG16
                 if (String.IsNullOrWhiteSpace(instructions[i])) //Check for blank line
                 {
                     instructions.RemoveAt(i);
+                    i--;
                 }
                 else if (instructions[i][0] == '#') //Check for comment
                 {
                     instructions.RemoveAt(i);
+                    i--;
                 }
             }
 
@@ -69,8 +71,148 @@ namespace SG16
 
             string[] tokens = _input.Split(' ');
 
-            //TODO: Actually assemble machine code from tokenized Assembly code
-            
+            if (tokens[0] == "NULL")
+            {
+                instruction[0] = 0x00;
+            }
+            else if (tokens[0] == "START")
+            {
+                instruction[0] = 0x01;
+            }
+            else if (tokens[0] == "END")
+            {
+                instruction[0] = 0x02;
+            }
+            else if (tokens[0] == "REF")
+            {
+                instruction[0] = 0x03;
+            }
+            else if (tokens[0] == "MOVE")
+            {
+                instruction[0] = 0x11;
+            }
+            else if (tokens[0] == "SWAP")
+            {
+                instruction[0] = 0x12;
+            }
+            else if (tokens[0] == "ROTL")
+            {
+                instruction[0] = 0x13;
+            }
+            else if (tokens[0] == "ROTR")
+            {
+                instruction[0] = 0x14;
+            }
+            else if (tokens[0] == "OR")
+            {
+                instruction[0] = 0x21;
+            }
+            else if (tokens[0] == "NOR")
+            {
+                instruction[0] = 0x22;
+            }
+            else if (tokens[0] == "XOR")
+            {
+                instruction[0] = 0x23;
+            }
+            else if (tokens[0] == "XNOR")
+            {
+                instruction[0] = 0x24;
+            }
+            else if (tokens[0] == "AND")
+            {
+                instruction[0] = 0x25;
+            }
+            else if (tokens[0] == "NAND")
+            {
+                instruction[0] = 0x26;
+            }
+            else if (tokens[0] == "NOT")
+            {
+                instruction[0] = 0x27;
+            }
+            else if (tokens[0] == "ADD")
+            {
+                instruction[0] = 0x31;
+            }
+            else if (tokens[0] == "SUBT")
+            {
+                instruction[0] = 0x32;
+            }
+            else if (tokens[0] == "INCR")
+            {
+                instruction[0] = 0x33;
+            }
+            else if (tokens[0] == "DECR")
+            {
+                instruction[0] = 0x34;
+            }
+            else if (tokens[0] == "MULT")
+            {
+                instruction[0] = 0x35;
+            }
+            else if (tokens[0] == "DIVI")
+            {
+                instruction[0] = 0x36;
+            }
+            else if (tokens[0] == "EXPO")
+            {
+                instruction[0] = 0x37;
+            }
+            else if (tokens[0] == "GOTO")
+            {
+                instruction[0] = 0x41;
+            }
+            else if (tokens[0] == "EVAL")
+            {
+                instruction[0] = 0x42;
+            }
+            else if (tokens[0] == "COMP")
+            {
+                instruction[0] = 0x43;
+            }
+            else if (tokens[0] == "JMPZ")
+            {
+                instruction[0] = 0x44;
+            }
+            else if (tokens[0] == "JMGZ")
+            {
+                instruction[0] = 0x45;
+            }
+            else if (tokens[0] == "JMLZ")
+            {
+                instruction[0] = 0x46;
+            }
+            else if (tokens[0] == "GSUB")
+            {
+                instruction[0] = 0x47;
+            }
+            else if (tokens[0] == "RTRN")
+            {
+                instruction[0] = 0x48;
+            }
+            else if (tokens[0] == "JMPE")
+            {
+                instruction[0] = 0x49;
+            }
+            else if (tokens[0] == "JMPG")
+            {
+                instruction[0] = 0x4A;
+            }
+            else if (tokens[0] == "JMPL")
+            {
+                instruction[0] = 0x4B;
+            }
+            else if (tokens[0] == "ENQU")
+            {
+                instruction[0] = 0x51;
+            }
+            else if (tokens[0] == "DEQU")
+            {
+                instruction[0] = 0x52;
+            }
+
+
             return instruction;
         }
 
