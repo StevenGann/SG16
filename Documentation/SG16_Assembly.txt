@@ -27,7 +27,7 @@ Code----Assembly--------Description
 01		sFF				ASCII literal, note 2 byte, 2 character limit
 01		o88888888		Octal literal
 01		xFFFF			Hex literal
-01		i65536			Decimal literal
+01		d65536			Decimal literal
 01		b010010...		Binary literal
 02		@FFFF			Absolute RAM address, refers to the data stored at that address
 03		$FFFF			Indirect RAM address, refers to the data stored at RREF plus the specified offset
@@ -36,30 +36,30 @@ Code----Assembly--------Description
 --------------------------Registers
 - 16 bits, two bytes
 
-PC					Program Counter, address of current instruction
-STAT				Status flags register
-SUBR				Address of last GSUB jump
-PSTR				Address of first program instruction, all RAM below this *should* be free
-PEND				Address of last program instruction, all RAM above this *should* be free
-RAND				Generates a random value when read
-RREF				Reference RAM address for indirect adressing mode
+00 PC					Program Counter, address of current instruction
+01 STAT				Status flags register
+02 SUBR				Address of last GSUB jump
+03 PSTR				Address of first program instruction, all RAM below this *should* be free
+04 PEND				Address of last program instruction, all RAM above this *should* be free
+05 RAND				Generates a random value when read
+06 RREF				Reference RAM address for indirect adressing mode
 
-USR0				User Register 0
-USR1				User Register 1
-USR2				User Register 2
-USR3				User Register 3
-USR4				User Register 4
-USR5				User Register 5
-USR6				User Register 6
-USR7				User Register 7
-USR8				User Register 8
-USR9				User Register 9
-USRA				User Register A
-USRB				User Register B
-USRC				User Register C
-USRD				User Register D
-USRE				User Register E
-USRF				User Register F
+F0 USR0				User Register 0
+F1 USR1				User Register 1
+F2 USR2				User Register 2
+F3 USR3				User Register 3
+F4 USR4				User Register 4
+F5 USR5				User Register 5
+F6 USR6				User Register 6
+F7 USR7				User Register 7
+F8 USR8				User Register 8
+F9 USR9				User Register 9
+FA USRA				User Register A
+FB USRB				User Register B
+FC USRC				User Register C
+FD USRD				User Register D
+FE USRE				User Register E
+FF USRF				User Register F
 
 --------------------------Instruction Set
 
