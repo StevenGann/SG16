@@ -1,0 +1,120 @@
+--------------------------Syntactic Sugar
+Comments:
+	All characters after a # are ignored as comments
+
+Labels:
+	Labels are all caps, start with a letter, include only
+	letters and numbers, and end with a colon ":".
+	During assembly, label references are replaced with a
+	relative address pointing to the instruction following
+	the label.
+
+--------------------------Memory Representation
+
+Opcode  | Arg1                     | Arg2                     |
+        | Mode   | Data            | Mode   | Data            | RESERVED
+Byte    | Byte   | Byte   | Byte   | Byte   | Byte   | Byte   | Byte
+00000000 00000000 00000000 00000000 00000000 00000000 00000000	11111111
+Opcode  | Mode   | Data            | Mode   | Data            |
+
+The modifier byte indicates what the following data bytes represent, such as
+literals or addresses. 
+
+--------------------------Addressing Modes
+
+Code----Assembly--------Description
+00		...				Register name, see Registers
+01		sFF				ASCII literal, note 2 byte, 2 character limit
+01		o88888888		Octal literal
+01		xFFFF			Hex literal
+01		i65536			Decimal literal
+01		b010010...		Binary literal
+02		@FFFF			Absolute RAM address, refers to the data stored at that address
+03		$FFFF			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+
+
+--------------------------Registers
+- 16 bits, two bytes
+
+PC					Program Counter, address of current instruction
+STAT				Status flags register
+SUBR				Address of last GSUB jump
+PSTR				Address of first program instruction, all RAM below this *should* be free
+PEND				Address of last program instruction, all RAM above this *should* be free
+RAND				Generates a random value when read
+RREF				Reference RAM address for indirect adressing mode
+
+USR0				User Register 0
+USR1				User Register 1
+USR2				User Register 2
+USR3				User Register 3
+USR4				User Register 4
+USR5				User Register 5
+USR6				User Register 6
+USR7				User Register 7
+USR8				User Register 8
+USR9				User Register 9
+USRA				User Register A
+USRB				User Register B
+USRC				User Register C
+USRD				User Register D
+USRE				User Register E
+USRF				User Register F
+
+--------------------------Instruction Set
+
+System Instructions
+Opcode--Assembly------------Description
+00		NULL				Null instruction, does nothing
+01		START				Denotes start of the program
+02		END					Denotes end of the program
+03		REF Arg1			Sets Arg1 as the reference for offset addressing
+
+Memory Operations
+Opcode--Assembly------------Description
+11		MOVE Arg1 Arg2		Copies contents of Arg1 into Arg2
+12		SWAP Arg1 Arg2		Swaps contents of Arg1 and Arg2
+13		ROTL Arg1			Rotates Arg1 left one bit
+14		ROTR Arg1			Rotates Arg1 right one bit
+
+Logic Operations
+Opcode--Assembly------------Description
+21		OR Arg1 Arg2		ORs Arg1 with Arg2 and stores the result in Arg2
+22		NOR Arg1 Arg2		NORs Arg1 with Arg2 and stores the result in Arg2
+23		XOR Arg1 Arg2		XORs Arg1 with Arg2 and stores the result in Arg2
+24		XNOR Arg1 Arg2		XNORs Arg1 with Arg2 and stores the result in Arg2
+25		AND Arg1 Arg2		ANDs Arg1 with Arg2 and stores the result in Arg2
+26		NAND Arg1 Arg2		NANDs Arg1 with Arg2 and stores the result in Arg2
+27		NOT Arg1			Inverts Arg1
+
+Math Operations
+Opcode--Assembly------------Description
+31		ADD Arg1 Arg2		Adds contents of Arg1 to Arg2
+32		SUBT Arg1 Arg2		Subtracts contents of Arg1 from Arg2
+33		INCR Arg1			Increments contents of Arg1
+34		DECR Arg1			Decrements contents of Arg1
+35		MULT Arg1 Arg2		Mutiplies Arg2 by Arg1
+36		DIVI Arg1 Arg2		Divides Arg2 by Arg1
+37		EXPO Arg1 Arg2		Raises Arg2 to the power of Arg1
+
+Flow Control
+Opcode--Assembly------------Description
+41		GOTO Arg1			Unconditionally jumps to Arg1
+42		EVAL Arg1			Evaluates Arg1, for use with conditional operations
+43		COMP Arg1 Arg2		Compare Arg1 to Arg2, for use with conditional operations
+44		JMPZ Arg1			Jumps to Arg1 if result of last operation was 0
+45		JMGZ Arg1			Jumps to Arg1 if result of last operation was greater than 0 
+46		JMLZ Arg1			Jumps to Arg1 if result of last operation was less than 0
+47		GSUB Arg1			Jumps to Arg1, returns after next RTRN instruction
+48		RTRN				Jumps back to last GSUB
+49		JMPE Arg1			Jumps to Arg1 if contents of last two arguments are equal
+4A		JMPG Arg1			Jumps if the first argument of the last instruction was greater than the second
+4B		JMPL Arg1			Jumps if the first argument of the last instruction was less than the second
+
+Special Operations
+Opcode--Assembly------------Description
+51		ENQU Arg1			Enqueues the value Arg1
+52		DEQU Arg1			Dequeue value and store it in Arg1
+
+
+
