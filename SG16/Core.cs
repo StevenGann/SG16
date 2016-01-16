@@ -125,7 +125,21 @@ namespace SG16
             PC = (Register)PSTR.ToInt();
         }
         private void REF(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void MOVE(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void MOVE(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register to Register
+            {
+
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal to Register
+            {
+
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal to Absolute RAM
+            {
+
+            }
+        }
         private void SWAP(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void ROTL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void ROTR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
