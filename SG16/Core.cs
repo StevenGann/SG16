@@ -182,7 +182,60 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
-        private void SWAP(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void SWAP(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+                setRegisterFromID(Arg2[2], arg1Data);
+                setRegisterFromID(Arg1[2], arg2Data);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM, Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+        }
         private void ROTL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void ROTR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void OR(byte[] Arg1, byte[] Arg2)
