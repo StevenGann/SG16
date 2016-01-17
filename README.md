@@ -5,12 +5,72 @@ For a couple years, I've kicked around the idea of building a CPU from scratch o
 Instead, I'm working on building an emulator instead, while designing the CPU architecture from the Assembly language level down and then up.
 
 - [x] Define Assembly language specification
-- [ ] Define processor architecture
-- [ ] Write assembler
+- [x] Define processor architecture
+- [x] Write assembler
 - [ ] Write disassembler
 - [ ] Write emulator
 - [ ] Write emulator GUI
 - [ ] Write peripheral emulators
+
+#Implemented Instructions
+
+**Dual Argument**
+- **R** Register
+- **L** Literal
+- **A** Absolute RAM addressing
+- **I** Indirect RAM addressing
+
+|      | R R | L R | A R | I R | R A | L A | A A | I A | R I | L I | A I | I I | Notes |
+|-----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:------|
+| MOVE |  ✔  | ✔ |  
+| SWAP |
+|   OR | ✔ |
+|  NOR |
+|  XOR |
+| XNOR |
+|  AND | ✔ |
+| NAND |
+|  ADD |
+| SUBT |
+| MULT |
+| DIVI |
+| EXPO |
+| COMP |
+
+**Single Argument**
+- **R** Register
+- **L** Literal
+- **A** Absolute RAM addressing
+- **I** Indirect RAM addressing
+
+|      | R | L | A | I | Notes |
+|-----:|:-:|:-:|:-:|:-:|:------|
+|  REF |
+| ROTL |
+| ROTR |
+|  NOT |
+| INCR |
+| DECR |
+| GOTO | | ✔ |
+| EVAL |
+| JMPZ |
+| JMGZ |
+| JMLZ |
+| GSUB |
+| JMPE |
+| JMPG |
+| JMPL |
+| ENQU |
+| DEQU |
+
+**No Arguments**
+
+|      | ✔ | Notes |
+|-----:|:-:|:------|
+| NULL | ✔ |
+| START | ✔ |
+|  END | ✔ |
+| RTRN |
 
 **Background**
 I've worked at the lowest levels with PIC, 68000, MSP-430, Atmega, and ARM processors, working with all of those in Assembly and sometimes C, as well as Assembly for x86. PIC, 68000, and MSP-430 were my first introductions to Assembly and processor architectures, and the SG16 reflects that in many ways.
