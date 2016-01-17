@@ -26,7 +26,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 | SWAP |
 |   OR | ✔ |
 |  NOR |
-|  XOR |
+|  XOR | ✔ |
 | XNOR |
 |  AND | ✔ |
 | NAND |
