@@ -16,12 +16,12 @@ namespace Emulator
             core.LoadROM(0, "test.rom");
 
 
-            for (int i = 0; i < 10; i++)
+            while(core.PC.ToInt() < core.RAM.Data.Length)
             {
+                Console.Write(" PC=" + core.PC.ToInt().ToString("D2") + " - ");
                 long time = core.Tick();
-                Console.Write(" PC=" + core.PC.ToInt());
                 //Console.Write(" PSTR=" + core.PSTR.ToInt());
-                Console.WriteLine("\nTook " + Convert.ToString(time) + "ms");
+                Console.WriteLine(" - Took " + Convert.ToString(time) + "ms");
             }
 
             Console.ReadLine();

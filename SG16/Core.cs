@@ -16,7 +16,7 @@ namespace SG16
         public Register SUBR = (Register)0x00;
         public Register PSTR = (Register)0x00;
         public Register PEND = (Register)0x00;
-        //public Register RAND = (Register)0x00; //RAND will be dealt with differently.
+        public Register RAND = (Register)0x00; //RAND will be dealt with differently.
         public Register RREF = (Register)0x00;
 
         //User Registers
@@ -39,6 +39,8 @@ namespace SG16
 
         public Memory RAM = new Memory();
 
+        Random RNG = new Random();
+
         public long Tick()
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -57,7 +59,7 @@ namespace SG16
         private void Execute(int address)
         {
             Instruction instruction = new Instruction(RAM.Data, address);
-            Console.WriteLine("Executing " + ASM.ByteArrayToString(instruction.ToArray()));
+            Console.Write("Executing " + ASM.ByteArrayToString(instruction.ToArray()));
 
             switch (instruction.Opcode)
             {
@@ -129,21 +131,116 @@ namespace SG16
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register to Register
             {
-
+                byte[] data = getRegisterFromID(Arg1[2]);
+                setRegisterFromID(Arg2[2], data);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal to Register
             {
-
+                byte[] data = new byte[2];
+                data[0] = Arg1[2];
+                data[1] = Arg1[1];
+                setRegisterFromID(Arg2[2], data);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal to Absolute RAM
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM to Register
             {
-
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM to Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal to Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM to Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM to Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register to Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal to Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM to Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM to Indirect RAM
+            {
+                throw new NotImplementedException();
             }
         }
         private void SWAP(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void ROTL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void ROTR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void OR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void OR(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register OR Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+                byte[] data = new byte[2];
+                data[0] = (byte)((int)arg1Data[0] | (int)arg2Data[0]);
+                data[1] = (byte)((int)arg1Data[1] | (int)arg2Data[1]);
+                setRegisterFromID(Arg2[2], data);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal OR Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM OR Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM OR Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register OR Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal OR Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM OR Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM OR Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register OR Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal OR Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM OR Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM OR Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+        }
         private void NOR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void XOR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void XNOR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
@@ -183,7 +280,187 @@ namespace SG16
 
         #endregion
 
+        private void setRegisterFromID(byte id, byte[] value)
+        {
+            switch(id)
+            {
+                case 0x00:
+                    PC = (Register)value;
+                    break;
+                case 0x01:
+                    STAT = (Register)value;
+                    break;
+                case 0x02:
+                    SUBR = (Register)value;
+                    break;
+                case 0x03:
+                    PSTR = (Register)value;
+                    break;
+                case 0x04:
+                    PEND = (Register)value;
+                    break;
+                case 0x05:
+                    RAND = (Register)value;
+                    break;
+                case 0x06:
+                    RREF = (Register)value;
+                    break;
+                case 0xF0:
+                    USR0 = (Register)value;
+                    break;
+                case 0xF1:
+                    USR1 = (Register)value;
+                    break;
+                case 0xF2:
+                    USR2 = (Register)value;
+                    break;
+                case 0xF3:
+                    USR3 = (Register)value;
+                    break;
+                case 0xF4:
+                    USR4 = (Register)value;
+                    break;
+                case 0xF5:
+                    USR5 = (Register)value;
+                    break;
+                case 0xF6:
+                    USR6 = (Register)value;
+                    break;
+                case 0xF7:
+                    USR7 = (Register)value;
+                    break;
+                case 0xF8:
+                    USR8 = (Register)value;
+                    break;
+                case 0xF9:
+                    USR9 = (Register)value;
+                    break;
+                case 0xFA:
+                    USRA = (Register)value;
+                    break;
+                case 0xFB:
+                    USRB = (Register)value;
+                    break;
+                case 0xFC:
+                    USRC = (Register)value;
+                    break;
+                case 0xFD:
+                    USRD = (Register)value;
+                    break;
+                case 0xFE:
+                    USRE = (Register)value;
+                    break;
+                case 0xFF:
+                    USRF = (Register)value;
+                    break;
+                default:
+                    break;
+            }
+        }
 
+        private byte[] getRegisterFromID(byte id)
+        {
+            byte[] result = new byte[2];
+
+            switch (id)
+            {
+                case 0x00:
+                    result[0] = PC.LowerByte;
+                    result[1] = PC.UpperByte;
+                    break;
+                case 0x01:
+                    result[0] = STAT.LowerByte;
+                    result[1] = STAT.UpperByte;
+                    break;
+                case 0x02:
+                    result[0] = SUBR.LowerByte;
+                    result[1] = SUBR.UpperByte;
+                    break;
+                case 0x03:
+                    result[0] = PSTR.LowerByte;
+                    result[1] = PSTR.UpperByte;
+                    break;
+                case 0x04:
+                    result[0] = PEND.LowerByte;
+                    result[1] = PEND.UpperByte;
+                    break;
+                case 0x05:
+                    RNG.NextBytes(result);
+                    break;
+                case 0x06:
+                    result[0] = RREF.LowerByte;
+                    result[1] = RREF.UpperByte;
+                    break;
+                case 0xF0:
+                    result[0] = USR0.LowerByte;
+                    result[1] = USR0.UpperByte;
+                    break;
+                case 0xF1:
+                    result[0] = USR1.LowerByte;
+                    result[1] = USR1.UpperByte;
+                    break;
+                case 0xF2:
+                    result[0] = USR2.LowerByte;
+                    result[1] = USR2.UpperByte;
+                    break;
+                case 0xF3:
+                    result[0] = USR3.LowerByte;
+                    result[1] = USR3.UpperByte;
+                    break;
+                case 0xF4:
+                    result[0] = USR4.LowerByte;
+                    result[1] = USR4.UpperByte;
+                    break;
+                case 0xF5:
+                    result[0] = USR5.LowerByte;
+                    result[1] = USR5.UpperByte;
+                    break;
+                case 0xF6:
+                    result[0] = USR6.LowerByte;
+                    result[1] = USR6.UpperByte;
+                    break;
+                case 0xF7:
+                    result[0] = USR7.LowerByte;
+                    result[1] = USR7.UpperByte;
+                    break;
+                case 0xF8:
+                    result[0] = USR8.LowerByte;
+                    result[1] = USR8.UpperByte;
+                    break;
+                case 0xF9:
+                    result[0] = USR9.LowerByte;
+                    result[1] = USR9.UpperByte;
+                    break;
+                case 0xFA:
+                    result[0] = USRA.LowerByte;
+                    result[1] = USRA.UpperByte;
+                    break;
+                case 0xFB:
+                    result[0] = USRB.LowerByte;
+                    result[1] = USRB.UpperByte;
+                    break;
+                case 0xFC:
+                    result[0] = USRC.LowerByte;
+                    result[1] = USRC.UpperByte;
+                    break;
+                case 0xFD:
+                    result[0] = USRD.LowerByte;
+                    result[1] = USRD.UpperByte;
+                    break;
+                case 0xFE:
+                    result[0] = USRE.LowerByte;
+                    result[1] = USRE.UpperByte;
+                    break;
+                case 0xFF:
+                    result[0] = USRF.LowerByte;
+                    result[1] = USRF.UpperByte;
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
 
         public void LoadROM(int offset, string path)
         {

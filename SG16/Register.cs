@@ -60,5 +60,14 @@ namespace SG16
         {
             return (int)(Convert.ToUInt32(UpperByte) + Convert.ToUInt32(LowerByte));
         }
+
+        new public string ToString()
+        {
+            string result = "";
+            byte[] data = new byte[2];
+            data[0] = UpperByte;
+            data[1] = LowerByte;
+            return ASM.ByteArrayToString(data);
+        }
     }
 }
