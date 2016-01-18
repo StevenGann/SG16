@@ -466,18 +466,172 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
-        private void NAND(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void NOT(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void NAND(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+                byte[] data = new byte[2];
+                data[0] = (byte)~((int)arg1Data[0] & (int)arg2Data[0]);
+                data[1] = (byte)~((int)arg1Data[1] & (int)arg2Data[1]);
+                setRegisterFromID(Arg2[2], data);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM, Register
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM, Absolute RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM, Indirect RAM
+            {
+                throw new NotImplementedException();
+            }
+        }
+        private void NOT(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg1Word = (UInt16)~arg1Word;
+                byte[] result = UInt16ToByteArray(arg1Word);
+                setRegisterFromID(Arg1[2], result);
+            }
+        }
         private void ADD(byte[] Arg1, byte[] Arg2)
         {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
 
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
         }
-        private void SUBT(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void INCR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void DECR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void MULT(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void DIVI(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void EXPO(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void SUBT(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+        }
+        private void INCR(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word + 1);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg1[2], result);
+            }
+        }
+        private void DECR(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - 1);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg1[2], result);
+            }
+        }
+        private void MULT(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+        }
+        private void DIVI(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+        }
+        private void EXPO(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(Math.Pow(arg2Word, arg1Word));
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+        }
         private void GOTO(byte[] Arg1, byte[] Arg2)
         {
             PC = (Register)Arg1;
@@ -714,6 +868,23 @@ namespace SG16
         public void LoadROM(string path)
         {
             LoadROM(0, path);
+        }
+
+        static byte[] UInt16ToByteArray(UInt16 b)
+        {
+            byte[] result = new byte[2];
+
+            if (b <= 0xFF)
+            {
+                result[0] = Convert.ToByte(b);
+            }
+            else
+            {
+                result[0] = 0xFF;
+                result[1] = Convert.ToByte(b - Convert.ToUInt16(0xFF));
+            }
+
+            return result;
         }
     }
 }

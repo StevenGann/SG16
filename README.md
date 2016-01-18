@@ -29,12 +29,12 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 |  XOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
 | XNOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
 |  AND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| NAND |     |     |     |     |     |     |     |     |     |     |     |     |       |
-|  ADD |     |     |     |     |     |     |     |     |     |     |     |     |       |
-| SUBT |     |     |     |     |     |     |     |     |     |     |     |     |       |
-| MULT |     |     |     |     |     |     |     |     |     |     |     |     |       |
-| DIVI |     |     |     |     |     |     |     |     |     |     |     |     |       |
-| EXPO |     |     |     |     |     |     |     |     |     |     |     |     |       |
+| NAND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
+|  ADD |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
+| SUBT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
+| MULT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
+| DIVI |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
+| EXPO |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
 | COMP |     |     |     |     |     |     |     |     |     |     |     |     |       |
 
 **Single Argument**
@@ -45,18 +45,18 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 
 |      | R | L | A | I | Notes |
 |-----:|:-:|:-:|:-:|:-:|:------|
-|  REF |
+|  REF |   | ✔ |
 | ROTL |   |N/A|
 | ROTR |   |N/A|
-|  NOT |   |N/A|
-| INCR |   |N/A|
-| DECR |   |N/A|
+|  NOT | ✔ |N/A|
+| INCR | ✔ |N/A|
+| DECR | ✔ |N/A|
 | GOTO |   | ✔ |
 | EVAL |
 | JMPZ |
 | JMGZ |
 | JMLZ |
-| GSUB |
+| GSUB |   | ✔ |
 | JMPE |
 | JMPG |
 | JMPL |
@@ -70,7 +70,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 | NULL | ✔ |
 | START | ✔ |
 |  END | ✔ |
-| RTRN |
+| RTRN | ✔ |
 
 **Background**
 I've worked at the lowest levels with PIC, 68000, MSP-430, Atmega, and ARM processors, working with all of those in Assembly and sometimes C, as well as Assembly for x86. PIC, 68000, and MSP-430 were my first introductions to Assembly and processor architectures, and the SG16 reflects that in many ways.
