@@ -468,7 +468,10 @@ namespace SG16
         }
         private void NAND(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void NOT(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void ADD(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void ADD(byte[] Arg1, byte[] Arg2)
+        {
+
+        }
         private void SUBT(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void INCR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void DECR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }

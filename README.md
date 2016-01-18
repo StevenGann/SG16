@@ -46,12 +46,12 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 |      | R | L | A | I | Notes |
 |-----:|:-:|:-:|:-:|:-:|:------|
 |  REF |
-| ROTL |
-| ROTR |
-|  NOT |
-| INCR |
-| DECR |
-| GOTO | | ✔ |
+| ROTL |   |N/A|
+| ROTR |   |N/A|
+|  NOT |   |N/A|
+| INCR |   |N/A|
+| DECR |   |N/A|
+| GOTO |   | ✔ |
 | EVAL |
 | JMPZ |
 | JMGZ |
