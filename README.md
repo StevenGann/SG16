@@ -20,22 +20,22 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 - **A** Absolute RAM addressing
 - **I** Indirect RAM addressing
 
-|      | R R | L R | A R | I R | R A | L A | A A | I A | R I | L I | A I | I I | Notes |
-|-----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:------|
-| MOVE |  ✔  |  ✔  |     |     |     |     |     |     |     |     |     |     |       |
-| SWAP |  ✔  | N/A |     |     |     | N/A |     |     |     | N/A |     |     |       |
-|   OR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-|  NOR |     |     |     |     |     |     |     |     |     |     |     |     |       |
-|  XOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| XNOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-|  AND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| NAND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-|  ADD |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| SUBT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| MULT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| DIVI |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| EXPO |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       |
-| COMP |     |     |     |     |     |     |     |     |     |     |     |     |       |
+|      | R R | L R | A R | I R | R A | L A | A A | I A | R I | L I | A I | I I |
+|-----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| MOVE |  ✔  |  ✔  |     |     |     |     |     |     |     |     |     |     |       
+| SWAP |  ✔  | N/A |     |     |     | N/A |     |     |     | N/A |     |     |       
+|   OR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+|  NOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+|  XOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| XNOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+|  AND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| NAND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+|  ADD |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| SUBT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| MULT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| DIVI |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| EXPO |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| COMP |     |     |     |     |     |     |     |     |     |     |     |     |       
 
 **Single Argument**
 - **R** Register
@@ -43,11 +43,11 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 - **A** Absolute RAM addressing
 - **I** Indirect RAM addressing
 
-|      | R | L | A | I | Notes |
-|-----:|:-:|:-:|:-:|:-:|:------|
+|      | R | L | A | I |
+|-----:|:-:|:-:|:-:|:-:|
 |  REF |   | ✔ |
-| ROTL |   |N/A|
-| ROTR |   |N/A|
+| ROTL | ✔ |N/A|
+| ROTR | ✔ |N/A|
 |  NOT | ✔ |N/A|
 | INCR | ✔ |N/A|
 | DECR | ✔ |N/A|
@@ -83,7 +83,7 @@ One unique function I included was the hardware queue. compared to some common A
 Addressing modes were certainly a challenge. I was inspired by the indirect addressing mode used by the MSP-430, but when it came to planning the machine code I couldn't think of a simple way to represent it. I could have looked up how the MSP-430 does it, but I wanted the architecture to follow my style of doing things instead of copying someone else's implementation. As such, I solved it by adding a register for the reference address and indirect addressing simply specifies the offset.
 
 **Assembler**
-This is simpler than I had expected. The Assembler program is little more than an interface, with the actual assembly being performed by the ASM class of the SG16 library. Simply put, the assembler parses Assembly language code and converts it to machine code, outputing the result as a binary ROM file which will later be opened and executed by the emulator.
+This is simpler than I had expected. The Assembler program is little more than an interface, with the actual assembly being performed by the ASM class of the SG16 library. Simply put, the assembler parses Assembly language code and converts it to machine code, outputing the result as a binary ROM file which will later be opened and executed by the emulator. The exercise brought me to the stunningly obvious realization than an emulator is an interpriter for machine code.
 
 **Emulator**
 The emulator will be the most challenging part of the project, and I plan to approach it with strong OOP design principles. The imlementation will be fairly abstract, with no user interface besides some console output for debugging.

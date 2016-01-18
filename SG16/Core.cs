@@ -239,8 +239,28 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
-        private void ROTL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void ROTR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void ROTL(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg1Word = (UInt16)(arg1Word << 1);
+                byte[] result = UInt16ToByteArray(arg1Word);
+                setRegisterFromID(Arg1[2], result);
+            }
+        }
+        private void ROTR(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg1Word = (UInt16)(arg1Word >> 1);
+                byte[] result = UInt16ToByteArray(arg1Word);
+                setRegisterFromID(Arg1[2], result);
+            }
+        }
         private void OR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register OR Register
@@ -297,7 +317,18 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
-        private void NOR(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void NOR(byte[] Arg1, byte[] Arg2)
+        {
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+                byte[] data = new byte[2];
+                data[0] = (byte)~((int)arg1Data[0] | (int)arg2Data[0]);
+                data[1] = (byte)~((int)arg1Data[1] | (int)arg2Data[1]);
+                setRegisterFromID(Arg2[2], data);
+            }
+        }
         private void XOR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register XOR Register
