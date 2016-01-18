@@ -39,7 +39,7 @@ namespace SG16
             return result;
         }
 
-        public static explicit operator Register(Int16 b)
+        public static explicit operator Register(UInt16 b)
         {
             Register result = new Register();
             
