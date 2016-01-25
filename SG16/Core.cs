@@ -108,6 +108,66 @@ namespace SG16
                 case 0x27:
                     NOT(instruction.Argument1, instruction.Argument2);
                     break;
+                case 0x31:
+                    ADD(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x32:
+                    SUBT(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x33:
+                    INCR(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x34:
+                    DECR(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x35:
+                    MULT(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x36:
+                    DIVI(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x37:
+                    EXPO(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x41:
+                    GOTO(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x42:
+                    EVAL(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x43:
+                    COMP(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x44:
+                    JMPZ(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x45:
+                    JMGZ(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x46:
+                    JMLZ(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x47:
+                    GSUB(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x48:
+                    RTRN(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x49:
+                    JMPE(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x4A:
+                    JMPG(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x4B:
+                    JMPL(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x51:
+                    ENQU(instruction.Argument1, instruction.Argument2);
+                    break;
+                case 0x52:
+                    DEQU(instruction.Argument1, instruction.Argument2);
+                    break;
                 default:
                     NULL(instruction.Argument1, instruction.Argument2);
                     break;
@@ -905,15 +965,7 @@ namespace SG16
         {
             byte[] result = new byte[2];
 
-            if (b <= 0xFF)
-            {
-                result[0] = Convert.ToByte(b);
-            }
-            else
-            {
-                result[0] = 0xFF;
-                result[1] = Convert.ToByte(b - Convert.ToUInt16(0xFF));
-            }
+            result = BitConverter.GetBytes(b);
 
             return result;
         }
