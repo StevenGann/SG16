@@ -63,9 +63,23 @@ namespace SG16
 
         override public string ToString()
         {
-            string result = "NULL x00 x00";
-            //I need to implement a disassembler, but I need to refactor the assembler first.
+            string result = "";
+            AssemblyTable table = new AssemblyTable();
+            result += table.GetInstruction(Opcode);
+            result += "," + ByteArrayToString(Argument1);
+            result += "," + ByteArrayToString(Argument2);
             return result;
+        }
+
+        public static string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+            {
+                hex.Append(' ');
+                hex.AppendFormat("{0:x2}", b);
+            }
+            return hex.ToString().ToUpper();
         }
     }
 }

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ASM.cs" />
+    <Compile Include="AssemblyTable.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Instruction.cs" />
     <Compile Include="Memory.cs" />

@@ -41,6 +41,8 @@ namespace SG16
 
         Random RNG = new Random();
 
+        public string Message = "";
+
         public long Tick()
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -59,7 +61,7 @@ namespace SG16
         private void Execute(int address)
         {
             Instruction instruction = new Instruction(RAM.Data, address);
-            Console.Write("Executing " + ASM.ByteArrayToString(instruction.ToArray()));
+            Message = "Executing " + ASM.ByteArrayToString(instruction.ToArray());
 
             switch (instruction.Opcode)
             {

@@ -18,10 +18,15 @@ namespace Emulator
 
             while(core.PC.ToInt() < core.RAM.Data.Length)
             {
-                Console.Write(" PC=" + core.PC.ToInt().ToString("D2") + " - ");
                 long time = core.Tick();
-                //Console.Write(" PSTR=" + core.PSTR.ToInt());
-                Console.WriteLine(" - Took " + Convert.ToString(time) + "ms");
+                if (time >= 1)
+                {
+                    Console.Write(" PC=" + core.PC.ToInt().ToString("D2") + " - ");
+                    Console.Write(core.Message);
+                    Console.Write(" - Took " + Convert.ToString(time) + "ms");
+                    Console.Write("\n");
+                }
+                
             }
 
             Console.ReadLine();
