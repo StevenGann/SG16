@@ -32,11 +32,36 @@ Code----Assembly--------Description
 02		@FFFF			Absolute RAM address, refers to the data stored at that address
 03		$FFFF			Indirect RAM address, refers to the data stored at RREF plus the specified offset
 
+--------------------------Status Flags Register
+Reserved bits, especially the Upper Byte, may be used for hardware interrupts
+in future revisions.
+
+Lower Byte
+Bit-----Name------------Description
+0		Z				Set if result of last instruction was 0
+1		C				Carry bit
+2		N				Set if result of last instruction overflowed down
+3		O				Set if result of last instruction overflowed up
+4		P				Set if number of set bits of the last result was odd
+5		E				Set if (arg1 == arg2) in last 2-argument instruction
+6		L				Set if (arg1 <= arg2) in last 2-argument instruction
+7						[RESERVED]
+
+Upper Byte
+Bit-----Name------------Description
+8						[RESERVED]
+9						[RESERVED]
+A						[RESERVED]
+B						[RESERVED]
+C						[RESERVED]
+D						[RESERVED]
+E						[RESERVED]
+F						[RESERVED]
 
 --------------------------Registers
 - 16 bits, two bytes
 
-00 PC					Program Counter, address of current instruction
+00 PC				Program Counter, address of current instruction
 01 STAT				Status flags register
 02 SUBR				Address of last GSUB jump
 03 PSTR				Address of first program instruction, all RAM below this *should* be free
