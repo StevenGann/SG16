@@ -6,11 +6,13 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 
 - [x] Define Assembly language specification
 - [x] Define processor architecture
-- [x] Write assembler
-- [ ] Write disassembler
-- [ ] Write emulator
-- [ ] Write emulator GUI
-- [ ] Write peripheral emulators
+- [x] Assembler
+- [x] Disassembler
+- [ ] Emulator core
+- [ ] Emulator GUI
+- [ ] Peripheral emulators
+- [ ] Software tools (C, BASIC compilers)
+
 
 #Implemented Instructions
 
@@ -86,10 +88,13 @@ Addressing modes were certainly a challenge. I was inspired by the indirect addr
 This is simpler than I had expected. The Assembler program is little more than an interface, with the actual assembly being performed by the ASM class of the SG16 library. Simply put, the assembler parses Assembly language code and converts it to machine code, outputing the result as a binary ROM file which will later be opened and executed by the emulator. The exercise brought me to the stunningly obvious realization than an emulator is an interpriter for machine code.
 
 **Emulator**
-The emulator will be the most challenging part of the project, and I plan to approach it with strong OOP design principles. The imlementation will be fairly abstract, with no user interface besides some console output for debugging.
+The emulator is certainly the most challenging part of the project, and I am approaching it with strong OOP design principles. The imlementation is fairly abstract, contained within a DLL for easy adaptation into future frontends and UIs.
 
 **Emulator UI**
-The bulk of the emulator's facilities, such as registers and RAM, will be public. This is to allow a simple GUI application to read and display the contents, as well as providing some interface for pausing and stepping execution and connecting emulated peripherals.
+The bulk of the emulator's facilities, such as registers and RAM, are public to allow a simple GUI application to read and display the contents, as well as providing some interface for pausing and stepping execution and connecting emulated peripherals. The first UI will use WinForms and be inspired heavily by the classic Easy68k emulator, with a traditional WYSIWYG interface and low-level display of registers, RAM, and other mechanisms.
 
 **Peripherals**
-There's no shortage of input and output peripherals I'd like to emulate, but the most important to start will certainly be a text terminal, followed by a simple graphics adapter. These will probably be emulated as simple memory-mapped I/O, making Assembly interaction as simple as possible. Other peripherals may eventually include serial ports, nonvolatile memory, direct interaction with the host mouse and keyboard, and sound output.
+There's no shortage of input and output peripherals I'd like to emulate, but the most important to start will certainly be a text terminal, followed by a simple graphics adapter. These will be emulated as simple memory-mapped I/O, making Assembly interaction as simple as possible. Other peripherals may eventually include serial ports, nonvolatile memory, direct interaction with the host mouse and keyboard, and sound output.
+
+**Software**
+Assembly is the first step, but writing useful or interesting software in Assembly is difficult and tedious. I am looking into a partial port of gcc, and definitely want to write a QBASIC compiler.
