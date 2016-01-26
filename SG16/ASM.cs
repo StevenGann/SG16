@@ -143,7 +143,10 @@ namespace SG16
             else if (_input[0] == '@')//Absolute address
             {
                 result[0] = 0x02;
-                throw new NotImplementedException();
+                string raw = _input.Remove(0, 1);
+                byte[] data = StringToByteArray(raw);
+                result[1] = data[0];
+                result[2] = data[1];
             }
             else if (_input[0] == '$')//Indirect address
             {
@@ -253,9 +256,16 @@ namespace SG16
         public static string ByteArrayToString(byte[] ba)
         {
             StringBuilder hex = new StringBuilder(ba.Length * 2);
+            int i = 0;
             foreach (byte b in ba)
             {
                 hex.AppendFormat("{0:x2}", b);
+                if (ba.Length <= 8 && i == 0) { hex.Append(" ");}
+                if (ba.Length <= 8 && i == 1) { hex.Append(" "); }
+                if (ba.Length <= 8 && i == 3) { hex.Append(" "); }
+                if (ba.Length <= 8 && i == 4) { hex.Append(" "); }
+                if (ba.Length <= 8 && i == 6) { hex.Append(" "); }
+                i++;
             }
             return hex.ToString().ToUpper();
         }

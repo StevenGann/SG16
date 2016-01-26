@@ -208,7 +208,9 @@ namespace SG16
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM to Register
             {
-                throw new NotImplementedException();
+                byte[] data = new byte[2];
+                data = RAM.Get16(Arg1);
+                setRegisterFromID(Arg2[2], data);
             }
             else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM to Register
             {
@@ -216,7 +218,8 @@ namespace SG16
             }
             else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
             {
-                throw new NotImplementedException();
+                byte[] data = getRegisterFromID(Arg1[2]);
+                RAM.Set16(Arg2, data);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal to Absolute RAM
             {

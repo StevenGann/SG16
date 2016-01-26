@@ -37,9 +37,21 @@ namespace SG16
             }
         }
 
-        public byte Get(byte upper, byte lower)
+        public byte[] Get16(byte[] address)
         {
-            return Data[Convert.ToInt16(upper) + Convert.ToInt16(lower)];
+            byte[] result = new byte[2];
+            int index = BitConverter.ToUInt16(address, 0);
+            result[0] = Data[index];
+            result[1] = Data[index + 1];
+            return result;
         }
+
+        public void Set16(byte[] address, byte[] value)
+        {
+            int index = BitConverter.ToUInt16(address, 0);
+            Data[index] = value[0];
+            Data[index + 1] = value[1];
+        }
+
     }
 }
