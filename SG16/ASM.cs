@@ -86,8 +86,26 @@ namespace SG16
                     i--;
                 }
             }
+            AssemblyTable table = new AssemblyTable();
+            instruction[0] = table.GetOpcode(tokens[0]);
+            if (tokens.Count >= 2)
+            {
+                byte[] b = ParseArgument(tokens[1]);
+                instruction[1] = b[0];
+                instruction[2] = b[1];
+                instruction[3] = b[2];
+                if (tokens.Count >= 3)
+                {
+                    b = ParseArgument(tokens[2]);
+                    instruction[4] = b[0];
+                    instruction[5] = b[1];
+                    instruction[6] = b[2];
+                }
+            }
+            
 
             #region Opcodes
+            /*
             if (tokens[0] == "NULL")
             {
                 instruction[0] = 0x00;
@@ -408,6 +426,7 @@ namespace SG16
                 instruction[2] = b[1];
                 instruction[3] = b[2];
             }
+            */
             #endregion
             
             return instruction;
