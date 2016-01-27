@@ -32,7 +32,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 | XNOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 |  AND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 | NAND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-|  ADD |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+|  ADD |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
 | SUBT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 | MULT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 | DIVI |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
