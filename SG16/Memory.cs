@@ -48,7 +48,10 @@ namespace SG16
 
         public void Set16(byte[] address, byte[] value)
         {
-            int index = BitConverter.ToUInt16(address, 0);
+            byte[] indexBytes = new byte[2];
+            indexBytes[0] = address[2];
+            indexBytes[1] = address[1];
+            int index = BitConverter.ToUInt16(indexBytes, 0);
             Data[index] = value[0];
             Data[index + 1] = value[1];
         }
