@@ -223,11 +223,15 @@ namespace SG16
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal to Absolute RAM
             {
-                throw new NotImplementedException();
+                byte[] data = new byte[2];
+                data[0] = Arg1[2];
+                data[1] = Arg1[1];
+                RAM.Set16(Arg2, data);
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM to Absolute RAM
             {
-                throw new NotImplementedException();
+                byte[] data = RAM.Get16(Arg1);
+                RAM.Set16(Arg2, data);
             }
             else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM to Absolute RAM
             {

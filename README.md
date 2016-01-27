@@ -24,7 +24,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 
 |      | R R | L R | A R | I R | R A | L A | A A | I A | R I | L I | A I | I I |
 |-----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| MOVE |  ✔  |  ✔  |  ✔  |    |  ✔  |    |     |     |     |     |     |     |       
+| MOVE |  ✔  |  ✔  |  ✔  |    |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
 | SWAP |  ✔  | N/A |     |     |     | N/A |     |     |     | N/A |     |     |       
 |   OR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 |  NOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
