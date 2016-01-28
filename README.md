@@ -50,7 +50,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 |  REF |   | ✔ |
 | ROTL | ✔ |N/A|
 | ROTR | ✔ |N/A|
-|  NOT | ✔ |N/A|
+|  NOT | ✔ |N/A| ✔ |
 | INCR | ✔ |N/A| ✔ |
 | DECR | ✔ |N/A| ✔ |
 | GOTO | ✔ | ✔ |
