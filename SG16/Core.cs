@@ -632,6 +632,14 @@ namespace SG16
                 byte[] result = UInt16ToByteArray(arg1Word);
                 setRegisterFromID(Arg1[2], result);
             }
+            else if (Arg1[0] == 0x02) //Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 resultWord = (UInt16)~arg1Word;
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg1, result);
+            }
         }
         private void ADD(byte[] Arg1, byte[] Arg2)
         {
@@ -721,6 +729,65 @@ namespace SG16
                 byte[] result = UInt16ToByteArray(resultWord);
                 setRegisterFromID(Arg2[2], result);
             }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = RAM.Get16(Arg2);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
         }
         private void INCR(byte[] Arg1, byte[] Arg2)
         {
@@ -733,6 +800,14 @@ namespace SG16
                 byte[] result = UInt16ToByteArray(resultWord);
                 setRegisterFromID(Arg1[2], result);
             }
+            else if (Arg1[0] == 0x02) //Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word + 1);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg1, result);
+            }
         }
         private void DECR(byte[] Arg1, byte[] Arg2)
         {
@@ -744,6 +819,14 @@ namespace SG16
 
                 byte[] result = UInt16ToByteArray(resultWord);
                 setRegisterFromID(Arg1[2], result);
+            }
+            else if (Arg1[0] == 0x02) //Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word - 1);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg1, result);
             }
         }
         private void MULT(byte[] Arg1, byte[] Arg2)
@@ -760,6 +843,65 @@ namespace SG16
                 byte[] result = UInt16ToByteArray(resultWord);
                 setRegisterFromID(Arg2[2], result);
             }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = RAM.Get16(Arg2);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
         }
         private void DIVI(byte[] Arg1, byte[] Arg2)
         {
@@ -774,6 +916,65 @@ namespace SG16
 
                 byte[] result = UInt16ToByteArray(resultWord);
                 setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
+
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                setRegisterFromID(Arg2[2], result);
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = RAM.Get16(Arg2);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
+                byte[] result = UInt16ToByteArray(resultWord);
+                RAM.Set16(Arg2, result);
             }
         }
         private void EXPO(byte[] Arg1, byte[] Arg2)

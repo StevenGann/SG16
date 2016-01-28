@@ -33,9 +33,9 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 |  AND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 | NAND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 |  ADD |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
-| SUBT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-| MULT |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-| DIVI |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
+| SUBT |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |        
+| MULT |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |        
+| DIVI |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |         
 | EXPO |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
 | COMP |     |     |     |     |     |     |     |     |     |     |     |     |       
 
@@ -51,9 +51,9 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 | ROTL | ✔ |N/A|
 | ROTR | ✔ |N/A|
 |  NOT | ✔ |N/A|
-| INCR | ✔ |N/A|
-| DECR | ✔ |N/A|
-| GOTO |   | ✔ |
+| INCR | ✔ |N/A| ✔ |
+| DECR | ✔ |N/A| ✔ |
+| GOTO | ✔ | ✔ |
 | EVAL |
 | JMPZ |
 | JMGZ |
