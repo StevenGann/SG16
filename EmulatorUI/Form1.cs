@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections;
+using System.ComponentModel.Design;
 
 namespace EmulatorUI
 {
@@ -19,6 +21,7 @@ namespace EmulatorUI
         {
             InitializeComponent();
             core.LoadROM(0, "test.rom");
+            byteViewerRAM.SetFile(@"c:\windows\notepad.exe");
         }
 
         private void timerMain_Tick(object sender, EventArgs e)
@@ -36,6 +39,11 @@ namespace EmulatorUI
         private void buttonPause_Click(object sender, EventArgs e)
         {
             timerMain.Enabled = false;
+        }
+
+        public void resetCPU()
+        {
+
         }
 
         private void tickCPU()

@@ -1200,13 +1200,14 @@ namespace SG16
             return result;
         }
 
-        public bool LoadROM(int offset, string path)
+        public int LoadROM(int offset, string path)
         {
             if (File.Exists(path))
             {
+                int length = 0;
                 using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
                 {
-                    int length = (int)reader.BaseStream.Length;
+                    length = (int)reader.BaseStream.Length;
                     byte[] chunk = new byte[8];
                     int n = 0;
                     for (int i = 0; i < length; i++)
@@ -1222,10 +1223,10 @@ namespace SG16
 
                     }
                 }
-                return true;
+                return length;
             }
 
-            return false;
+            return -1;
         }
 
         public void LoadROM(string path)
