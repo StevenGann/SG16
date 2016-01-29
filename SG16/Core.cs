@@ -1200,7 +1200,7 @@ namespace SG16
             return result;
         }
 
-        public void LoadROM(int offset, string path)
+        public bool LoadROM(int offset, string path)
         {
             if (File.Exists(path))
             {
@@ -1217,12 +1217,15 @@ namespace SG16
                         if (n >= 8)
                         {
                             n = 0;
-                            Console.WriteLine("Loaded " + ASM.ByteArrayToString(chunk));
+                            Message = "Loaded " + ASM.ByteArrayToString(chunk);
                         }
 
                     }
                 }
+                return true;
             }
+
+            return false;
         }
 
         public void LoadROM(string path)
