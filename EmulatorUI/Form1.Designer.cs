@@ -44,7 +44,6 @@ namespace EmulatorUI
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxUSRF = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.textBoxUSRE = new System.Windows.Forms.TextBox();
@@ -77,7 +76,6 @@ namespace EmulatorUI
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxUSR0 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxRREF = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxPEND = new System.Windows.Forms.TextBox();
@@ -90,22 +88,22 @@ namespace EmulatorUI
             this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.byteViewerRAM = new System.ComponentModel.Design.ByteViewer();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 498);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 638);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(429, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(652, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -120,7 +118,7 @@ namespace EmulatorUI
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(429, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(652, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -135,17 +133,18 @@ namespace EmulatorUI
             // openROMToolStripMenuItem
             // 
             this.openROMToolStripMenuItem.Name = "openROMToolStripMenuItem";
-            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openROMToolStripMenuItem.Text = "Open ROM";
+            this.openROMToolStripMenuItem.Click += new System.EventHandler(this.openROMToolStripMenuItem_Click);
             // 
             // timerMain
             // 
-            this.timerMain.Interval = 1;
+            this.timerMain.Interval = 5;
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
             // 
             // buttonRun
             // 
-            this.buttonRun.Location = new System.Drawing.Point(12, 27);
+            this.buttonRun.Location = new System.Drawing.Point(3, 3);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(75, 23);
             this.buttonRun.TabIndex = 2;
@@ -155,7 +154,7 @@ namespace EmulatorUI
             // 
             // buttonPause
             // 
-            this.buttonPause.Location = new System.Drawing.Point(93, 27);
+            this.buttonPause.Location = new System.Drawing.Point(84, 3);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(75, 23);
             this.buttonPause.TabIndex = 3;
@@ -165,7 +164,7 @@ namespace EmulatorUI
             // 
             // buttonStep
             // 
-            this.buttonStep.Location = new System.Drawing.Point(174, 27);
+            this.buttonStep.Location = new System.Drawing.Point(165, 3);
             this.buttonStep.Name = "buttonStep";
             this.buttonStep.Size = new System.Drawing.Size(75, 23);
             this.buttonStep.TabIndex = 4;
@@ -175,7 +174,7 @@ namespace EmulatorUI
             // 
             // buttonReset
             // 
-            this.buttonReset.Location = new System.Drawing.Point(255, 27);
+            this.buttonReset.Location = new System.Drawing.Point(246, 3);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(75, 23);
             this.buttonReset.TabIndex = 5;
@@ -184,7 +183,7 @@ namespace EmulatorUI
             // 
             // textBoxPC
             // 
-            this.textBoxPC.Location = new System.Drawing.Point(6, 19);
+            this.textBoxPC.Location = new System.Drawing.Point(9, 6);
             this.textBoxPC.Name = "textBoxPC";
             this.textBoxPC.ReadOnly = true;
             this.textBoxPC.Size = new System.Drawing.Size(47, 20);
@@ -194,7 +193,7 @@ namespace EmulatorUI
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(59, 22);
+            this.label1.Location = new System.Drawing.Point(62, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(21, 13);
             this.label1.TabIndex = 7;
@@ -204,68 +203,70 @@ namespace EmulatorUI
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(0, 56);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 53);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(429, 439);
+            this.tabControl1.Size = new System.Drawing.Size(652, 585);
             this.tabControl1.TabIndex = 8;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.groupBox2);
-            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.textBoxUSRF);
+            this.tabPage1.Controls.Add(this.textBoxRREF);
+            this.tabPage1.Controls.Add(this.label22);
+            this.tabPage1.Controls.Add(this.textBoxUSRE);
+            this.tabPage1.Controls.Add(this.label21);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.textBoxPEND);
+            this.tabPage1.Controls.Add(this.textBoxUSRD);
+            this.tabPage1.Controls.Add(this.textBoxPC);
+            this.tabPage1.Controls.Add(this.label20);
+            this.tabPage1.Controls.Add(this.label5);
+            this.tabPage1.Controls.Add(this.textBoxUSRC);
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.label19);
+            this.tabPage1.Controls.Add(this.textBoxPSTR);
+            this.tabPage1.Controls.Add(this.textBoxUSRB);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.label18);
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.textBoxUSRA);
+            this.tabPage1.Controls.Add(this.textBoxSTAT);
+            this.tabPage1.Controls.Add(this.label17);
+            this.tabPage1.Controls.Add(this.textBoxSUBR);
+            this.tabPage1.Controls.Add(this.textBoxUSR9);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.label16);
+            this.tabPage1.Controls.Add(this.textBoxUSR0);
+            this.tabPage1.Controls.Add(this.textBoxUSR8);
+            this.tabPage1.Controls.Add(this.label15);
+            this.tabPage1.Controls.Add(this.label7);
+            this.tabPage1.Controls.Add(this.label8);
+            this.tabPage1.Controls.Add(this.textBoxUSR7);
+            this.tabPage1.Controls.Add(this.label14);
+            this.tabPage1.Controls.Add(this.textBoxUSR1);
+            this.tabPage1.Controls.Add(this.label9);
+            this.tabPage1.Controls.Add(this.textBoxUSR6);
+            this.tabPage1.Controls.Add(this.textBoxUSR2);
+            this.tabPage1.Controls.Add(this.label13);
+            this.tabPage1.Controls.Add(this.label10);
+            this.tabPage1.Controls.Add(this.textBoxUSR5);
+            this.tabPage1.Controls.Add(this.textBoxUSR3);
+            this.tabPage1.Controls.Add(this.label12);
+            this.tabPage1.Controls.Add(this.label11);
+            this.tabPage1.Controls.Add(this.textBoxUSR4);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(421, 413);
+            this.tabPage1.Size = new System.Drawing.Size(644, 559);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Registers";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.textBoxUSRF);
-            this.groupBox2.Controls.Add(this.label22);
-            this.groupBox2.Controls.Add(this.textBoxUSRE);
-            this.groupBox2.Controls.Add(this.label21);
-            this.groupBox2.Controls.Add(this.textBoxUSRD);
-            this.groupBox2.Controls.Add(this.label20);
-            this.groupBox2.Controls.Add(this.textBoxUSRC);
-            this.groupBox2.Controls.Add(this.label19);
-            this.groupBox2.Controls.Add(this.textBoxUSRB);
-            this.groupBox2.Controls.Add(this.label18);
-            this.groupBox2.Controls.Add(this.textBoxUSRA);
-            this.groupBox2.Controls.Add(this.label17);
-            this.groupBox2.Controls.Add(this.textBoxUSR9);
-            this.groupBox2.Controls.Add(this.label16);
-            this.groupBox2.Controls.Add(this.textBoxUSR8);
-            this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Controls.Add(this.textBoxUSR7);
-            this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Controls.Add(this.textBoxUSR6);
-            this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Controls.Add(this.textBoxUSR5);
-            this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Controls.Add(this.textBoxUSR4);
-            this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Controls.Add(this.textBoxUSR3);
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.textBoxUSR2);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.textBoxUSR1);
-            this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Controls.Add(this.textBoxUSR0);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(6, 207);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(409, 200);
-            this.groupBox2.TabIndex = 9;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "User Registers";
-            // 
             // textBoxUSRF
             // 
-            this.textBoxUSRF.Location = new System.Drawing.Point(196, 45);
+            this.textBoxUSRF.Location = new System.Drawing.Point(203, 188);
             this.textBoxUSRF.Name = "textBoxUSRF";
             this.textBoxUSRF.ReadOnly = true;
             this.textBoxUSRF.Size = new System.Drawing.Size(47, 20);
@@ -275,7 +276,7 @@ namespace EmulatorUI
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(249, 48);
+            this.label22.Location = new System.Drawing.Point(256, 191);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(36, 13);
             this.label22.TabIndex = 49;
@@ -283,7 +284,7 @@ namespace EmulatorUI
             // 
             // textBoxUSRE
             // 
-            this.textBoxUSRE.Location = new System.Drawing.Point(196, 19);
+            this.textBoxUSRE.Location = new System.Drawing.Point(203, 162);
             this.textBoxUSRE.Name = "textBoxUSRE";
             this.textBoxUSRE.ReadOnly = true;
             this.textBoxUSRE.Size = new System.Drawing.Size(47, 20);
@@ -293,7 +294,7 @@ namespace EmulatorUI
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(249, 22);
+            this.label21.Location = new System.Drawing.Point(256, 165);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(37, 13);
             this.label21.TabIndex = 47;
@@ -301,7 +302,7 @@ namespace EmulatorUI
             // 
             // textBoxUSRD
             // 
-            this.textBoxUSRD.Location = new System.Drawing.Point(101, 175);
+            this.textBoxUSRD.Location = new System.Drawing.Point(203, 136);
             this.textBoxUSRD.Name = "textBoxUSRD";
             this.textBoxUSRD.ReadOnly = true;
             this.textBoxUSRD.Size = new System.Drawing.Size(47, 20);
@@ -311,7 +312,7 @@ namespace EmulatorUI
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(154, 178);
+            this.label20.Location = new System.Drawing.Point(256, 139);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(38, 13);
             this.label20.TabIndex = 45;
@@ -319,7 +320,7 @@ namespace EmulatorUI
             // 
             // textBoxUSRC
             // 
-            this.textBoxUSRC.Location = new System.Drawing.Point(101, 152);
+            this.textBoxUSRC.Location = new System.Drawing.Point(203, 113);
             this.textBoxUSRC.Name = "textBoxUSRC";
             this.textBoxUSRC.ReadOnly = true;
             this.textBoxUSRC.Size = new System.Drawing.Size(47, 20);
@@ -329,7 +330,7 @@ namespace EmulatorUI
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(154, 155);
+            this.label19.Location = new System.Drawing.Point(256, 116);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(37, 13);
             this.label19.TabIndex = 43;
@@ -337,7 +338,7 @@ namespace EmulatorUI
             // 
             // textBoxUSRB
             // 
-            this.textBoxUSRB.Location = new System.Drawing.Point(101, 126);
+            this.textBoxUSRB.Location = new System.Drawing.Point(203, 87);
             this.textBoxUSRB.Name = "textBoxUSRB";
             this.textBoxUSRB.ReadOnly = true;
             this.textBoxUSRB.Size = new System.Drawing.Size(47, 20);
@@ -347,7 +348,7 @@ namespace EmulatorUI
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(154, 129);
+            this.label18.Location = new System.Drawing.Point(256, 90);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(37, 13);
             this.label18.TabIndex = 41;
@@ -355,7 +356,7 @@ namespace EmulatorUI
             // 
             // textBoxUSRA
             // 
-            this.textBoxUSRA.Location = new System.Drawing.Point(101, 97);
+            this.textBoxUSRA.Location = new System.Drawing.Point(203, 58);
             this.textBoxUSRA.Name = "textBoxUSRA";
             this.textBoxUSRA.ReadOnly = true;
             this.textBoxUSRA.Size = new System.Drawing.Size(47, 20);
@@ -365,7 +366,7 @@ namespace EmulatorUI
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(154, 100);
+            this.label17.Location = new System.Drawing.Point(256, 61);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(37, 13);
             this.label17.TabIndex = 39;
@@ -373,7 +374,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR9
             // 
-            this.textBoxUSR9.Location = new System.Drawing.Point(101, 71);
+            this.textBoxUSR9.Location = new System.Drawing.Point(203, 32);
             this.textBoxUSR9.Name = "textBoxUSR9";
             this.textBoxUSR9.ReadOnly = true;
             this.textBoxUSR9.Size = new System.Drawing.Size(47, 20);
@@ -383,7 +384,7 @@ namespace EmulatorUI
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(154, 74);
+            this.label16.Location = new System.Drawing.Point(256, 35);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(36, 13);
             this.label16.TabIndex = 37;
@@ -391,7 +392,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR8
             // 
-            this.textBoxUSR8.Location = new System.Drawing.Point(101, 45);
+            this.textBoxUSR8.Location = new System.Drawing.Point(203, 6);
             this.textBoxUSR8.Name = "textBoxUSR8";
             this.textBoxUSR8.ReadOnly = true;
             this.textBoxUSR8.Size = new System.Drawing.Size(47, 20);
@@ -401,7 +402,7 @@ namespace EmulatorUI
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(154, 48);
+            this.label15.Location = new System.Drawing.Point(256, 9);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 35;
@@ -409,7 +410,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR7
             // 
-            this.textBoxUSR7.Location = new System.Drawing.Point(101, 19);
+            this.textBoxUSR7.Location = new System.Drawing.Point(108, 188);
             this.textBoxUSR7.Name = "textBoxUSR7";
             this.textBoxUSR7.ReadOnly = true;
             this.textBoxUSR7.Size = new System.Drawing.Size(47, 20);
@@ -419,7 +420,7 @@ namespace EmulatorUI
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(154, 22);
+            this.label14.Location = new System.Drawing.Point(161, 191);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(36, 13);
             this.label14.TabIndex = 33;
@@ -427,7 +428,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR6
             // 
-            this.textBoxUSR6.Location = new System.Drawing.Point(6, 175);
+            this.textBoxUSR6.Location = new System.Drawing.Point(108, 162);
             this.textBoxUSR6.Name = "textBoxUSR6";
             this.textBoxUSR6.ReadOnly = true;
             this.textBoxUSR6.Size = new System.Drawing.Size(47, 20);
@@ -437,7 +438,7 @@ namespace EmulatorUI
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(59, 178);
+            this.label13.Location = new System.Drawing.Point(161, 165);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(36, 13);
             this.label13.TabIndex = 31;
@@ -445,7 +446,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR5
             // 
-            this.textBoxUSR5.Location = new System.Drawing.Point(6, 149);
+            this.textBoxUSR5.Location = new System.Drawing.Point(108, 136);
             this.textBoxUSR5.Name = "textBoxUSR5";
             this.textBoxUSR5.ReadOnly = true;
             this.textBoxUSR5.Size = new System.Drawing.Size(47, 20);
@@ -455,7 +456,7 @@ namespace EmulatorUI
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(59, 152);
+            this.label12.Location = new System.Drawing.Point(161, 139);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(36, 13);
             this.label12.TabIndex = 29;
@@ -463,7 +464,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR4
             // 
-            this.textBoxUSR4.Location = new System.Drawing.Point(6, 123);
+            this.textBoxUSR4.Location = new System.Drawing.Point(108, 110);
             this.textBoxUSR4.Name = "textBoxUSR4";
             this.textBoxUSR4.ReadOnly = true;
             this.textBoxUSR4.Size = new System.Drawing.Size(47, 20);
@@ -473,7 +474,7 @@ namespace EmulatorUI
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(59, 126);
+            this.label11.Location = new System.Drawing.Point(161, 113);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(36, 13);
             this.label11.TabIndex = 27;
@@ -481,7 +482,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR3
             // 
-            this.textBoxUSR3.Location = new System.Drawing.Point(6, 97);
+            this.textBoxUSR3.Location = new System.Drawing.Point(108, 84);
             this.textBoxUSR3.Name = "textBoxUSR3";
             this.textBoxUSR3.ReadOnly = true;
             this.textBoxUSR3.Size = new System.Drawing.Size(47, 20);
@@ -491,7 +492,7 @@ namespace EmulatorUI
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(59, 100);
+            this.label10.Location = new System.Drawing.Point(161, 87);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(36, 13);
             this.label10.TabIndex = 25;
@@ -499,7 +500,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR2
             // 
-            this.textBoxUSR2.Location = new System.Drawing.Point(6, 71);
+            this.textBoxUSR2.Location = new System.Drawing.Point(108, 58);
             this.textBoxUSR2.Name = "textBoxUSR2";
             this.textBoxUSR2.ReadOnly = true;
             this.textBoxUSR2.Size = new System.Drawing.Size(47, 20);
@@ -509,7 +510,7 @@ namespace EmulatorUI
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(59, 74);
+            this.label9.Location = new System.Drawing.Point(161, 61);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(36, 13);
             this.label9.TabIndex = 23;
@@ -517,7 +518,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR1
             // 
-            this.textBoxUSR1.Location = new System.Drawing.Point(6, 45);
+            this.textBoxUSR1.Location = new System.Drawing.Point(108, 32);
             this.textBoxUSR1.Name = "textBoxUSR1";
             this.textBoxUSR1.ReadOnly = true;
             this.textBoxUSR1.Size = new System.Drawing.Size(47, 20);
@@ -527,7 +528,7 @@ namespace EmulatorUI
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(59, 48);
+            this.label8.Location = new System.Drawing.Point(161, 35);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(36, 13);
             this.label8.TabIndex = 21;
@@ -535,7 +536,7 @@ namespace EmulatorUI
             // 
             // textBoxUSR0
             // 
-            this.textBoxUSR0.Location = new System.Drawing.Point(6, 19);
+            this.textBoxUSR0.Location = new System.Drawing.Point(108, 6);
             this.textBoxUSR0.Name = "textBoxUSR0";
             this.textBoxUSR0.ReadOnly = true;
             this.textBoxUSR0.Size = new System.Drawing.Size(47, 20);
@@ -545,36 +546,15 @@ namespace EmulatorUI
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(59, 22);
+            this.label7.Location = new System.Drawing.Point(161, 9);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(36, 13);
             this.label7.TabIndex = 19;
             this.label7.Text = "USR0";
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.textBoxRREF);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.textBoxPEND);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBoxPSTR);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.textBoxSUBR);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBoxSTAT);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBoxPC);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(409, 195);
-            this.groupBox1.TabIndex = 8;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "System Registers";
-            // 
             // textBoxRREF
             // 
-            this.textBoxRREF.Location = new System.Drawing.Point(6, 149);
+            this.textBoxRREF.Location = new System.Drawing.Point(9, 136);
             this.textBoxRREF.Name = "textBoxRREF";
             this.textBoxRREF.ReadOnly = true;
             this.textBoxRREF.Size = new System.Drawing.Size(47, 20);
@@ -584,7 +564,7 @@ namespace EmulatorUI
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(59, 152);
+            this.label6.Location = new System.Drawing.Point(62, 139);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 13);
             this.label6.TabIndex = 17;
@@ -592,7 +572,7 @@ namespace EmulatorUI
             // 
             // textBoxPEND
             // 
-            this.textBoxPEND.Location = new System.Drawing.Point(6, 123);
+            this.textBoxPEND.Location = new System.Drawing.Point(9, 110);
             this.textBoxPEND.Name = "textBoxPEND";
             this.textBoxPEND.ReadOnly = true;
             this.textBoxPEND.Size = new System.Drawing.Size(47, 20);
@@ -602,7 +582,7 @@ namespace EmulatorUI
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(59, 126);
+            this.label5.Location = new System.Drawing.Point(62, 113);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 15;
@@ -610,7 +590,7 @@ namespace EmulatorUI
             // 
             // textBoxPSTR
             // 
-            this.textBoxPSTR.Location = new System.Drawing.Point(6, 97);
+            this.textBoxPSTR.Location = new System.Drawing.Point(9, 84);
             this.textBoxPSTR.Name = "textBoxPSTR";
             this.textBoxPSTR.ReadOnly = true;
             this.textBoxPSTR.Size = new System.Drawing.Size(47, 20);
@@ -620,7 +600,7 @@ namespace EmulatorUI
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(59, 100);
+            this.label4.Location = new System.Drawing.Point(62, 87);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(36, 13);
             this.label4.TabIndex = 13;
@@ -628,7 +608,7 @@ namespace EmulatorUI
             // 
             // textBoxSUBR
             // 
-            this.textBoxSUBR.Location = new System.Drawing.Point(6, 71);
+            this.textBoxSUBR.Location = new System.Drawing.Point(9, 58);
             this.textBoxSUBR.Name = "textBoxSUBR";
             this.textBoxSUBR.ReadOnly = true;
             this.textBoxSUBR.Size = new System.Drawing.Size(47, 20);
@@ -638,7 +618,7 @@ namespace EmulatorUI
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(59, 74);
+            this.label3.Location = new System.Drawing.Point(62, 61);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 11;
@@ -646,7 +626,7 @@ namespace EmulatorUI
             // 
             // textBoxSTAT
             // 
-            this.textBoxSTAT.Location = new System.Drawing.Point(6, 45);
+            this.textBoxSTAT.Location = new System.Drawing.Point(9, 32);
             this.textBoxSTAT.Name = "textBoxSTAT";
             this.textBoxSTAT.ReadOnly = true;
             this.textBoxSTAT.Size = new System.Drawing.Size(47, 20);
@@ -656,7 +636,7 @@ namespace EmulatorUI
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(59, 48);
+            this.label2.Location = new System.Drawing.Point(62, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 9;
@@ -668,13 +648,14 @@ namespace EmulatorUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(421, 413);
+            this.tabPage2.Size = new System.Drawing.Size(644, 559);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "RAM";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // byteViewerRAM
             // 
+            this.byteViewerRAM.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.byteViewerRAM.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.byteViewerRAM.ColumnCount = 1;
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -685,20 +666,29 @@ namespace EmulatorUI
             this.byteViewerRAM.RowCount = 1;
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.byteViewerRAM.Size = new System.Drawing.Size(415, 407);
+            this.byteViewerRAM.Size = new System.Drawing.Size(638, 553);
             this.byteViewerRAM.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.buttonRun);
+            this.panel1.Controls.Add(this.buttonPause);
+            this.panel1.Controls.Add(this.buttonReset);
+            this.panel1.Controls.Add(this.buttonStep);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(652, 29);
+            this.panel1.TabIndex = 9;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 520);
+            this.ClientSize = new System.Drawing.Size(652, 660);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.buttonReset);
-            this.Controls.Add(this.buttonStep);
-            this.Controls.Add(this.buttonPause);
-            this.Controls.Add(this.buttonRun);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -709,11 +699,9 @@ namespace EmulatorUI
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -736,8 +724,6 @@ namespace EmulatorUI
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBoxRREF;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBoxPEND;
@@ -781,6 +767,7 @@ namespace EmulatorUI
         private System.Windows.Forms.TextBox textBoxUSR1;
         private System.Windows.Forms.Label label8;
         private System.ComponentModel.Design.ByteViewer byteViewerRAM;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

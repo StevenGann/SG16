@@ -10,18 +10,31 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
 using System.ComponentModel.Design;
+using System.IO;
 
 namespace EmulatorUI
 {
     public partial class Form1 : Form
     {
+        string romPath = "";
         Core core = new Core();
 
         public Form1()
         {
             InitializeComponent();
-            core.LoadROM(0, "test.rom");
-            byteViewerRAM.SetFile(@"c:\windows\notepad.exe");
+
+
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 2)
+            {
+                if (File.Exists(args[1]) && Path.GetExtension(args[1]) == ".rom")
+                {
+                    romPath = args[1];
+                    tabControl1.SelectedIndex = 1;
+                }
+                
+            }
+            resetCPU();
         }
 
         private void timerMain_Tick(object sender, EventArgs e)
@@ -43,7 +56,13 @@ namespace EmulatorUI
 
         public void resetCPU()
         {
-
+            timerMain.Enabled = false;
+            core = new Core();
+            if (File.Exists(romPath))
+            {
+                core.LoadROM(0, romPath);
+            }
+            updateUI();
         }
 
         private void tickCPU()
@@ -90,12 +109,34 @@ namespace EmulatorUI
             textBoxUSRD.Text = core.USRD.ToString();
             textBoxUSRE.Text = core.USRE.ToString();
             textBoxUSRF.Text = core.USRF.ToString();
+
+            if (tabControl1.SelectedIndex == 1)
+            {
+                byteViewerRAM.SetBytes(core.RAM.Data);
+            }
         }
 
         private void buttonStep_Click(object sender, EventArgs e)
         {
             timerMain.Enabled = false;
             tickCPU();
+        }
+
+        private void openROMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            // Set filter options and filter index.
+            openFileDialog1.Filter = "SG16 Executable Files|*.rom|All Files|*.*";
+            openFileDialog1.FilterIndex = 1;
+
+            // Process input if the user clicked OK.
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                // Open the selected file to read.
+                romPath = openFileDialog1.FileName;
+                resetCPU();
+            }
         }
     }
 }
