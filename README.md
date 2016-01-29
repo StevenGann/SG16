@@ -9,7 +9,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 - [x] Assembler
 - [x] Disassembler
 - [ ] Emulator core
-- [ ] Emulator GUI
+- [x] Emulator GUI
 - [ ] Peripheral emulators
 - [ ] Software tools (C, BASIC compilers)
 
@@ -85,16 +85,16 @@ One unique function I included was the hardware queue. compared to some common A
 Addressing modes were certainly a challenge. I was inspired by the indirect addressing mode used by the MSP-430, but when it came to planning the machine code I couldn't think of a simple way to represent it. I could have looked up how the MSP-430 does it, but I wanted the architecture to follow my style of doing things instead of copying someone else's implementation. As such, I solved it by adding a register for the reference address and indirect addressing simply specifies the offset.
 
 **Assembler**
-This is simpler than I had expected. The Assembler program is little more than an interface, with the actual assembly being performed by the ASM class of the SG16 library. Simply put, the assembler parses Assembly language code and converts it to machine code, outputing the result as a binary ROM file which will later be opened and executed by the emulator. The exercise brought me to the stunningly obvious realization than an emulator is an interpriter for machine code.
+This is simpler than I had expected. The Assembler program is little more than an interface, with the actual assembly being performed by the ASM class of the SG16 library. Simply put, the assembler parses Assembly language code and converts it to machine code, outputing the result as a binary ROM file which will later be opened and executed by the emulator. The exercise brought me to the stunningly obvious realization than an emulator is just an interpriter for machine code.
 
 **Emulator**
-The emulator is certainly the most challenging part of the project, and I am approaching it with strong OOP design principles. The imlementation is fairly abstract, contained within a DLL for easy adaptation into future frontends and UIs.
+The core emulator is certainly the most challenging part of the project, and I am approaching it with strong OOP design principles. The imlementation is fairly abstract, contained within a DLL for easy adaptation into future frontends and UIs. Operations on registers are the simplest in terms of logic, though operations on RAM have already resulted in some issues regarding endianess, and a reminder of how important it is to keep that in mind. 
 
 **Emulator UI**
-The bulk of the emulator's facilities, such as registers and RAM, are public to allow a simple GUI application to read and display the contents, as well as providing some interface for pausing and stepping execution and connecting emulated peripherals. The first UI will use WinForms and be inspired heavily by the classic Easy68k emulator, with a traditional WYSIWYG interface and low-level display of registers, RAM, and other mechanisms.
+The bulk of the core emulator's facilities, such as registers and RAM, are public to allow a simple GUI application to read and display the contents, as well as providing some interface for pausing and stepping execution and connecting emulated peripherals. The first UI uses WinForms and is inspired heavily by the classic Easy68k emulator, with a traditional WYSIWYG interface and low-level display of registers and RAM. With a convenient UI for testing, debugging the core emulator should be a great deal easier.
 
 **Peripherals**
 There's no shortage of input and output peripherals I'd like to emulate, but the most important to start will certainly be a text terminal, followed by a simple graphics adapter. These will be emulated as simple memory-mapped I/O, making Assembly interaction as simple as possible. Other peripherals may eventually include serial ports, nonvolatile memory, direct interaction with the host mouse and keyboard, and sound output.
 
 **Software**
-Assembly is the first step, but writing useful or interesting software in Assembly is difficult and tedious. I am looking into a partial port of gcc, and definitely want to write a QBASIC compiler.
+Assembly is the first step, but writing useful or interesting software in Assembly is difficult and tedious. I am looking into a partial port of gcc, and definitely want to write a QBASIC compiler. I am told that gcc is tuned for simple partial porting to new architectures with minimal effort, though full ports can be exceedinly complicated. As for QBasic, it seems to me that few language families come as close to Assembly as the BASIC dialects do, and I have great nostalgia for QBasic because it was my first programming language.

@@ -135,8 +135,14 @@ namespace EmulatorUI
             {
                 // Open the selected file to read.
                 romPath = openFileDialog1.FileName;
+                tabControl1.SelectedIndex = 1;
                 resetCPU();
             }
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            resetCPU();
         }
     }
 }
