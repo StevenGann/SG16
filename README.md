@@ -37,7 +37,7 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 | MULT |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |        
 | DIVI |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |         
 | EXPO |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-| COMP |     |     |     |     |     |     |     |     |     |     |     |     |       
+| COMP |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
 
 **Single Argument**
 - **R** Register
@@ -53,15 +53,15 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 |  NOT | ✔ |N/A| ✔ |
 | INCR | ✔ |N/A| ✔ |
 | DECR | ✔ |N/A| ✔ |
-| GOTO | ✔ | ✔ |
+| GOTO | ✔ | ✔ | ✔ |
 | EVAL |
-| JMPZ |
-| JMGZ |
-| JMLZ |
+| JMPZ | ✔ | ✔ | ✔ |
+| JMGZ | ✔ | ✔ | ✔ |
+| JMLZ | ✔ | ✔ | ✔ |
 | GSUB |   | ✔ |
-| JMPE |
-| JMPG |
-| JMPL |
+| JMPE | ✔ | ✔ | ✔ |
+| JMPG | ✔ | ✔ | ✔ |
+| JMPL | ✔ | ✔ | ✔ |
 | ENQU |
 | DEQU |
 

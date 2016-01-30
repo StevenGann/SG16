@@ -43,6 +43,43 @@ namespace SG16
             get { return GetBit(LowerByte, 6); }
             set { WriteBit(LowerByte, 6, value); }
         }
+        public bool G
+        {
+            get { return GetBit(LowerByte, 7); }
+            set { WriteBit(LowerByte, 7, value); }
+        }
+
+        public static explicit operator StatusRegister(byte b)
+        {
+            StatusRegister result = new StatusRegister();
+            result.LowerByte = b;
+            return result;
+        }
+
+        public static explicit operator StatusRegister(byte[] b)
+        {
+            StatusRegister result = new StatusRegister();
+            result.LowerByte = b[0];
+            if (b.Length > 1) { result.UpperByte = b[1]; }
+            return result;
+        }
+
+        public static explicit operator StatusRegister(UInt16 b)
+        {
+            StatusRegister result = new StatusRegister();
+
+            if (b <= 0xFF)
+            {
+                result.LowerByte = Convert.ToByte(b);
+            }
+            else
+            {
+                result.LowerByte = 0xFF;
+                result.UpperByte = Convert.ToByte(b - Convert.ToUInt16(0xFF));
+            }
+
+            return result;
+        }
 
         new public string ToString()
         {

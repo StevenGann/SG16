@@ -12,7 +12,7 @@ namespace SG16
     {
         //System Registers
         public Register PC = (Register)0x00;
-        public Register STAT = (Register)0x00;
+        public StatusRegister STAT = (StatusRegister)0x00;
         public Register SUBR = (Register)0x00;
         public Register PSTR = (Register)0x00;
         public Register PEND = (Register)0x00;
@@ -994,13 +994,167 @@ namespace SG16
         }
         private void GOTO(byte[] Arg1, byte[] Arg2)
         {
-            PC = (Register)Arg1;
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                PC = (Register)arg1Word;
+            }
+            else if (Arg1[0] == 0x01) //Literal
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                PC = (Register)arg1Word;
+            }
+            else if (Arg1[0] == 0x02) //Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                PC = (Register)arg1Word;
+            }
         }
         private void EVAL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void COMP(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void JMPZ(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void JMGZ(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void JMLZ(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void COMP(byte[] Arg1, byte[] Arg2)
+        {
+            UInt16 arg1Word = 0;
+            UInt16 arg2Word = 0;
+            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            }
+            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            }
+            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                byte[] arg2Data = RAM.Get16(Arg1);
+
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            }
+            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                byte[] arg2Data = RAM.Get16(Arg2);
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            }
+
+            STAT.Z = (arg1Word == 0);
+            STAT.E = (arg1Word == arg2Word);
+            STAT.L = (arg1Word <= arg2Word);
+            STAT.G = (arg1Word > arg2Word);
+        }
+        private void JMPZ(byte[] Arg1, byte[] Arg2)
+        {
+            if (STAT.Z)
+            {
+                if (Arg1[0] == 0x00) //Register
+                {
+                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x01) //Literal
+                {
+                    byte[] arg1Data = new byte[2];
+                    arg1Data[0] = Arg1[2];
+                    arg1Data[1] = Arg1[1];
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x02) //Absolute RAM
+                {
+                    byte[] arg1Data = RAM.Get16(Arg1);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+            }
+        }
+        private void JMGZ(byte[] Arg1, byte[] Arg2)
+        {
+            if (!STAT.Z)
+            {
+                if (Arg1[0] == 0x00) //Register
+                {
+                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x01) //Literal
+                {
+                    byte[] arg1Data = new byte[2];
+                    arg1Data[0] = Arg1[2];
+                    arg1Data[1] = Arg1[1];
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x02) //Absolute RAM
+                {
+                    byte[] arg1Data = RAM.Get16(Arg1);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+            }
+        }
+        private void JMLZ(byte[] Arg1, byte[] Arg2)
+        {
+            if (STAT.N)
+            {
+                if (Arg1[0] == 0x00) //Register
+                {
+                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x01) //Literal
+                {
+                    byte[] arg1Data = new byte[2];
+                    arg1Data[0] = Arg1[2];
+                    arg1Data[1] = Arg1[1];
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x02) //Absolute RAM
+                {
+                    byte[] arg1Data = RAM.Get16(Arg1);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+            }
+        }
         private void GSUB(byte[] Arg1, byte[] Arg2)
         {
             SUBR = (Register)PC.ToInt();
@@ -1010,9 +1164,84 @@ namespace SG16
         {
             PC = (Register)(SUBR.ToInt() + 1);
         }
-        private void JMPE(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void JMPG(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void JMPL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+        private void JMPE(byte[] Arg1, byte[] Arg2)
+        {
+            if (STAT.E)
+            {
+                if (Arg1[0] == 0x00) //Register
+                {
+                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x01) //Literal
+                {
+                    byte[] arg1Data = new byte[2];
+                    arg1Data[0] = Arg1[2];
+                    arg1Data[1] = Arg1[1];
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x02) //Absolute RAM
+                {
+                    byte[] arg1Data = RAM.Get16(Arg1);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+            }
+        }
+        private void JMPG(byte[] Arg1, byte[] Arg2)
+        {
+            if (STAT.G)
+            {
+                if (Arg1[0] == 0x00) //Register
+                {
+                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x01) //Literal
+                {
+                    byte[] arg1Data = new byte[2];
+                    arg1Data[0] = Arg1[2];
+                    arg1Data[1] = Arg1[1];
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x02) //Absolute RAM
+                {
+                    byte[] arg1Data = RAM.Get16(Arg1);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+            }
+        }
+        private void JMPL(byte[] Arg1, byte[] Arg2)
+        {
+            if (STAT.L && !STAT.E)
+            {
+                if (Arg1[0] == 0x00) //Register
+                {
+                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x01) //Literal
+                {
+                    byte[] arg1Data = new byte[2];
+                    arg1Data[0] = Arg1[2];
+                    arg1Data[1] = Arg1[1];
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+                else if (Arg1[0] == 0x02) //Absolute RAM
+                {
+                    byte[] arg1Data = RAM.Get16(Arg1);
+                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                    PC = (Register)arg1Word;
+                }
+            }
+        }
         private void ENQU(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
         private void DEQU(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
 
@@ -1026,7 +1255,7 @@ namespace SG16
                     PC = (Register)value;
                     break;
                 case 0x01:
-                    STAT = (Register)value;
+                    STAT = (StatusRegister)value;
                     break;
                 case 0x02:
                     SUBR = (Register)value;
