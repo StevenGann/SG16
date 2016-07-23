@@ -91,12 +91,12 @@ namespace EmulatorUI
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.serialTextBox = new System.Windows.Forms.TextBox();
+            this.textBoxTerminalOutput = new System.Windows.Forms.TextBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxTerminalInput = new System.Windows.Forms.TextBox();
             this.buttonSerialSend = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -227,6 +227,7 @@ namespace EmulatorUI
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(652, 585);
             this.tabControl1.TabIndex = 8;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -721,7 +722,7 @@ namespace EmulatorUI
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.serialTextBox);
+            this.splitContainer1.Panel1.Controls.Add(this.textBoxTerminalOutput);
             // 
             // splitContainer1.Panel2
             // 
@@ -730,17 +731,17 @@ namespace EmulatorUI
             this.splitContainer1.SplitterDistance = 414;
             this.splitContainer1.TabIndex = 0;
             // 
-            // serialTextBox
+            // textBoxTerminalOutput
             // 
-            this.serialTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.serialTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.serialTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.serialTextBox.Location = new System.Drawing.Point(0, 0);
-            this.serialTextBox.Multiline = true;
-            this.serialTextBox.Name = "serialTextBox";
-            this.serialTextBox.ReadOnly = true;
-            this.serialTextBox.Size = new System.Drawing.Size(640, 410);
-            this.serialTextBox.TabIndex = 0;
+            this.textBoxTerminalOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTerminalOutput.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBoxTerminalOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxTerminalOutput.Location = new System.Drawing.Point(0, 0);
+            this.textBoxTerminalOutput.Multiline = true;
+            this.textBoxTerminalOutput.Name = "textBoxTerminalOutput";
+            this.textBoxTerminalOutput.ReadOnly = true;
+            this.textBoxTerminalOutput.Size = new System.Drawing.Size(640, 410);
+            this.textBoxTerminalOutput.TabIndex = 0;
             // 
             // tabControl2
             // 
@@ -757,7 +758,7 @@ namespace EmulatorUI
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.buttonSerialSend);
-            this.tabPage4.Controls.Add(this.textBox1);
+            this.tabPage4.Controls.Add(this.textBoxTerminalInput);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
@@ -785,13 +786,13 @@ namespace EmulatorUI
             this.tabPage6.Text = "Options";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // textBoxTerminalInput
             // 
-            this.textBox1.Location = new System.Drawing.Point(6, 6);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(514, 99);
-            this.textBox1.TabIndex = 0;
+            this.textBoxTerminalInput.Location = new System.Drawing.Point(6, 6);
+            this.textBoxTerminalInput.Multiline = true;
+            this.textBoxTerminalInput.Name = "textBoxTerminalInput";
+            this.textBoxTerminalInput.Size = new System.Drawing.Size(514, 99);
+            this.textBoxTerminalInput.TabIndex = 0;
             // 
             // buttonSerialSend
             // 
@@ -900,11 +901,11 @@ namespace EmulatorUI
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TextBox serialTextBox;
+        private System.Windows.Forms.TextBox textBoxTerminalOutput;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Button buttonSerialSend;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxTerminalInput;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
     }

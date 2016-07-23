@@ -1,21 +1,47 @@
-﻿using System;
+﻿using Assembler;
+using SG16;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assembler;
-using SG16;
 
 namespace Assembler
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            ASM Assembler = new ASM();
-            string input = System.IO.File.ReadAllText("test.asm");
-            Console.WriteLine(input);
-            Assembler.Assemble(input);
+            string inputPath = "test.asm";
+
+            foreach (string s in args)
+            {
+                Console.WriteLine(s);
+            }
+
+            if (args.Length >= 1)
+            {
+                if (File.Exists(args[0]) && Path.GetExtension(args[0]) == ".asm")
+                {
+                    inputPath = args[0];
+                    Console.WriteLine(inputPath);
+                }
+            }
+
+            if (File.Exists(inputPath))
+            {
+                ASM Assembler = new ASM();
+                string input = System.IO.File.ReadAllText(inputPath);
+                Console.WriteLine(input);
+                Assembler.Assemble(input, Path.GetFileNameWithoutExtension(inputPath) + ".rom");
+            }
+            else
+            {
+                Console.WriteLine("Could not find file:");
+                Console.WriteLine(inputPath);
+                Console.ReadLine();
+            }
         }
     }
 }

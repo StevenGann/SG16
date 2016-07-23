@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace SG16
 {
@@ -12,6 +12,7 @@ namespace SG16
     {
         //System Registers
         public Register PC = (Register)0x00;
+
         public StatusRegister STAT = (StatusRegister)0x00;
         public Register SUBR = (Register)0x00;
         public Register PSTR = (Register)0x00;
@@ -21,6 +22,7 @@ namespace SG16
 
         //User Registers
         public Register USR0 = (Register)0x00;
+
         public Register USR1 = (Register)0x00;
         public Register USR2 = (Register)0x00;
         public Register USR3 = (Register)0x00;
@@ -39,7 +41,9 @@ namespace SG16
 
         public Memory RAM = new Memory();
 
-        Random RNG = new Random();
+        public List<Peripheral> Peripherals = new List<Peripheral>();
+
+        private Random RNG = new Random();
 
         public string Message = "";
 
@@ -49,12 +53,21 @@ namespace SG16
 
             //Execute Instruction
             Execute(PC.ToInt());
-            
+
             //Advance PC
             PC.Increment(8);
 
             long result = sw.ElapsedMilliseconds;
             sw.Stop();
+
+            if (Peripherals.Count > 0)
+            {
+                foreach (Peripheral p in Peripherals)
+                {
+                    p.Tick();
+                }
+            }
+
             return result;
         }
 
@@ -68,130 +81,171 @@ namespace SG16
                 case 0x00:
                     NULL(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x01:
                     START(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x02:
                     END(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x03:
                     REF(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x11:
                     MOVE(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x12:
                     SWAP(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x13:
                     ROTL(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x14:
                     ROTR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x21:
                     OR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x22:
                     NOR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x23:
                     XOR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x24:
                     XNOR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x25:
                     AND(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x26:
                     NAND(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x27:
                     NOT(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x31:
                     ADD(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x32:
                     SUBT(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x33:
                     INCR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x34:
                     DECR(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x35:
                     MULT(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x36:
                     DIVI(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x37:
                     EXPO(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x41:
                     GOTO(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x42:
                     EVAL(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x43:
                     COMP(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x44:
                     JMPZ(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x45:
                     JMGZ(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x46:
                     JMLZ(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x47:
                     GSUB(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x48:
                     RTRN(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x49:
                     JMPE(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x4A:
                     JMPG(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x4B:
                     JMPL(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x51:
                     ENQU(instruction.Argument1, instruction.Argument2);
                     break;
+
                 case 0x52:
                     DEQU(instruction.Argument1, instruction.Argument2);
                     break;
+
                 default:
                     NULL(instruction.Argument1, instruction.Argument2);
                     break;
             }
-
         }
 
         #region Operations
-        private void NULL(byte[] Arg1, byte[] Arg2) { } //Does nothing
+
+        private void NULL(byte[] Arg1, byte[] Arg2)
+        {
+        } //Does nothing
+
         private void START(byte[] Arg1, byte[] Arg2)
         {
             PSTR = (Register)PC.ToInt();
         }
+
         private void END(byte[] Arg1, byte[] Arg2)
         {
             PEND = (Register)PC.ToInt();
             PC = (Register)PSTR.ToInt();
         }
+
         private void REF(byte[] Arg1, byte[] Arg2)
         {
             RREF = (Register)Arg1;
         }
+
         private void MOVE(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register to Register
@@ -254,6 +308,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void SWAP(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register Register
@@ -308,6 +363,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void ROTL(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00) //Register
@@ -319,6 +375,7 @@ namespace SG16
                 setRegisterFromID(Arg1[2], result);
             }
         }
+
         private void ROTR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00) //Register
@@ -330,6 +387,7 @@ namespace SG16
                 setRegisterFromID(Arg1[2], result);
             }
         }
+
         private void OR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register OR Register
@@ -386,6 +444,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void NOR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -398,6 +457,7 @@ namespace SG16
                 setRegisterFromID(Arg2[2], data);
             }
         }
+
         private void XOR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register XOR Register
@@ -454,6 +514,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void XNOR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -510,6 +571,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void AND(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register AND Register
@@ -566,6 +628,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void NAND(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -622,6 +685,7 @@ namespace SG16
                 throw new NotImplementedException();
             }
         }
+
         private void NOT(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00) //Register
@@ -641,6 +705,7 @@ namespace SG16
                 RAM.Set16(Arg1, result);
             }
         }
+
         private void ADD(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -715,6 +780,7 @@ namespace SG16
                 RAM.Set16(Arg2, result);
             }
         }
+
         private void SUBT(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -789,6 +855,7 @@ namespace SG16
                 RAM.Set16(Arg2, result);
             }
         }
+
         private void INCR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00) //Register
@@ -809,6 +876,7 @@ namespace SG16
                 RAM.Set16(Arg1, result);
             }
         }
+
         private void DECR(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00) //Register
@@ -829,6 +897,7 @@ namespace SG16
                 RAM.Set16(Arg1, result);
             }
         }
+
         private void MULT(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -903,6 +972,7 @@ namespace SG16
                 RAM.Set16(Arg2, result);
             }
         }
+
         private void DIVI(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -977,6 +1047,7 @@ namespace SG16
                 RAM.Set16(Arg2, result);
             }
         }
+
         private void EXPO(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
@@ -992,6 +1063,7 @@ namespace SG16
                 setRegisterFromID(Arg2[2], result);
             }
         }
+
         private void GOTO(byte[] Arg1, byte[] Arg2)
         {
             if (Arg1[0] == 0x00) //Register
@@ -1015,7 +1087,12 @@ namespace SG16
                 PC = (Register)arg1Word;
             }
         }
-        private void EVAL(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
+
+        private void EVAL(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
         private void COMP(byte[] Arg1, byte[] Arg2)
         {
             UInt16 arg1Word = 0;
@@ -1077,6 +1154,7 @@ namespace SG16
             STAT.L = (arg1Word <= arg2Word);
             STAT.G = (arg1Word > arg2Word);
         }
+
         private void JMPZ(byte[] Arg1, byte[] Arg2)
         {
             if (STAT.Z)
@@ -1103,6 +1181,7 @@ namespace SG16
                 }
             }
         }
+
         private void JMGZ(byte[] Arg1, byte[] Arg2)
         {
             if (!STAT.Z)
@@ -1129,6 +1208,7 @@ namespace SG16
                 }
             }
         }
+
         private void JMLZ(byte[] Arg1, byte[] Arg2)
         {
             if (STAT.N)
@@ -1155,15 +1235,18 @@ namespace SG16
                 }
             }
         }
+
         private void GSUB(byte[] Arg1, byte[] Arg2)
         {
             SUBR = (Register)PC.ToInt();
             PC = (Register)Arg1;
         }
+
         private void RTRN(byte[] Arg1, byte[] Arg2)
         {
             PC = (Register)(SUBR.ToInt() + 1);
         }
+
         private void JMPE(byte[] Arg1, byte[] Arg2)
         {
             if (STAT.E)
@@ -1190,6 +1273,7 @@ namespace SG16
                 }
             }
         }
+
         private void JMPG(byte[] Arg1, byte[] Arg2)
         {
             if (STAT.G)
@@ -1216,6 +1300,7 @@ namespace SG16
                 }
             }
         }
+
         private void JMPL(byte[] Arg1, byte[] Arg2)
         {
             if (STAT.L && !STAT.E)
@@ -1242,84 +1327,115 @@ namespace SG16
                 }
             }
         }
-        private void ENQU(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
-        private void DEQU(byte[] Arg1, byte[] Arg2) { throw new NotImplementedException(); }
 
-        #endregion
+        private void ENQU(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DEQU(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Operations
 
         private void setRegisterFromID(byte id, byte[] value)
         {
-            switch(id)
+            switch (id)
             {
                 case 0x00:
                     PC = (Register)value;
                     break;
+
                 case 0x01:
                     STAT = (StatusRegister)value;
                     break;
+
                 case 0x02:
                     SUBR = (Register)value;
                     break;
+
                 case 0x03:
                     PSTR = (Register)value;
                     break;
+
                 case 0x04:
                     PEND = (Register)value;
                     break;
+
                 case 0x05:
                     RAND = (Register)value;
                     break;
+
                 case 0x06:
                     RREF = (Register)value;
                     break;
+
                 case 0xF0:
                     USR0 = (Register)value;
                     break;
+
                 case 0xF1:
                     USR1 = (Register)value;
                     break;
+
                 case 0xF2:
                     USR2 = (Register)value;
                     break;
+
                 case 0xF3:
                     USR3 = (Register)value;
                     break;
+
                 case 0xF4:
                     USR4 = (Register)value;
                     break;
+
                 case 0xF5:
                     USR5 = (Register)value;
                     break;
+
                 case 0xF6:
                     USR6 = (Register)value;
                     break;
+
                 case 0xF7:
                     USR7 = (Register)value;
                     break;
+
                 case 0xF8:
                     USR8 = (Register)value;
                     break;
+
                 case 0xF9:
                     USR9 = (Register)value;
                     break;
+
                 case 0xFA:
                     USRA = (Register)value;
                     break;
+
                 case 0xFB:
                     USRB = (Register)value;
                     break;
+
                 case 0xFC:
                     USRC = (Register)value;
                     break;
+
                 case 0xFD:
                     USRD = (Register)value;
                     break;
+
                 case 0xFE:
                     USRE = (Register)value;
                     break;
+
                 case 0xFF:
                     USRF = (Register)value;
                     break;
+
                 default:
                     break;
             }
@@ -1335,93 +1451,116 @@ namespace SG16
                     result[0] = PC.LowerByte;
                     result[1] = PC.UpperByte;
                     break;
+
                 case 0x01:
                     result[0] = STAT.LowerByte;
                     result[1] = STAT.UpperByte;
                     break;
+
                 case 0x02:
                     result[0] = SUBR.LowerByte;
                     result[1] = SUBR.UpperByte;
                     break;
+
                 case 0x03:
                     result[0] = PSTR.LowerByte;
                     result[1] = PSTR.UpperByte;
                     break;
+
                 case 0x04:
                     result[0] = PEND.LowerByte;
                     result[1] = PEND.UpperByte;
                     break;
+
                 case 0x05:
                     RNG.NextBytes(result);
                     break;
+
                 case 0x06:
                     result[0] = RREF.LowerByte;
                     result[1] = RREF.UpperByte;
                     break;
+
                 case 0xF0:
                     result[0] = USR0.LowerByte;
                     result[1] = USR0.UpperByte;
                     break;
+
                 case 0xF1:
                     result[0] = USR1.LowerByte;
                     result[1] = USR1.UpperByte;
                     break;
+
                 case 0xF2:
                     result[0] = USR2.LowerByte;
                     result[1] = USR2.UpperByte;
                     break;
+
                 case 0xF3:
                     result[0] = USR3.LowerByte;
                     result[1] = USR3.UpperByte;
                     break;
+
                 case 0xF4:
                     result[0] = USR4.LowerByte;
                     result[1] = USR4.UpperByte;
                     break;
+
                 case 0xF5:
                     result[0] = USR5.LowerByte;
                     result[1] = USR5.UpperByte;
                     break;
+
                 case 0xF6:
                     result[0] = USR6.LowerByte;
                     result[1] = USR6.UpperByte;
                     break;
+
                 case 0xF7:
                     result[0] = USR7.LowerByte;
                     result[1] = USR7.UpperByte;
                     break;
+
                 case 0xF8:
                     result[0] = USR8.LowerByte;
                     result[1] = USR8.UpperByte;
                     break;
+
                 case 0xF9:
                     result[0] = USR9.LowerByte;
                     result[1] = USR9.UpperByte;
                     break;
+
                 case 0xFA:
                     result[0] = USRA.LowerByte;
                     result[1] = USRA.UpperByte;
                     break;
+
                 case 0xFB:
                     result[0] = USRB.LowerByte;
                     result[1] = USRB.UpperByte;
                     break;
+
                 case 0xFC:
                     result[0] = USRC.LowerByte;
                     result[1] = USRC.UpperByte;
                     break;
+
                 case 0xFD:
                     result[0] = USRD.LowerByte;
                     result[1] = USRD.UpperByte;
                     break;
+
                 case 0xFE:
                     result[0] = USRE.LowerByte;
                     result[1] = USRE.UpperByte;
                     break;
+
                 case 0xFF:
                     result[0] = USRF.LowerByte;
                     result[1] = USRF.UpperByte;
                     break;
+
                 default:
                     break;
             }
@@ -1449,7 +1588,6 @@ namespace SG16
                             n = 0;
                             Message = "Loaded " + ASM.ByteArrayToString(chunk);
                         }
-
                     }
                 }
                 return length;
@@ -1463,7 +1601,12 @@ namespace SG16
             LoadROM(0, path);
         }
 
-        static byte[] UInt16ToByteArray(UInt16 b)
+        public void AttachPeripheral(Peripheral _peripheral)
+        {
+            Peripherals.Add(_peripheral);
+        }
+
+        private static byte[] UInt16ToByteArray(UInt16 b)
         {
             byte[] result = new byte[2];
 

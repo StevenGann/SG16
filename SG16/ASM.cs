@@ -9,7 +9,7 @@ namespace SG16
 {
     public class ASM
     {
-        public void Assemble(string _input)
+        public void Assemble(string _input, string _output)
         {
             //Split code file into lines
             string[] inputArray = _input.Split('\n');
@@ -45,9 +45,9 @@ namespace SG16
             Console.WriteLine("==============");
             Console.WriteLine(ByteArrayToString(program.ToArray()));
 
-            using (BinaryWriter writer = new BinaryWriter(File.Open("output.rom", FileMode.Create)))
+            using (BinaryWriter writer = new BinaryWriter(File.Open(_output, FileMode.Create)))
             {
-                foreach(byte b in program)
+                foreach (byte b in program)
                 {
                     writer.Write(b);
                 }
@@ -260,7 +260,7 @@ namespace SG16
             foreach (byte b in ba)
             {
                 hex.AppendFormat("{0:x2}", b);
-                if (ba.Length <= 8 && i == 0) { hex.Append(" ");}
+                if (ba.Length <= 8 && i == 0) { hex.Append(" "); }
                 if (ba.Length <= 8 && i == 1) { hex.Append(" "); }
                 if (ba.Length <= 8 && i == 3) { hex.Append(" "); }
                 if (ba.Length <= 8 && i == 4) { hex.Append(" "); }

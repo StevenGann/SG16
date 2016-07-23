@@ -1,28 +1,28 @@
 ﻿using SG16;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections;
-using System.ComponentModel.Design;
-using System.IO;
 
 namespace EmulatorUI
 {
     public partial class Form1 : Form
     {
-        string romPath = "";
-        Core core = new Core();
+        private string romPath = "";
+        private Core core = new Core();
+        private Terminal terminal = new Terminal();
 
         public Form1()
         {
             InitializeComponent();
-
 
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length >= 2)
@@ -32,7 +32,6 @@ namespace EmulatorUI
                     romPath = args[1];
                     tabControl1.SelectedIndex = 1;
                 }
-                
             }
             resetCPU();
         }
@@ -62,6 +61,12 @@ namespace EmulatorUI
             {
                 core.LoadROM(0, romPath);
             }
+
+            //Attach terminal to 0xFF00, 0xFF02, and 0xFF04
+            terminal = new Terminal();
+            terminal.Attach(65280, 65282, 65284, core.RAM);
+            core.AttachPeripheral(terminal);
+
             updateUI();
         }
 
@@ -75,44 +80,49 @@ namespace EmulatorUI
                 {
                     StatusLabel.Text += " - Took " + Convert.ToString(time) + "ms";
                 }
-                updateUI();
-
             }
             else
             {
                 MessageBox.Show("Program Counter has reached the end of RAM");
             }
+            updateUI();
         }
 
         private void updateUI()
         {
-            textBoxPC.Text = core.PC.ToString();
-            textBoxSTAT.Text = core.STAT.ToString();
-            textBoxSUBR.Text = core.SUBR.ToString();
-            textBoxPSTR.Text = core.PSTR.ToString();
-            textBoxPEND.Text = core.PEND.ToString();
-            textBoxRREF.Text = core.RREF.ToString();
+            if (tabControl1.SelectedIndex == 0)
+            {
+                textBoxPC.Text = core.PC.ToString();
+                textBoxSTAT.Text = core.STAT.ToString();
+                textBoxSUBR.Text = core.SUBR.ToString();
+                textBoxPSTR.Text = core.PSTR.ToString();
+                textBoxPEND.Text = core.PEND.ToString();
+                textBoxRREF.Text = core.RREF.ToString();
 
-            textBoxUSR0.Text = core.USR0.ToString();
-            textBoxUSR1.Text = core.USR1.ToString();
-            textBoxUSR2.Text = core.USR2.ToString();
-            textBoxUSR3.Text = core.USR3.ToString();
-            textBoxUSR4.Text = core.USR4.ToString();
-            textBoxUSR5.Text = core.USR5.ToString();
-            textBoxUSR6.Text = core.USR6.ToString();
-            textBoxUSR7.Text = core.USR7.ToString();
-            textBoxUSR8.Text = core.USR8.ToString();
-            textBoxUSR9.Text = core.USR9.ToString();
-            textBoxUSRA.Text = core.USRA.ToString();
-            textBoxUSRB.Text = core.USRB.ToString();
-            textBoxUSRC.Text = core.USRC.ToString();
-            textBoxUSRD.Text = core.USRD.ToString();
-            textBoxUSRE.Text = core.USRE.ToString();
-            textBoxUSRF.Text = core.USRF.ToString();
-
-            if (tabControl1.SelectedIndex == 1)
+                textBoxUSR0.Text = core.USR0.ToString();
+                textBoxUSR1.Text = core.USR1.ToString();
+                textBoxUSR2.Text = core.USR2.ToString();
+                textBoxUSR3.Text = core.USR3.ToString();
+                textBoxUSR4.Text = core.USR4.ToString();
+                textBoxUSR5.Text = core.USR5.ToString();
+                textBoxUSR6.Text = core.USR6.ToString();
+                textBoxUSR7.Text = core.USR7.ToString();
+                textBoxUSR8.Text = core.USR8.ToString();
+                textBoxUSR9.Text = core.USR9.ToString();
+                textBoxUSRA.Text = core.USRA.ToString();
+                textBoxUSRB.Text = core.USRB.ToString();
+                textBoxUSRC.Text = core.USRC.ToString();
+                textBoxUSRD.Text = core.USRD.ToString();
+                textBoxUSRE.Text = core.USRE.ToString();
+                textBoxUSRF.Text = core.USRF.ToString();
+            }
+            else if (tabControl1.SelectedIndex == 1)
             {
                 byteViewerRAM.SetBytes(core.RAM.Data);
+            }
+            else if (tabControl1.SelectedIndex == 2)
+            {
+                textBoxTerminalOutput.Text = terminal.Text;
             }
         }
 
@@ -143,6 +153,11 @@ namespace EmulatorUI
         private void buttonReset_Click(object sender, EventArgs e)
         {
             resetCPU();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateUI();
         }
     }
 }

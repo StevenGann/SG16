@@ -13,6 +13,14 @@ Instead, I'm working on building an emulator instead, while designing the CPU ar
 - [ ] Peripheral emulators
 - [ ] Software tools (C, BASIC compilers)
 
+**Peripherals**
+- [x] Serial terminal
+- [ ] Hardware COM ports
+- [ ] HDD/Floppy controller
+- [ ] Display adapter
+- [ ] Graphics accellerator (Probably its own project!)
+- [ ] Network adapter
+- [ ] Audio controller
 
 #Implemented Instructions
 
@@ -94,7 +102,7 @@ The core emulator is certainly the most challenging part of the project, and I a
 The bulk of the core emulator's facilities, such as registers and RAM, are public to allow a simple GUI application to read and display the contents, as well as providing some interface for pausing and stepping execution and connecting emulated peripherals. The first UI uses WinForms and is inspired heavily by the classic Easy68k emulator, with a traditional WYSIWYG interface and low-level display of registers and RAM. With a convenient UI for testing, debugging the core emulator should be a great deal easier.
 
 **Peripherals**
-There's no shortage of input and output peripherals I'd like to emulate, but the most important to start will certainly be a text terminal, followed by a simple graphics adapter. These will be emulated as simple memory-mapped I/O, making Assembly interaction as simple as possible. Other peripherals may eventually include serial ports, nonvolatile memory, direct interaction with the host mouse and keyboard, and sound output.
+There's no shortage of input and output peripherals I'd like to emulate, but the most important to start will certainly be a text terminal, followed by a simple graphics adapter. These will be emulated as simple memory-mapped I/O, making Assembly interaction as simple as possible. Other peripherals may eventually include serial ports, nonvolatile memory, direct interaction with the host mouse and keyboard, and sound output. Top priority is definitely serial communication, though, since almost every other peripheral could be built on top of that.
 
 **Software**
 Assembly is the first step, but writing useful or interesting software in Assembly is difficult and tedious. I am looking into a partial port of gcc, and definitely want to write a QBASIC compiler. I am told that gcc is tuned for simple partial porting to new architectures with minimal effort, though full ports can be exceedinly complicated. As for QBasic, it seems to me that few language families come as close to Assembly as the BASIC dialects do, and I have great nostalgia for QBasic because it was my first programming language.

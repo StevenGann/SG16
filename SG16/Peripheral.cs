@@ -6,28 +6,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emulator
+namespace SG16
 {
-    internal class Peripheral
+    public class Peripheral
     {
-        private Queue<byte> InputBuffer;
-        private Queue<byte> OutputBuffer;
+        protected Queue<byte> InputBuffer;
+        protected Queue<byte> OutputBuffer;
         public int InputAddress = -1;
         public int OutputAddress = -1;
         public int ControlAddress = -1;
-        private Memory ramReference;
+        protected Memory ramReference;
 
-        public Peripheral(Memory _ramReference)
+        public Peripheral()
         {
             InputBuffer = new Queue<byte>();
             OutputBuffer = new Queue<byte>();
-            ramReference = _ramReference;
         }
 
         public Peripheral(int _inputAddress, int _outputAddress, int _controlAddress, Memory _ramReference)
         {
             InputBuffer = new Queue<byte>();
             OutputBuffer = new Queue<byte>();
+            InputAddress = _inputAddress;
+            OutputAddress = _outputAddress;
+            ramReference = _ramReference;
+        }
+
+        public void Attach(int _inputAddress, int _outputAddress, int _controlAddress, Memory _ramReference)
+        {
             InputAddress = _inputAddress;
             OutputAddress = _outputAddress;
             ramReference = _ramReference;
@@ -45,7 +51,7 @@ namespace Emulator
             return result;
         }
 
-        private void Function()
+        virtual public void Function()
         {
             if (InputAddress >= 0)
             {
@@ -57,7 +63,7 @@ namespace Emulator
             //address to the output address
             OutputBuffer.Enqueue(InputBuffer.Dequeue());
 
-            if (InputAddress >= 0)
+            if (OutputAddress >= 0)
             {
                 ramReference[OutputAddress] = OutputBuffer.Dequeue();
             }
