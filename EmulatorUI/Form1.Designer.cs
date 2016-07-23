@@ -45,56 +45,72 @@ namespace EmulatorUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textBoxUSRF = new System.Windows.Forms.TextBox();
+            this.textBoxRREF = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.textBoxUSRE = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
-            this.textBoxUSRD = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.textBoxUSRC = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.textBoxUSRB = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.textBoxUSRA = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.textBoxUSR9 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBoxUSR8 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBoxUSR7 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBoxUSR6 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBoxUSR5 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBoxUSR4 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBoxUSR3 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBoxUSR2 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBoxUSR1 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBoxUSR0 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBoxRREF = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxPEND = new System.Windows.Forms.TextBox();
+            this.textBoxUSRD = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.textBoxUSRC = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.textBoxPSTR = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxSUBR = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBoxSTAT = new System.Windows.Forms.TextBox();
+            this.textBoxUSRB = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxUSRA = new System.Windows.Forms.TextBox();
+            this.textBoxSTAT = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBoxSUBR = new System.Windows.Forms.TextBox();
+            this.textBoxUSR9 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBoxUSR0 = new System.Windows.Forms.TextBox();
+            this.textBoxUSR8 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBoxUSR7 = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxUSR1 = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBoxUSR6 = new System.Windows.Forms.TextBox();
+            this.textBoxUSR2 = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBoxUSR5 = new System.Windows.Forms.TextBox();
+            this.textBoxUSR3 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBoxUSR4 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.byteViewerRAM = new System.ComponentModel.Design.ByteViewer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.serialTextBox = new System.Windows.Forms.TextBox();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.buttonSerialSend = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -133,7 +149,7 @@ namespace EmulatorUI
             // openROMToolStripMenuItem
             // 
             this.openROMToolStripMenuItem.Name = "openROMToolStripMenuItem";
-            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.openROMToolStripMenuItem.Text = "Open ROM";
             this.openROMToolStripMenuItem.Click += new System.EventHandler(this.openROMToolStripMenuItem_Click);
             // 
@@ -204,6 +220,7 @@ namespace EmulatorUI
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 53);
             this.tabControl1.Name = "tabControl1";
@@ -274,6 +291,15 @@ namespace EmulatorUI
             this.textBoxUSRF.TabIndex = 48;
             this.textBoxUSRF.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // textBoxRREF
+            // 
+            this.textBoxRREF.Location = new System.Drawing.Point(9, 136);
+            this.textBoxRREF.Name = "textBoxRREF";
+            this.textBoxRREF.ReadOnly = true;
+            this.textBoxRREF.Size = new System.Drawing.Size(47, 20);
+            this.textBoxRREF.TabIndex = 16;
+            this.textBoxRREF.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // label22
             // 
             this.label22.AutoSize = true;
@@ -301,6 +327,24 @@ namespace EmulatorUI
             this.label21.TabIndex = 47;
             this.label21.Text = "USRE";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(62, 139);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(36, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "RREF";
+            // 
+            // textBoxPEND
+            // 
+            this.textBoxPEND.Location = new System.Drawing.Point(9, 110);
+            this.textBoxPEND.Name = "textBoxPEND";
+            this.textBoxPEND.ReadOnly = true;
+            this.textBoxPEND.Size = new System.Drawing.Size(47, 20);
+            this.textBoxPEND.TabIndex = 14;
+            this.textBoxPEND.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // textBoxUSRD
             // 
             this.textBoxUSRD.Location = new System.Drawing.Point(203, 136);
@@ -318,6 +362,15 @@ namespace EmulatorUI
             this.label20.Size = new System.Drawing.Size(38, 13);
             this.label20.TabIndex = 45;
             this.label20.Text = "USRD";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(62, 113);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "PEND";
             // 
             // textBoxUSRC
             // 
@@ -337,6 +390,15 @@ namespace EmulatorUI
             this.label19.TabIndex = 43;
             this.label19.Text = "USRC";
             // 
+            // textBoxPSTR
+            // 
+            this.textBoxPSTR.Location = new System.Drawing.Point(9, 84);
+            this.textBoxPSTR.Name = "textBoxPSTR";
+            this.textBoxPSTR.ReadOnly = true;
+            this.textBoxPSTR.Size = new System.Drawing.Size(47, 20);
+            this.textBoxPSTR.TabIndex = 12;
+            this.textBoxPSTR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // textBoxUSRB
             // 
             this.textBoxUSRB.Location = new System.Drawing.Point(203, 87);
@@ -345,6 +407,15 @@ namespace EmulatorUI
             this.textBoxUSRB.Size = new System.Drawing.Size(47, 20);
             this.textBoxUSRB.TabIndex = 40;
             this.textBoxUSRB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(62, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "STAT";
             // 
             // label18
             // 
@@ -355,6 +426,15 @@ namespace EmulatorUI
             this.label18.TabIndex = 41;
             this.label18.Text = "USRB";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(62, 87);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "PSTR";
+            // 
             // textBoxUSRA
             // 
             this.textBoxUSRA.Location = new System.Drawing.Point(203, 58);
@@ -363,6 +443,15 @@ namespace EmulatorUI
             this.textBoxUSRA.Size = new System.Drawing.Size(47, 20);
             this.textBoxUSRA.TabIndex = 38;
             this.textBoxUSRA.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxSTAT
+            // 
+            this.textBoxSTAT.Location = new System.Drawing.Point(9, 32);
+            this.textBoxSTAT.Name = "textBoxSTAT";
+            this.textBoxSTAT.ReadOnly = true;
+            this.textBoxSTAT.Size = new System.Drawing.Size(47, 20);
+            this.textBoxSTAT.TabIndex = 8;
+            this.textBoxSTAT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label17
             // 
@@ -373,6 +462,15 @@ namespace EmulatorUI
             this.label17.TabIndex = 39;
             this.label17.Text = "USRA";
             // 
+            // textBoxSUBR
+            // 
+            this.textBoxSUBR.Location = new System.Drawing.Point(9, 58);
+            this.textBoxSUBR.Name = "textBoxSUBR";
+            this.textBoxSUBR.ReadOnly = true;
+            this.textBoxSUBR.Size = new System.Drawing.Size(47, 20);
+            this.textBoxSUBR.TabIndex = 10;
+            this.textBoxSUBR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // textBoxUSR9
             // 
             this.textBoxUSR9.Location = new System.Drawing.Point(203, 32);
@@ -382,6 +480,15 @@ namespace EmulatorUI
             this.textBoxUSR9.TabIndex = 36;
             this.textBoxUSR9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(62, 61);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "SUBR";
+            // 
             // label16
             // 
             this.label16.AutoSize = true;
@@ -390,6 +497,15 @@ namespace EmulatorUI
             this.label16.Size = new System.Drawing.Size(36, 13);
             this.label16.TabIndex = 37;
             this.label16.Text = "USR9";
+            // 
+            // textBoxUSR0
+            // 
+            this.textBoxUSR0.Location = new System.Drawing.Point(108, 6);
+            this.textBoxUSR0.Name = "textBoxUSR0";
+            this.textBoxUSR0.ReadOnly = true;
+            this.textBoxUSR0.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR0.TabIndex = 18;
+            this.textBoxUSR0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxUSR8
             // 
@@ -409,6 +525,24 @@ namespace EmulatorUI
             this.label15.TabIndex = 35;
             this.label15.Text = "USR8";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(161, 9);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "USR0";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(161, 35);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(36, 13);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "USR1";
+            // 
             // textBoxUSR7
             // 
             this.textBoxUSR7.Location = new System.Drawing.Point(108, 188);
@@ -427,86 +561,14 @@ namespace EmulatorUI
             this.label14.TabIndex = 33;
             this.label14.Text = "USR7";
             // 
-            // textBoxUSR6
+            // textBoxUSR1
             // 
-            this.textBoxUSR6.Location = new System.Drawing.Point(108, 162);
-            this.textBoxUSR6.Name = "textBoxUSR6";
-            this.textBoxUSR6.ReadOnly = true;
-            this.textBoxUSR6.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR6.TabIndex = 30;
-            this.textBoxUSR6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(161, 165);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(36, 13);
-            this.label13.TabIndex = 31;
-            this.label13.Text = "USR6";
-            // 
-            // textBoxUSR5
-            // 
-            this.textBoxUSR5.Location = new System.Drawing.Point(108, 136);
-            this.textBoxUSR5.Name = "textBoxUSR5";
-            this.textBoxUSR5.ReadOnly = true;
-            this.textBoxUSR5.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR5.TabIndex = 28;
-            this.textBoxUSR5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(161, 139);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(36, 13);
-            this.label12.TabIndex = 29;
-            this.label12.Text = "USR5";
-            // 
-            // textBoxUSR4
-            // 
-            this.textBoxUSR4.Location = new System.Drawing.Point(108, 110);
-            this.textBoxUSR4.Name = "textBoxUSR4";
-            this.textBoxUSR4.ReadOnly = true;
-            this.textBoxUSR4.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR4.TabIndex = 26;
-            this.textBoxUSR4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(161, 113);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(36, 13);
-            this.label11.TabIndex = 27;
-            this.label11.Text = "USR4";
-            // 
-            // textBoxUSR3
-            // 
-            this.textBoxUSR3.Location = new System.Drawing.Point(108, 84);
-            this.textBoxUSR3.Name = "textBoxUSR3";
-            this.textBoxUSR3.ReadOnly = true;
-            this.textBoxUSR3.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR3.TabIndex = 24;
-            this.textBoxUSR3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(161, 87);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(36, 13);
-            this.label10.TabIndex = 25;
-            this.label10.Text = "USR3";
-            // 
-            // textBoxUSR2
-            // 
-            this.textBoxUSR2.Location = new System.Drawing.Point(108, 58);
-            this.textBoxUSR2.Name = "textBoxUSR2";
-            this.textBoxUSR2.ReadOnly = true;
-            this.textBoxUSR2.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR2.TabIndex = 22;
-            this.textBoxUSR2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxUSR1.Location = new System.Drawing.Point(108, 32);
+            this.textBoxUSR1.Name = "textBoxUSR1";
+            this.textBoxUSR1.ReadOnly = true;
+            this.textBoxUSR1.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR1.TabIndex = 20;
+            this.textBoxUSR1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label9
             // 
@@ -517,131 +579,86 @@ namespace EmulatorUI
             this.label9.TabIndex = 23;
             this.label9.Text = "USR2";
             // 
-            // textBoxUSR1
+            // textBoxUSR6
             // 
-            this.textBoxUSR1.Location = new System.Drawing.Point(108, 32);
-            this.textBoxUSR1.Name = "textBoxUSR1";
-            this.textBoxUSR1.ReadOnly = true;
-            this.textBoxUSR1.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR1.TabIndex = 20;
-            this.textBoxUSR1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxUSR6.Location = new System.Drawing.Point(108, 162);
+            this.textBoxUSR6.Name = "textBoxUSR6";
+            this.textBoxUSR6.ReadOnly = true;
+            this.textBoxUSR6.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR6.TabIndex = 30;
+            this.textBoxUSR6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label8
+            // textBoxUSR2
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(161, 35);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(36, 13);
-            this.label8.TabIndex = 21;
-            this.label8.Text = "USR1";
+            this.textBoxUSR2.Location = new System.Drawing.Point(108, 58);
+            this.textBoxUSR2.Name = "textBoxUSR2";
+            this.textBoxUSR2.ReadOnly = true;
+            this.textBoxUSR2.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR2.TabIndex = 22;
+            this.textBoxUSR2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBoxUSR0
+            // label13
             // 
-            this.textBoxUSR0.Location = new System.Drawing.Point(108, 6);
-            this.textBoxUSR0.Name = "textBoxUSR0";
-            this.textBoxUSR0.ReadOnly = true;
-            this.textBoxUSR0.Size = new System.Drawing.Size(47, 20);
-            this.textBoxUSR0.TabIndex = 18;
-            this.textBoxUSR0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(161, 165);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(36, 13);
+            this.label13.TabIndex = 31;
+            this.label13.Text = "USR6";
             // 
-            // label7
+            // label10
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(161, 9);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(36, 13);
-            this.label7.TabIndex = 19;
-            this.label7.Text = "USR0";
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(161, 87);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(36, 13);
+            this.label10.TabIndex = 25;
+            this.label10.Text = "USR3";
             // 
-            // textBoxRREF
+            // textBoxUSR5
             // 
-            this.textBoxRREF.Location = new System.Drawing.Point(9, 136);
-            this.textBoxRREF.Name = "textBoxRREF";
-            this.textBoxRREF.ReadOnly = true;
-            this.textBoxRREF.Size = new System.Drawing.Size(47, 20);
-            this.textBoxRREF.TabIndex = 16;
-            this.textBoxRREF.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxUSR5.Location = new System.Drawing.Point(108, 136);
+            this.textBoxUSR5.Name = "textBoxUSR5";
+            this.textBoxUSR5.ReadOnly = true;
+            this.textBoxUSR5.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR5.TabIndex = 28;
+            this.textBoxUSR5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label6
+            // textBoxUSR3
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(62, 139);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(36, 13);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "RREF";
+            this.textBoxUSR3.Location = new System.Drawing.Point(108, 84);
+            this.textBoxUSR3.Name = "textBoxUSR3";
+            this.textBoxUSR3.ReadOnly = true;
+            this.textBoxUSR3.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR3.TabIndex = 24;
+            this.textBoxUSR3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBoxPEND
+            // label12
             // 
-            this.textBoxPEND.Location = new System.Drawing.Point(9, 110);
-            this.textBoxPEND.Name = "textBoxPEND";
-            this.textBoxPEND.ReadOnly = true;
-            this.textBoxPEND.Size = new System.Drawing.Size(47, 20);
-            this.textBoxPEND.TabIndex = 14;
-            this.textBoxPEND.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(161, 139);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(36, 13);
+            this.label12.TabIndex = 29;
+            this.label12.Text = "USR5";
             // 
-            // label5
+            // label11
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(62, 113);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
-            this.label5.TabIndex = 15;
-            this.label5.Text = "PEND";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(161, 113);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(36, 13);
+            this.label11.TabIndex = 27;
+            this.label11.Text = "USR4";
             // 
-            // textBoxPSTR
+            // textBoxUSR4
             // 
-            this.textBoxPSTR.Location = new System.Drawing.Point(9, 84);
-            this.textBoxPSTR.Name = "textBoxPSTR";
-            this.textBoxPSTR.ReadOnly = true;
-            this.textBoxPSTR.Size = new System.Drawing.Size(47, 20);
-            this.textBoxPSTR.TabIndex = 12;
-            this.textBoxPSTR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(62, 87);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(36, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "PSTR";
-            // 
-            // textBoxSUBR
-            // 
-            this.textBoxSUBR.Location = new System.Drawing.Point(9, 58);
-            this.textBoxSUBR.Name = "textBoxSUBR";
-            this.textBoxSUBR.ReadOnly = true;
-            this.textBoxSUBR.Size = new System.Drawing.Size(47, 20);
-            this.textBoxSUBR.TabIndex = 10;
-            this.textBoxSUBR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(62, 61);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "SUBR";
-            // 
-            // textBoxSTAT
-            // 
-            this.textBoxSTAT.Location = new System.Drawing.Point(9, 32);
-            this.textBoxSTAT.Name = "textBoxSTAT";
-            this.textBoxSTAT.ReadOnly = true;
-            this.textBoxSTAT.Size = new System.Drawing.Size(47, 20);
-            this.textBoxSTAT.TabIndex = 8;
-            this.textBoxSTAT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(62, 35);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "STAT";
+            this.textBoxUSR4.Location = new System.Drawing.Point(108, 110);
+            this.textBoxUSR4.Name = "textBoxUSR4";
+            this.textBoxUSR4.ReadOnly = true;
+            this.textBoxUSR4.Size = new System.Drawing.Size(47, 20);
+            this.textBoxUSR4.TabIndex = 26;
+            this.textBoxUSR4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tabPage2
             // 
@@ -661,10 +678,12 @@ namespace EmulatorUI
             this.byteViewerRAM.ColumnCount = 1;
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.Dock = System.Windows.Forms.DockStyle.Fill;
             this.byteViewerRAM.Location = new System.Drawing.Point(3, 3);
             this.byteViewerRAM.Name = "byteViewerRAM";
             this.byteViewerRAM.RowCount = 1;
+            this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.Size = new System.Drawing.Size(638, 553);
@@ -681,6 +700,107 @@ namespace EmulatorUI
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(652, 29);
             this.panel1.TabIndex = 9;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.splitContainer1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(644, 559);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Terminal";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.serialTextBox);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.tabControl2);
+            this.splitContainer1.Size = new System.Drawing.Size(644, 559);
+            this.splitContainer1.SplitterDistance = 414;
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // serialTextBox
+            // 
+            this.serialTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.serialTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.serialTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.serialTextBox.Location = new System.Drawing.Point(0, 0);
+            this.serialTextBox.Multiline = true;
+            this.serialTextBox.Name = "serialTextBox";
+            this.serialTextBox.ReadOnly = true;
+            this.serialTextBox.Size = new System.Drawing.Size(640, 410);
+            this.serialTextBox.TabIndex = 0;
+            // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage4);
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl2.Location = new System.Drawing.Point(0, 0);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(640, 137);
+            this.tabControl2.TabIndex = 0;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.buttonSerialSend);
+            this.tabPage4.Controls.Add(this.textBox1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(632, 111);
+            this.tabPage4.TabIndex = 0;
+            this.tabPage4.Text = "Input";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(632, 311);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "COM";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(632, 311);
+            this.tabPage6.TabIndex = 2;
+            this.tabPage6.Text = "Options";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 6);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(514, 99);
+            this.textBox1.TabIndex = 0;
+            // 
+            // buttonSerialSend
+            // 
+            this.buttonSerialSend.Location = new System.Drawing.Point(526, 6);
+            this.buttonSerialSend.Name = "buttonSerialSend";
+            this.buttonSerialSend.Size = new System.Drawing.Size(100, 100);
+            this.buttonSerialSend.TabIndex = 1;
+            this.buttonSerialSend.Text = "Send";
+            this.buttonSerialSend.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -703,6 +823,15 @@ namespace EmulatorUI
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -769,6 +898,15 @@ namespace EmulatorUI
         private System.Windows.Forms.Label label8;
         private System.ComponentModel.Design.ByteViewer byteViewerRAM;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TextBox serialTextBox;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button buttonSerialSend;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
     }
 }
 
