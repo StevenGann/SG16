@@ -13,12 +13,7 @@ namespace Assembler
     {
         private static void Main(string[] args)
         {
-            string inputPath = "test.asm";
-
-            foreach (string s in args)
-            {
-                Console.WriteLine(s);
-            }
+            string inputPath = "";
 
             if (args.Length >= 1)
             {

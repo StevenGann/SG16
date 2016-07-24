@@ -1090,7 +1090,37 @@ namespace SG16
 
         private void EVAL(byte[] Arg1, byte[] Arg2)
         {
-            throw new NotImplementedException();
+            UInt16 arg1Word = 0;
+            if (Arg1[0] == 0x00) //Register
+            {
+                byte[] arg1Data = getRegisterFromID(Arg1[2]);
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+            }
+            else if (Arg1[0] == 0x01) //Literal
+            {
+                byte[] arg1Data = new byte[2];
+                arg1Data[0] = Arg1[2];
+                arg1Data[1] = Arg1[1];
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+            }
+            else if (Arg1[0] == 0x02) //Absolute RAM
+            {
+                byte[] arg1Data = RAM.Get16(Arg1);
+                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+            }
+
+            if (arg1Word == 0x00)
+            {
+                STAT.Z = true;
+                STAT.L = true;
+                STAT.G = false;
+            }
+            else if (arg1Word > 0x00)
+            {
+                STAT.Z = false;
+                STAT.L = false;
+                STAT.G = true;
+            }
         }
 
         private void COMP(byte[] Arg1, byte[] Arg2)

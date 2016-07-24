@@ -2,7 +2,7 @@
 
 For a couple years, I've kicked around the idea of building a CPU from scratch out of discrete logic gates. I never got far because without an FPGA it just isn't a practical goal.
 
-Instead, I'm working on building an emulator instead, while designing the CPU architecture from the Assembly language level down and then up.
+Instead, I'm working on building an emulator while designing the CPU architecture from the Assembly language level down and then up.
 
 - [x] Define Assembly language specification
 - [x] Define processor architecture
@@ -106,3 +106,6 @@ There's no shortage of input and output peripherals I'd like to emulate, but the
 
 **Software**
 Assembly is the first step, but writing useful or interesting software in Assembly is difficult and tedious. I am looking into a partial port of gcc, and definitely want to write a QBASIC compiler. I am told that gcc is tuned for simple partial porting to new architectures with minimal effort, though full ports can be exceedinly complicated. As for QBasic, it seems to me that few language families come as close to Assembly as the BASIC dialects do, and I have great nostalgia for QBasic because it was my first programming language.
+
+**GPU**
+It's a bit premature, but to break up the monotony of implementing instructions I've started designing a primitive GPU. As much as I lack formal training in CPU design, I am much further lacking in GPU design. For inspiration I've been reading through "Flights of Fantasy" from The Waite Group circa 1993. It goes through the details of building a primitive 3D engine with almost bare-metal C++. My GPU design is based on a hypothetical hardware implementation of this engine's data structures, matrix transforms, and rasterization techniques.

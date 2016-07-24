@@ -81,6 +81,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Assembler\Assembler.csproj">
+      <Project>{7f4acef1-7f28-4854-998b-08ab73dec18a}</Project>
+      <Name>Assembler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SG16\SG16.csproj">
       <Project>{79dd327a-fbbd-4c3b-8da8-026adc8d0c4f}</Project>
       <Name>SG16</Name>
