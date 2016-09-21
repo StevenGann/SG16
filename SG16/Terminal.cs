@@ -17,6 +17,14 @@ namespace SG16
             ramReference = _ramReference;
         }
 
+        public void Feed(string _input)
+        {
+            foreach (char c in _input)
+            {
+                OutputBuffer.Enqueue(Convert.ToByte(c));
+            }
+        }
+
         override public void Function()
         {
             if (InputAddress >= 0)//If the Input has been attached

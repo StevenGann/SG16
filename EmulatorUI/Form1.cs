@@ -162,6 +162,11 @@ namespace EmulatorUI
 
         private void buttonSerialSend_Click(object sender, EventArgs e)
         {
+            if (textBoxTerminalInput.Text.Length > 0)
+            {
+                terminal.Feed(textBoxTerminalInput.Text);
+                textBoxTerminalInput.Text = "";
+            }
         }
     }
 }
