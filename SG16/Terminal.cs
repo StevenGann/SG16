@@ -10,6 +10,13 @@ namespace SG16
     {
         public string Text = "";
 
+        new public void Attach(int _inputAddress, int _outputAddress, int _controlAddress, Memory _ramReference)
+        {
+            InputAddress = _inputAddress;
+            OutputAddress = _outputAddress;
+            ramReference = _ramReference;
+        }
+
         override public void Function()
         {
             if (InputAddress >= 0)//If the Input has been attached

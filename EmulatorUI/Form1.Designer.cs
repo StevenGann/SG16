@@ -88,22 +88,21 @@ namespace EmulatorUI
             this.textBoxUSR4 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.byteViewerRAM = new System.ComponentModel.Design.ByteViewer();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.textBoxTerminalOutput = new System.Windows.Forms.TextBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.buttonSerialSend = new System.Windows.Forms.Button();
+            this.textBoxTerminalInput = new System.Windows.Forms.TextBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.textBoxTerminalInput = new System.Windows.Forms.TextBox();
-            this.buttonSerialSend = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -111,6 +110,7 @@ namespace EmulatorUI
             this.splitContainer1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -680,6 +680,7 @@ namespace EmulatorUI
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.Dock = System.Windows.Forms.DockStyle.Fill;
             this.byteViewerRAM.Location = new System.Drawing.Point(3, 3);
             this.byteViewerRAM.Name = "byteViewerRAM";
@@ -687,20 +688,9 @@ namespace EmulatorUI
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.Size = new System.Drawing.Size(638, 553);
             this.byteViewerRAM.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.buttonRun);
-            this.panel1.Controls.Add(this.buttonPause);
-            this.panel1.Controls.Add(this.buttonReset);
-            this.panel1.Controls.Add(this.buttonStep);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 24);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(652, 29);
-            this.panel1.TabIndex = 9;
             // 
             // tabPage3
             // 
@@ -767,24 +757,15 @@ namespace EmulatorUI
             this.tabPage4.Text = "Input";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // tabPage5
+            // buttonSerialSend
             // 
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(632, 311);
-            this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "COM";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(632, 311);
-            this.tabPage6.TabIndex = 2;
-            this.tabPage6.Text = "Options";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            this.buttonSerialSend.Location = new System.Drawing.Point(526, 6);
+            this.buttonSerialSend.Name = "buttonSerialSend";
+            this.buttonSerialSend.Size = new System.Drawing.Size(100, 100);
+            this.buttonSerialSend.TabIndex = 1;
+            this.buttonSerialSend.Text = "Send";
+            this.buttonSerialSend.UseVisualStyleBackColor = true;
+            this.buttonSerialSend.Click += new System.EventHandler(this.buttonSerialSend_Click);
             // 
             // textBoxTerminalInput
             // 
@@ -794,14 +775,36 @@ namespace EmulatorUI
             this.textBoxTerminalInput.Size = new System.Drawing.Size(514, 99);
             this.textBoxTerminalInput.TabIndex = 0;
             // 
-            // buttonSerialSend
+            // tabPage5
             // 
-            this.buttonSerialSend.Location = new System.Drawing.Point(526, 6);
-            this.buttonSerialSend.Name = "buttonSerialSend";
-            this.buttonSerialSend.Size = new System.Drawing.Size(100, 100);
-            this.buttonSerialSend.TabIndex = 1;
-            this.buttonSerialSend.Text = "Send";
-            this.buttonSerialSend.UseVisualStyleBackColor = true;
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(632, 111);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "COM";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(632, 111);
+            this.tabPage6.TabIndex = 2;
+            this.tabPage6.Text = "Options";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.buttonRun);
+            this.panel1.Controls.Add(this.buttonPause);
+            this.panel1.Controls.Add(this.buttonReset);
+            this.panel1.Controls.Add(this.buttonStep);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(652, 29);
+            this.panel1.TabIndex = 9;
             // 
             // Form1
             // 
@@ -823,7 +826,6 @@ namespace EmulatorUI
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -833,6 +835,7 @@ namespace EmulatorUI
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

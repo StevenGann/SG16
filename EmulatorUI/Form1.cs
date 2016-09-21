@@ -159,5 +159,9 @@ namespace EmulatorUI
         {
             updateUI();
         }
+
+        private void buttonSerialSend_Click(object sender, EventArgs e)
+        {
+        }
     }
 }
