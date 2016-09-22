@@ -17,10 +17,13 @@ MOVE x000A @FF00 # <new line> 	#0048
 
 #Read and store loop
 EVAL @FF02  					#0050
+JMPZ x0050  					#0058	#Wait for data in the terminal output
 INCR $0000  					#0060	#Increment the value stored at the location RREF points to
 MOVE @FF02 $RREF  				#0068	#Copy the contents of FF02 into the location RREF points to, offset by the value stored at RREF
 COMP @FF02 s. 					#0070	#Check if the input is '.'
 MOVE x0000 @FF02 				#0078	#Reset the input
+JMPG x0050 						#0080	#Restart loop
+JMPG x0050 						#0088	#Restart loop
 
 
 #Print array to terminal loop
@@ -28,6 +31,7 @@ MOVE x0000 USR0 				#0090	#Using USR0 as counter variable
 INCR USR0 						#0098	
 MOVE $USR0 @FF00 				#00A0	#Copy array element to output
 COMP USR0 $0000 				#00A8	
+JMPL x0098 						#00B0	#Restart loop
 
 MOVE x000A @FF00 # <new line>	#00B8
 
