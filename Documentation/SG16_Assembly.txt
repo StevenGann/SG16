@@ -24,7 +24,7 @@ literals or addresses.
 
 Code----Assembly--------Description
 00		...				Register name, see Registers
-01		sFF				ASCII literal, note 2 byte, 2 character limit
+01		sF				ASCII literal, a single character
 01		o88888888		Octal literal
 01		xFFFF			Hex literal
 01		d65536			Decimal literal
