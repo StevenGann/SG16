@@ -85,6 +85,10 @@ namespace SG16
                     tokens.RemoveAt(i);
                     i--;
                 }
+                if (tokens[i][0] == '#')//Check for inline comment
+                {
+                    tokens.RemoveRange(i, tokens.Count - i);
+                }
             }
             AssemblyTable table = new AssemblyTable();
             instruction[0] = table.GetOpcode(tokens[0]);

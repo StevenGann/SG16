@@ -33,8 +33,17 @@ namespace Assembler
             }
             else
             {
-                Console.WriteLine("Could not find file:");
-                Console.WriteLine(inputPath);
+                if (inputPath != "")
+                {
+                    Console.WriteLine("Could not find file:");
+                    Console.WriteLine(inputPath);
+                }
+                else
+                {
+                    Console.WriteLine("SG16 Assembler");
+                    Console.WriteLine("Usage: Assembler.exe <input file>.asm");
+                    Console.WriteLine("Drag-and-drop is also supported.");
+                }
                 Console.ReadLine();
             }
         }
