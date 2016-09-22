@@ -50,7 +50,7 @@ namespace SG16
                 }
                 else if (newByte == 0x0A || newByte == 0x0D)//Newline, Carriage Return
                 {
-                    Text += '\n';
+                    Text += Environment.NewLine; //You'd expect this to just be /n. You'd be wrong.
                 }
                 else if (newByte >= 0x20 && newByte <= 0x7E)//Printable chars from Space to ~
                 {

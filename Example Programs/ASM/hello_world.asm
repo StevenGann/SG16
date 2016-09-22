@@ -16,5 +16,6 @@ MOVE x0072 @FF00 # r
 MOVE x006C @FF00 # l
 MOVE x0064 @FF00 # d
 MOVE x0021 @FF00 # !
+MOVE x000A @FF00 # <new line>
 
 END 
