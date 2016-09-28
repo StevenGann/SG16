@@ -12,6 +12,7 @@ namespace SG16
         //in this class. This makes the Assembler and Disassembler much
         //easier to maintain.
         private List<string> Instructions = new List<string>();
+
         private List<byte> Opcodes = new List<byte>();
 
         public AssemblyTable()
@@ -51,6 +52,16 @@ namespace SG16
             Add("JMPL", 0x4B);
             Add("ENQU", 0x51);
             Add("DEQU", 0x52);
+        }
+
+        public bool ContainsInstruction(string _instruction)
+        {
+            return Instructions.Contains(_instruction);
+        }
+
+        public bool ContainsOpcode(byte _opcode)
+        {
+            return Opcodes.Contains(_opcode);
         }
 
         public byte GetOpcode(string instruction)

@@ -14,6 +14,7 @@ namespace SG16
             //Split code file into lines
             string[] inputArray = _input.Split('\n');
             List<string> instructions = new List<string>(inputArray);
+            Dictionary<string, int> labels = new Dictionary<string, int>();
 
             //Remove comments and blank lines
             for (int i = 0; i < instructions.Count; i++)
@@ -33,14 +34,32 @@ namespace SG16
                 }
             }
 
+            //Index and remove labels, and remove anything that is neither
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                if (!isInstruction(instructions[i]))
+                {
+                    if (isLabel(instructions[i]))
+                    {
+                        string label = tokenizeLine(instructions[i])[0];
+                        label = label.Remove(label.Length - 1);
+                        labels.Add(label, i);
+                        Console.WriteLine("Found label \"" + label + "\" at @" + ByteToString(Convert.ToByte(i * 8)) + "\t Line " + Convert.ToString(i));
+                    }
+
+                    instructions.RemoveAt(i);
+                    i--;
+                }
+            }
+
             //Convert each Assembly instruction to machine code
             List<byte> program = new List<byte>();
             foreach (string line in instructions)
             {
                 Console.WriteLine("--------------");
                 Console.WriteLine(line);
-                Console.WriteLine(ByteArrayToString(StringToMachineCode(line)));
-                program.AddRange(StringToMachineCode(line));
+                Console.WriteLine(ByteArrayToString(StringToMachineCode(line, labels)));
+                program.AddRange(StringToMachineCode(line, labels));
             }
             Console.WriteLine("==============");
             Console.WriteLine(ByteArrayToString(program.ToArray()));
@@ -56,19 +75,52 @@ namespace SG16
             Console.ReadLine();
         }
 
-        private byte[] StringToMachineCode(string _input)
+        private bool isInstruction(string _line)
         {
-            byte[] instruction = new byte[8];
+            bool result = false;
 
-            instruction[0] = 0x00; //NULL opcode
-            instruction[1] = 0x01; //Reference type Literal
-            instruction[2] = 0x00; //Data upper byte
-            instruction[3] = 0x00; //Data lower byte
-            instruction[4] = 0x01; //Reference type Literal
-            instruction[5] = 0x00; //Data upper byte
-            instruction[6] = 0x00; //Data lower byte
-            instruction[7] = 0xFF; //RESERVED byte
+            List<string> tokens = tokenizeLine(_line);
 
+            if (tokens.Count > 0)
+            {
+                AssemblyTable table = new AssemblyTable();
+                if (table.ContainsInstruction(tokens[0]))
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        private bool isLabel(string _line)
+        {
+            bool result = false;
+
+            List<string> tokens = tokenizeLine(_line);
+
+            if (tokens.Count == 1)                                  //Labels must be the only thing on that line
+            {
+                if (tokens[0][tokens[0].Length - 1] == ':')         //Labels must end with a :
+                {
+                    if (tokens[0] == tokens[0].ToUpper())           //Labels must be all uppercase
+                    {
+                        //This check goes last because it is the most resource intensive.
+                        //See? I do optimize sometimes!
+                        AssemblyTable table = new AssemblyTable();
+                        if (!table.ContainsInstruction(tokens[0]))  //Labels cannot be an instruction
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private List<string> tokenizeLine(string _input)
+        {
             string[] tokenArray = _input.Split(' ');
             List<string> tokens = new List<string>(tokenArray);
 
@@ -90,17 +142,36 @@ namespace SG16
                     tokens.RemoveRange(i, tokens.Count - i);
                 }
             }
+
+            return tokens;
+        }
+
+        private byte[] StringToMachineCode(string _input, Dictionary<string, int> _labels)
+        {
+            byte[] instruction = new byte[8];
+
+            instruction[0] = 0x00; //NULL opcode
+            instruction[1] = 0x01; //Reference type Literal
+            instruction[2] = 0x00; //Data upper byte
+            instruction[3] = 0x00; //Data lower byte
+            instruction[4] = 0x01; //Reference type Literal
+            instruction[5] = 0x00; //Data upper byte
+            instruction[6] = 0x00; //Data lower byte
+            instruction[7] = 0xFF; //RESERVED byte
+
+            List<string> tokens = tokenizeLine(_input);
+
             AssemblyTable table = new AssemblyTable();
             instruction[0] = table.GetOpcode(tokens[0]);
             if (tokens.Count >= 2)
             {
-                byte[] b = ParseArgument(tokens[1]);
+                byte[] b = ParseArgument(tokens[1], _labels);
                 instruction[1] = b[0];
                 instruction[2] = b[1];
                 instruction[3] = b[2];
                 if (tokens.Count >= 3)
                 {
-                    b = ParseArgument(tokens[2]);
+                    b = ParseArgument(tokens[2], _labels);
                     instruction[4] = b[0];
                     instruction[5] = b[1];
                     instruction[6] = b[2];
@@ -109,7 +180,7 @@ namespace SG16
             return instruction;
         }
 
-        public byte[] ParseArgument(string _input)
+        public byte[] ParseArgument(string _input, Dictionary<string, int> _labels)
         {
             byte[] result = new byte[3];
             result[0] = 0x01;//Failsafe value, 0x0000 literal.
@@ -156,6 +227,17 @@ namespace SG16
             {
                 result[0] = 0x03;
                 throw new NotImplementedException();
+            }
+            else if (_labels.ContainsKey(_input))//Label, convert it to an Absolute address
+            {
+                Console.WriteLine("\nParsing label");
+                result[0] = 0x02;
+                string raw = _input;
+                Console.WriteLine("Label: " + raw);
+                byte[] data = BitConverter.GetBytes(_labels[raw]);
+                result[1] = data[0];
+                result[2] = data[1];
+                Console.WriteLine("Address: " + ByteArrayToString(data));
             }
             else //Must be a register
             {
@@ -271,6 +353,13 @@ namespace SG16
                 if (ba.Length <= 8 && i == 6) { hex.Append(" "); }
                 i++;
             }
+            return hex.ToString().ToUpper();
+        }
+
+        public static string ByteToString(byte b)
+        {
+            StringBuilder hex = new StringBuilder(2);
+            hex.AppendFormat("{0:x2}", b);
             return hex.ToString().ToUpper();
         }
 
