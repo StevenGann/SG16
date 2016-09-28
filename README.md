@@ -13,6 +13,14 @@ Instead, I'm working on building an emulator while designing the CPU architectur
 - [ ] Peripheral emulators
 - [ ] Software tools (C, BASIC compilers)
 
+**Emulator GUI Features**
+- [x] Core emulation
+- [x] Live view of registers and RAM
+- [ ] Disassembled view of program code
+- [ ] Loading multiple ROMs into arbitrary locations
+- [ ] Live register and RAM editing
+- [ ] Live Assembly editing
+
 **Peripherals**
 - [x] Serial terminal
 - [ ] Hardware COM ports
