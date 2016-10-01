@@ -1,0 +1,104 @@
+Some notes for planning out a primitive Basic compiler for SG16.
+QBasic was my first programming language and I still have my first
+reference manual, so I'll use it as a model.
+
+----------------- Translation --------------------------
+
+Basic should be fairly simple to translate to Assembly, since so
+much of Basic coresponds directly to a few lines of Assembly.
+The basic flow of compilation will be
+
+1. Make a table of all constants
+2. Make a table of all global fixed-width variables and allocate RAM for them
+3. Make a table of all global arrays and allocate RAM for them
+4. Make a table of all global strings and allocate RAM for them
+5. Make tables of all local variables, arrays, and strings and allocate RAM
+	sufficient for the largest scope
+6. Translate all subroutines to Assembly
+7. Translate all functions to Assembly
+8. Translate main body to Assembly
+
+----------------- Simple Functions ---------------------
+Translating these is a walk in the park. Each one expands neatly
+into a solid block of Assembly.
+
+PRINT
+
+PRINT "string literal"
+
+PRINT number
+
+PRINT string$
+
+INPUT "string literal", string$
+
+INPUT "string literal", number
+
+INPUT string$, string$
+
+INPUT string$, number
+
+CLS
+
+RND
+
+LOCATE number, number
+
+SLEEP
+
+CHR$(number)
+
+----------------- Loops --------------------------------
+
+DO...LOOP
+
+WHILE(expression)...LOOP
+
+FOR variable = variable TO variable...NEXT variable
+
+FOR variable = variable TO variable STEP variable...NEXT variable
+
+----------------- Conditionals -------------------------
+
+IF (expression) THEN...ELSE IF (expression)...ELSE...END IF
+
+SELECT variable...CASE variable...CASE variable...BREAK...DEFAULT...END SELECT
+
+----------------- Variables and Data -------------------
+
+----------------- Expressions --------------------------
+Translating infix expressions into postfix will be critical. A postfix
+expression can translate 1:1 into Assembly. Unfortunately, a stack
+is usually used for the infix-to-postfix algorithm, and SG16 has no
+hardware stack. I may have to change that soon, but for now I'll
+implement a software stack.
+
+----------------- Subroutines and Functions ------------
+Subroutines are simple. Translate the subroutine using the global
+scope, put a label above it, and replace GOSUB with GSUB. Cake.
+Functions are more complicated, with the need for their own scope
+and returning values, plus the need for a proper stack so they can be
+nested or recursed.
+
+SUB subroutine_name...END SUB
+
+GOSUB subroutine_name
+
+FUNCTION function_name...END FUNCTION
+
+FUNCTION function_name (parameter, parameter)...RETURN variable...END FUNCTION
+
+----------------- Graphics -----------------------------
+A video adapter for SG16 is still a ways off, but when the time comes
+I'll want to support these instructions.
+
+SCREEN number
+
+DRAW "logo commands"
+
+LINE (x1, y1)-(x2, y2), color [B]
+
+CIRCLE (x, y), radius, color
+
+PAINT (x, y), color, color
+
