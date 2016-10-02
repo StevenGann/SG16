@@ -190,7 +190,19 @@ namespace SG16
             if (_input[0] == 's')//ASCII literal
             {
                 result[0] = 0x01;
-                throw new NotImplementedException();
+                UInt16 raw = 0;
+                try
+                {
+                    raw = Convert.ToUInt16(_input.Remove(0, 1)[0]);
+                }
+                catch
+                {
+                    throw new Exception("\nSyntax Error in \"" + _input + "\"");
+                }
+
+                byte[] data = BitConverter.GetBytes(raw);
+                result[1] = data[0];
+                result[2] = data[1];
             }
             else if (_input[0] == 'o')//Octal literal
             {
@@ -208,7 +220,19 @@ namespace SG16
             else if (_input[0] == 'd')//Decimal literal
             {
                 result[0] = 0x01;
-                throw new NotImplementedException();
+                UInt16 raw = 0;
+                try
+                {
+                    raw = Convert.ToUInt16(int.Parse(_input.Remove(0, 1)));
+                }
+                catch
+                {
+                    throw new Exception("\nSyntax Error in \"" + _input + "\"");
+                }
+
+                byte[] data = BitConverter.GetBytes(raw);
+                result[1] = data[0];
+                result[2] = data[1];
             }
             else if (_input[0] == 'b')//Binary literal
             {
