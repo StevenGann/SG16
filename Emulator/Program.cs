@@ -1,32 +1,52 @@
 ﻿using SG16;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+
+//Simplest application of the emulator.
+//Example of how little support is needed to run the core emulator.
 
 namespace Emulator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Core core = new Core();
-
-            core.LoadROM(0, "test.rom");
-
-
-            while(core.PC.ToInt() < core.RAM.Data.Length)
+            if (args.Length >= 1)
             {
-                long time = core.Tick();
-                if (time >= 1)
+                bool fastMode = false;
+                if (args.Length >= 2) { fastMode = (args[1] == "-fast"); }
+
+                if (File.Exists(args[0]) && Path.GetExtension(args[0]) == ".rom")
                 {
-                    Console.Write(" PC=" + core.PC.ToInt().ToString("D2") + " - ");
-                    Console.Write(core.Message);
-                    Console.Write(" - Took " + Convert.ToString(time) + "ms");
-                    Console.Write("\n");
+                    Core core = new Core();
+                    Console.WriteLine("Loading ROM file: " + args[0]);
+                    core.LoadROM(0, args[0]);
+                    Console.WriteLine("Done!");
+                    long time = 0;
+                    while (core.PC.ToInt() < core.RAM.Data.Length)
+                    {
+                        time = core.Tick();
+
+                        if (!fastMode && time >= 1)
+                        {
+                            Console.Write(" PC=" + core.PC.ToInt().ToString("D2") + " - ");
+                            Console.Write(core.Message);
+                            Console.Write(" - Took " + Convert.ToString(time) + "ms");
+                            Console.Write("\n");
+                        }
+                    }
                 }
-                
+                else
+                {
+                    Console.WriteLine("Invalid or missing file:");
+                    Console.WriteLine(args[0]);
+                }
+            }
+            else
+            {
+                Console.WriteLine("CLI SG16 Emulator");
+                Console.WriteLine("Usage: Emulator.exe <input file>.rom [-fast]");
+                Console.WriteLine("Optional \"-fast\" parameter silences console output for improved emulation speed.");
             }
 
             Console.ReadLine();
