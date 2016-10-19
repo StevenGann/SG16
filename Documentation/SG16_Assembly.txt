@@ -33,8 +33,6 @@ Code----Assembly--------Description
 03		$FFFF			Indirect RAM address, refers to the data stored at RREF plus the specified offset
 
 --------------------------Status Flags Register
-The Upper Byte may be used for hardware interrupts
-in future revisions.
 
 Lower Byte
 Bit-----Name------------Description
@@ -49,11 +47,11 @@ Bit-----Name------------Description
 
 Upper Byte
 Bit-----Name------------Description
-8						[RESERVED]
-9						[RESERVED]
-A						[RESERVED]
-B						[RESERVED]
-C						[RESERVED]
+8		QO				Set if queue is full
+9		SO				Set if stack is full
+A		U0				Set if UART0 TX buffer is full
+B		U1				Set if UART1 TX buffer is full
+C		RO				Set if the current ROM interface is read-only
 D						[RESERVED]
 E						[RESERVED]
 F						[RESERVED]
@@ -61,14 +59,29 @@ F						[RESERVED]
 --------------------------Registers
 - 16 bits, two bytes
 
+
+- System Registers
 00 PC				Program Counter, address of current instruction
 01 STAT				Status flags register
 02 SUBR				Address of last GSUB jump
-03 PSTR				Address of first program instruction, all RAM below this *should* be free
-04 PEND				Address of last program instruction, all RAM above this *should* be free
+03 PSTR				Address of first program instruction
+04 PEND				Address of last program instruction
 05 RAND				Generates a random value when read
 06 RREF				Reference RAM address for indirect adressing mode
 
+- Peripheral Configuration
+A0 UART0			UART0
+A1 UART1			UART1
+A2 ROMS				ROM ID select, support for 65536(!) <=16Kb parallel [EEP]ROMs (1GB)
+
+- Peripheral Bus
+B0 BUS0				Lower 2 bytes of peripheral bus (bidirectional)
+B1 BUS1				Upper 2 bytes of peripheral bus (bidirectional)
+B2 BSEL				Bus device select
+B3 BDFB				Bus device feedback (read-only) 
+
+- User Registers
+	Never set or read automatically, simply provided for convenience and efficiency.
 F0 USR0				User Register 0
 F1 USR1				User Register 1
 F2 USR2				User Register 2
@@ -140,6 +153,16 @@ Special Operations
 Opcode--Assembly------------Description
 51		ENQU Arg1			Enqueues the value Arg1
 52		DEQU Arg1			Dequeue value and store it in Arg1
+53		PUSH Arg1			Pushes the value Arg1 onto the stack
+54		POP Arg1			Pops a value off the stack and stores it in Arg1 
 
+Peripherals
+Opcode--Assembly------------Description
+61		TXD0 Arg1			Adds Arg1 to the UART0 TX buffer
+62		RXD0 Arg1			Stores the next value from the UART0 RX buffer in Arg1
+63		TXD1 Arg1			Adds Arg1 to the UART1 TX buffer
+64		RXD1 Arg1			Stores the next value from the UART1 RX buffer in Arg1
+65		ROMR Arg1 Arg2		Copies the value from Arg1 in the active [EEP]ROM into Arg2
+66		ROMW Arg1 Arg2		Copies the value from Arg1 into the active EEPROM at Arg2
 
 
