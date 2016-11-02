@@ -19,14 +19,14 @@
 
 **RAM:**
 
-	- 16 address lines
-	- 8 data I/O lines
-	- CAS
-	- RAS
-	- Write-Enable
-	- Parity CAS
-	- Parity Out
-	- Parity In
+- 16 address lines
+- 8 data I/O lines
+- CAS
+- RAS
+- Write-Enable
+- Parity CAS
+- Parity Out
+- Parity In
 	
 	The interface is designed with 30-pin or 72-pin SIMM RAM in mind, but could probably be adapted to any parallel RAM or EEPROM.
 	
@@ -40,22 +40,22 @@
 
 **Experimental:**
 
-	**Instruction Cache**
-	SG16, as it currently stands, has no cache model at all. This is mostly because RAM latency isn't an issue for the intended application. This doesn't mean it couldn't benefit from a simple instruction cache, especially if it could allow more efficient ALU operation. For use with look-ahead and for speeding up tight instruction loops, a simple queue of recent and upcoming instructions would be sufficient. As instructions are read into the ALU, the would be copied into the queue simultaneously. If a GOTO/GOSUB/flow control statement redirect the Program Counter, the cache manager would continue loading instructions into the queue so the ALU wouldn't have to wait when it resumed moving forward. The biggest concern is with flow control statements that move the Program Counter outside of the existing cache, which would mean cache fragmentation, which would mean some form of garbage collection or defragmentation and a way of indexing the cache beyond a simple offset.
+**Instruction Cache**
+SG16, as it currently stands, has no cache model at all. This is mostly because RAM latency isn't an issue for the intended application. This doesn't mean it couldn't benefit from a simple instruction cache, especially if it could allow more efficient ALU operation. For use with look-ahead and for speeding up tight instruction loops, a simple queue of recent and upcoming instructions would be sufficient. As instructions are read into the ALU, the would be copied into the queue simultaneously. If a GOTO/GOSUB/flow control statement redirect the Program Counter, the cache manager would continue loading instructions into the queue so the ALU wouldn't have to wait when it resumed moving forward. The biggest concern is with flow control statements that move the Program Counter outside of the existing cache, which would mean cache fragmentation, which would mean some form of garbage collection or defragmentation and a way of indexing the cache beyond a simple offset.
 	
-	The simplest solution so far is to just purge the cache anytime execution flow strays beyond the scope of the existing cache. This means the ALU would be waiting on RAM access until the cache rebuilds, but cache misses are inevitable anyway and a simple cache is better than none.
+The simplest solution so far is to just purge the cache anytime execution flow strays beyond the scope of the existing cache. This means the ALU would be waiting on RAM access until the cache rebuilds, but cache misses are inevitable anyway and a simple cache is better than none.
 
-	**Multiple Instruction, Multiple Data**
-	I have been sketching out a system for executing multiple instructions simultaneously with a simple cache look-ahead system. So far, I have two solutions that I am considering:
+**Multiple Instruction, Multiple Data**
+I have been sketching out a system for executing multiple instructions simultaneously with a simple cache look-ahead system. So far, I have two solutions that I am considering:
 	
-	- **Double-wide instruction combinations in the ALU**. The fully-integrated approach is to implement not just individual instructions in the ALU, but also whole sequences of instructions which can be executed in parallel. In addition to MOVE could be MOVE/MOVE, MOVE/ADD, etc. This significantly increases the size and complexity of the ALU, making for more complex implementation but simpler architecture. The greatest benefit is that merging of instructions into combos could be performed by the assembler, combining instructions into hybrid opcodes.
+- **Double-wide instruction combinations in the ALU**. The fully-integrated approach is to implement not just individual instructions in the ALU, but also whole sequences of instructions which can be executed in parallel. In addition to MOVE could be MOVE/MOVE, MOVE/ADD, etc. This significantly increases the size and complexity of the ALU, making for more complex implementation but simpler architecture. The greatest benefit is that merging of instructions into combos could be performed by the assembler, combining instructions into hybrid opcodes.
 	
-	- **Multiple ALUs**. The tightly-integrated approach is to supplement the ALU with a second (or third or forth...) ALU that reads and executes the next instruction independently *IF* it can confirm that it is not dependent on the result of the previous instruction. The greatest benefit of this approach is that it is effectively transparent outside of the ALU, cache, and RAM.
+- **Multiple ALUs**. The tightly-integrated approach is to supplement the ALU with a second (or third or forth...) ALU that reads and executes the next instruction independently *IF* it can confirm that it is not dependent on the result of the previous instruction. The greatest benefit of this approach is that it is effectively transparent outside of the ALU, cache, and RAM.
 	
-	Either way, my biggest hurdle for either solution is devising a cache that can be accessed by multiple ALUs simultaneously, reading and writing. Furthermore, I'll need to design the RAM, ROM, and register interfaces for multiple access also. Until I solve this problem, I will not go any further with multiple execution.
+Either way, my biggest hurdle for either solution is devising a cache that can be accessed by multiple ALUs simultaneously, reading and writing. Furthermore, I'll need to design the RAM, ROM, and register interfaces for multiple access also. Until I solve this problem, I will not go any further with multiple execution.
 
-	**Multiprocessing**
-	In a similar vein as multiple execution, I'm trying to picture how multiple CPUs (or a single multi-core CPU) could operate. A master/slave interface for a secondary coprocessor would be simple enough, but it's hard to imagine how it would be beneficial.
+**Multiprocessing**
+In a similar vein as multiple execution, I'm trying to picture how multiple CPUs (or a single multi-core CPU) could operate. A master/slave interface for a secondary coprocessor would be simple enough, but it's hard to imagine how it would be beneficial.
 
 For a couple years I've kicked around the idea of building a CPU from scratch out of discrete logic gates, but mostly ruled it out as impractical. Instead, I'm working on building an emulator while designing the CPU architecture from the Assembly language level down and then up. As the project has progressed, I've discovered flaws in my designs and learned from experience why classic architectures (486, 68k, Z80) made certain choices.
 
