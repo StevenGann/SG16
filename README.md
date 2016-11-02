@@ -1,6 +1,7 @@
 # SG16 v1.1
 
 **v1.1:**
+
 - Transitioning from a memory-mapped IO model to a data-bus model
 - Eliminating internal RAM (a la microcontroller) in favor of an external RAM interface
 - Heavier focus on future hardware implementation
@@ -9,6 +10,7 @@
 #Hardware Description
 
 **CPU:**
+
 - 16-bit word size
 - External RAM with 8-bit parallel interface and paging space, and 16-bit address space
 - External EEPROM with 16-bit parallel interface and address space for bootloader
@@ -16,6 +18,7 @@
 - Two independent UARTs with seperate buffers
 
 **RAM:**
+
 	- 16 address lines
 	- 8 data I/O lines
 	- CAS
@@ -28,6 +31,7 @@
 	The interface is designed with 30-pin or 72-pin SIMM RAM in mind, but could probably be adapted to any parallel RAM or EEPROM.
 	
 **Peripheral Bus:**
+
 - 8 address lines
 - 8 configuration lines (bidirectional)
 - 16 data I/O lines (bidirectional)
