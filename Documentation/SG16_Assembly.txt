@@ -55,6 +55,12 @@ NOTE: Because RAM is organized in 8-bit units, an address really only
 points to the Lower byte. When the Upper byte is specified, the next
 address is used.
 
+NOTE: If a register name is prefaced with @ or $, it is handled as an
+address pointer. @PC would refer to the memory location of the current
+instruction.
+
+NOTE: Writing to @PC is a bad idea.
+	MOVE x0000 @PC	# Don't do that.
 
 --------------------------Status Flags Register
 Lower Byte
@@ -173,6 +179,16 @@ Opcode--Assembly------------Description
 49		JMPE Arg1			Jumps to Arg1 if contents of last two arguments are equal
 4A		JMPG Arg1			Jumps if the first argument of the last instruction was greater than the second
 4B		JMPL Arg1			Jumps if the first argument of the last instruction was less than the second
+
+NOTE: If a program loads a precompiled binary and executes it,
+such as a bootloader, BIOS, or OS might, these flow control
+statements will wreak havoc. A loader routine should probably
+scan for these instructions and change the destination addresses
+accordingly to compensate for any offset.
+Alternatively a bootloader could copy itself to a high section
+of RAM, load the target program at @0000, and replace the END
+instruction with a GOTO that calls the bootloader when the program
+has finished.
 
 Special Operations
 Opcode--Assembly------------Description

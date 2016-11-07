@@ -1,21 +1,17 @@
+# 2016-11-07: Updated for SG16 v1.1
 #hello_world.asm
 #The classic "Hello world!" implemented in SG16 Assembly
-#Assumes a terminal input is attached at @FF00
+#Uses UART0
 
-START #Start of the program
+START				#Start of the program
 
-MOVE x0048 @FF00 # H
-MOVE x0065 @FF00 # e
-MOVE x006C @FF00 # l
-MOVE x006C @FF00 # l
-MOVE x006F @FF00 # o
-MOVE x0020 @FF00 # <space>
-MOVE x0077 @FF00 # w
-MOVE x006F @FF00 # o
-MOVE x0072 @FF00 # r
-MOVE x006C @FF00 # l
-MOVE x0064 @FF00 # d
-MOVE x0021 @FF00 # !
-MOVE x000A @FF00 # <new line>
+MOVE x0000 UART0	# Set UART 0 to default configuration
+TXD0 x4865 			# He
+TXD0 x6C6C 			# ll
+TXD0 x6F20 			# o<space>
+TXD0 x776F 			# wo
+TXD0 x726C 			# rl
+TXD0 x6421 			# d!
+TXD0 x0A 			# <new line>
 
-END 
+END 				#End of the program
