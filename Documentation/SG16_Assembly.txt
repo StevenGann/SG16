@@ -4,7 +4,7 @@ Comments:
 
 Labels:
 	Labels are all caps, start with a letter, include only
-	letters and numbers, and end with a colon ":".
+	letters, numbers, and underscores, and end with a colon ":".
 	During assembly, label references are replaced with a
 	relative address pointing to the instruction following
 	the label.
@@ -21,19 +21,42 @@ The modifier byte indicates what the following data bytes represent, such as
 literals or addresses. 
 
 --------------------------Addressing Modes
+The Addressing Mode byte tells the ALU how to interprit the following two
+data bytes. The data bytes could be a register ID, literal data, a RAM
+address, or a RAM offset. Additionally the data could be handled as a whole
+word, with just the lower bytes, or with just the upper byte.
+Not all combinations of type and mode are supported for every instruction.
 
+If an instruction tries to store a word of data but is directed to a byte,
+the data will be truncated to 8 bits and the Overflow flag set in STAT.
+
+----Word---------------------------
 Code----Assembly--------Description
-00		...				Register name, see Registers
-01		sF				ASCII literal, a single character
+00		___				Register name, see Registers
+01		sAB				ASCII literal, two characters
 01		o88888888		Octal literal
 01		xFFFF			Hex literal
 01		d65536			Decimal literal
-01		b010010...		Binary literal
+01		b111111...		Binary literal
 02		@FFFF			Absolute RAM address, refers to the data stored at that address
 03		$FFFF			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+----Lower Byte---------------------
+Code----Assembly--------Description
+10		___.L			Register name, see Registers
+12		@FFFF.L			Absolute RAM address, refers to the data stored at that address
+13		$FFFF.L			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+----Upper Byte---------------------
+Code----Assembly--------Description
+20		___.U			Register name, see Registers
+22		@FFFF.U			Absolute RAM address, refers to the data stored at that address
+23		$FFFF.U			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+
+NOTE: Because RAM is organized in 8-bit units, an address really only
+points to the Lower byte. When the Upper byte is specified, the next
+address is used.
+
 
 --------------------------Status Flags Register
-
 Lower Byte
 Bit-----Name------------Description
 0		Z				Set if result of last instruction was 0
