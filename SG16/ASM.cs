@@ -1,13 +1,141 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace SG16
 {
     public class ASM
     {
-        public void Assemble(string _input, string _output)
+        public string Disassemble(byte[] _binary)
+        {
+            string output = "";
+
+            List<byte[]> lines = new List<byte[]>();
+
+            //Split the program into instruction lines
+            for (int i = 0; i < _binary.Length; i += 8)
+            {
+                byte[] temp = new byte[8];
+                temp[0] = _binary[i];       //Opcode
+                temp[1] = _binary[i + 1];   //Parameter mode
+                temp[2] = _binary[i + 2];   //Upper byte
+                temp[3] = _binary[i + 3];   //Lower byte
+                temp[4] = _binary[i + 4];   //Parameter mode
+                temp[5] = _binary[i + 5];   //Upper byte
+                temp[6] = _binary[i + 6];   //Lower byte
+                temp[7] = _binary[i + 7];   //0xFF
+                lines.Add(temp);
+            }
+
+            foreach (byte[] line in lines)
+            {
+                string assemblyLine = "";
+                AssemblyTable table = new AssemblyTable();
+                //Does it look like an instruction?
+                if (line[7] == 0xFF && table.ContainsOpcode(line[0]))
+                {
+                    //It's probably an instruction. Translate it!
+                    assemblyLine += table.GetInstruction(line[0]) + " "; //Opcode to command. Easy.
+
+                    byte[] parameter = new byte[3];
+                    parameter[0] = line[1];
+                    parameter[1] = line[2];
+                    parameter[2] = line[3];
+                    assemblyLine += machineCodeToParameter(parameter);
+
+                    if ((line[4] | line[5] | line[6]) != 0x00)
+                    {
+                        parameter[0] = line[4];
+                        parameter[1] = line[5];
+                        parameter[2] = line[6];
+                        assemblyLine += " " + machineCodeToParameter(parameter);
+                    }
+                    assemblyLine += "\t# " + ByteArrayToString(line);
+                }
+                else
+                {
+                    //It's not an instruction, but insert it as a comment
+                    assemblyLine = "# Unknown Data:" + ByteArrayToString(line);
+                }
+
+                Console.WriteLine(assemblyLine);
+                output += (assemblyLine + "\n");
+            }
+
+            return output;
+        }
+
+        private string machineCodeToParameter(byte[] _input)
+        {
+            string result = "";
+            AssemblyTable table = new AssemblyTable();
+            byte[] data = new byte[2];
+            switch (_input[0]) //First argument mode
+            {
+                case 0x00:
+                case 0x10:
+                case 0x20:
+                    //It's a register. Figure out which one
+                    result += table.GetRegister(_input[2]);
+                    break;
+
+                case 0x01:
+                    //It's a literal. Convert to hex
+                    data[0] = _input[1];
+                    data[1] = _input[2];
+                    result += ("x" + ByteArrayToStringSimple(data));
+                    break;
+
+                case 0x02:
+                case 0x12:
+                case 0x22:
+                    //Absolute RAM
+                    data[0] = _input[1];
+                    data[1] = _input[2];
+                    result += ("@" + ByteArrayToStringSimple(data));
+                    break;
+
+                case 0x03:
+                case 0x13:
+                case 0x23:
+                    //Indirect RAM
+                    data[0] = _input[1];
+                    data[1] = _input[2];
+                    result += ("$" + ByteArrayToStringSimple(data));
+                    break;
+
+                case 0x04:
+                case 0x14:
+                case 0x24:
+                    //Absolute RAM from register
+                    result += ("@" + table.GetRegister(_input[2]));
+                    break;
+
+                case 0x05:
+                case 0x15:
+                case 0x25:
+                    //Indirect RAM from register
+                    result += ("$" + table.GetRegister(_input[2]));
+                    break;
+            }
+
+            //Check for byte mode and add suffix if needed
+            if (_input[0] > 0x0F)
+            {
+                if (_input[0] >= 0x10 && _input[0] <= 0x1F)//Lower byte
+                {
+                    result += ".L";
+                }
+                else if (_input[0] >= 0x20 && _input[0] <= 0x2F)//Upper byte
+                {
+                    result += ".U";
+                }
+            }
+
+            return result;
+        }
+
+        public byte[] Assemble(string _input)
         {
             bool _debug = false;
 
@@ -112,15 +240,7 @@ namespace SG16
             Console.WriteLine("==============");
             Console.WriteLine(ByteArrayToString(program.ToArray()));
 
-            using (BinaryWriter writer = new BinaryWriter(File.Open(_output, FileMode.Create)))
-            {
-                foreach (byte b in program)
-                {
-                    writer.Write(b);
-                }
-            }
-
-            Console.ReadLine();
+            return program.ToArray();
         }
 
         private bool isInstruction(string _line)
@@ -462,6 +582,18 @@ namespace SG16
                 if (ba.Length <= 8 && i == 3) { hex.Append(" "); }
                 if (ba.Length <= 8 && i == 4) { hex.Append(" "); }
                 if (ba.Length <= 8 && i == 6) { hex.Append(" "); }
+                i++;
+            }
+            return hex.ToString().ToUpper();
+        }
+
+        public static string ByteArrayToStringSimple(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            int i = 0;
+            foreach (byte b in ba)
+            {
+                hex.AppendFormat("{0:x2}", b);
                 i++;
             }
             return hex.ToString().ToUpper();

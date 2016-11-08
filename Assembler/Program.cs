@@ -24,7 +24,16 @@ namespace Assembler
                 ASM Assembler = new ASM();
                 string input = System.IO.File.ReadAllText(inputPath);
                 Console.WriteLine(input);
-                Assembler.Assemble(input, Path.GetFileNameWithoutExtension(inputPath) + ".rom");
+
+                byte[] program = Assembler.Assemble(input);
+
+                using (BinaryWriter writer = new BinaryWriter(File.Open(Path.GetFileNameWithoutExtension(inputPath) + ".rom", FileMode.Create)))
+                {
+                    foreach (byte b in program)
+                    {
+                        writer.Write(b);
+                    }
+                }
             }
             else
             {
