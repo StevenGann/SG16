@@ -113,9 +113,19 @@ namespace SG16
             return Opcodes.Contains(_opcode);
         }
 
+        public bool ContainsRegister(string _register)
+        {
+            return Registers.Contains(_register);
+        }
+
+        public bool ContainsID(byte _id)
+        {
+            return IDs.Contains(_id);
+        }
+
         public byte GetOpcode(string instruction)
         {
-            for (int i = 0; i <= Instructions.Count; i++)
+            for (int i = 0; i < Instructions.Count; i++)
             {
                 if (Instructions[i] == instruction.ToUpper())
                 {
@@ -127,7 +137,7 @@ namespace SG16
 
         public string GetInstruction(byte opcode)
         {
-            for (int i = 0; i <= Opcodes.Count; i++)
+            for (int i = 0; i < Opcodes.Count; i++)
             {
                 if (Opcodes[i] == opcode)
                 {
@@ -139,7 +149,7 @@ namespace SG16
 
         public byte GetID(string register)
         {
-            for (int i = 0; i <= Registers.Count; i++)
+            for (int i = 0; i < Registers.Count; i++)
             {
                 if (Registers[i] == register.ToUpper())
                 {
@@ -151,7 +161,7 @@ namespace SG16
 
         public string GetRegister(byte id)
         {
-            for (int i = 0; i <= IDs.Count; i++)
+            for (int i = 0; i < IDs.Count; i++)
             {
                 if (IDs[i] == id)
                 {

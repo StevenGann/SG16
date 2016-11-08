@@ -40,16 +40,22 @@ Code----Assembly--------Description
 01		b111111...		Binary literal
 02		@FFFF			Absolute RAM address, refers to the data stored at that address
 03		$FFFF			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+04		@____			Direct address stored in register
+05		$____			Indirect offset stored in register
 ----Lower Byte---------------------
 Code----Assembly--------Description
 10		___.L			Register name, see Registers
 12		@FFFF.L			Absolute RAM address, refers to the data stored at that address
 13		$FFFF.L			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+14		@____.L			Direct address stored in register's Lower byte
+15		$____.L			Indirect offset stored in register's Lower byte
 ----Upper Byte---------------------
 Code----Assembly--------Description
 20		___.U			Register name, see Registers
 22		@FFFF.U			Absolute RAM address, refers to the data stored at that address
 23		$FFFF.U			Indirect RAM address, refers to the data stored at RREF plus the specified offset
+24		@____.U			Direct address stored in register's Upper byte
+25		$____.U			Indirect offset stored in register's Upper byte
 
 NOTE: Because RAM is organized in 8-bit units, an address really only
 points to the Lower byte. When the Upper byte is specified, the next

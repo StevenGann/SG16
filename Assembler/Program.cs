@@ -1,11 +1,6 @@
-﻿using Assembler;
-using SG16;
+﻿using SG16;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assembler
 {
@@ -13,7 +8,7 @@ namespace Assembler
     {
         private static void Main(string[] args)
         {
-            string inputPath = "";
+            string inputPath = "assembler_test.asm";
 
             if (args.Length >= 1)
             {

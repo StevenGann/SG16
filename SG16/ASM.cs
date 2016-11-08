@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SG16
 {
@@ -11,10 +9,23 @@ namespace SG16
     {
         public void Assemble(string _input, string _output)
         {
+            bool _debug = false;
+
             //Split code file into lines
             string[] inputArray = _input.Split('\n');
             List<string> instructions = new List<string>(inputArray);
             Dictionary<string, int> labels = new Dictionary<string, int>();
+
+            if (_debug)
+            {
+                Console.Write("\nInput file before parsing:\n");
+                for (int i = 0; i < instructions.Count; i++)
+                {
+                    Console.WriteLine(i + "\t|" + instructions[i]);
+                }
+                Console.WriteLine("Press ENTER to continue");
+                Console.ReadLine();
+            }
 
             //Remove comments and blank lines
             for (int i = 0; i < instructions.Count; i++)
@@ -27,11 +38,34 @@ namespace SG16
                     instructions.RemoveAt(i);
                     i--;
                 }
-                else if (instructions[i][0] == '#') //Check for comment
+                else if (instructions[i][0] == '#') //Check for whole-line comment
                 {
                     instructions.RemoveAt(i);
                     i--;
                 }
+                else
+                {
+                    //Check for inline comment
+                    for (int j = 0; j < instructions[i].Length; j++)
+                    {
+                        if (instructions[i][j] == '#')
+                        {
+                            instructions[i] = instructions[i].Remove(j, instructions[i].Length - j);
+                        }
+                    }
+                    instructions[i] = instructions[i].Trim();
+                }
+            }
+
+            if (_debug)
+            {
+                Console.Write("\nComments and whitespace removed:\n");
+                for (int i = 0; i < instructions.Count; i++)
+                {
+                    Console.WriteLine(i + "\t|" + instructions[i]);
+                }
+                Console.WriteLine("Press ENTER to continue");
+                Console.ReadLine();
             }
 
             //Index and remove labels, and remove anything that is neither
@@ -52,14 +86,28 @@ namespace SG16
                 }
             }
 
+            if (_debug)
+            {
+                Console.WriteLine("Press ENTER to continue");
+                Console.ReadLine();
+                Console.Write("\nLabels removed:\n");
+                for (int i = 0; i < instructions.Count; i++)
+                {
+                    Console.WriteLine(i + "\t|" + instructions[i]);
+                }
+                Console.WriteLine("Press ENTER to assemble");
+                Console.ReadLine();
+            }
+
             //Convert each Assembly instruction to machine code
             List<byte> program = new List<byte>();
             foreach (string line in instructions)
             {
                 Console.WriteLine("--------------");
                 Console.WriteLine(line);
-                Console.WriteLine(ByteArrayToString(StringToMachineCode(line, labels)));
-                program.AddRange(StringToMachineCode(line, labels));
+                byte[] code = StringToMachineCode(line, labels);
+                Console.WriteLine(ByteArrayToString(code));
+                program.AddRange(code);
             }
             Console.WriteLine("==============");
             Console.WriteLine(ByteArrayToString(program.ToArray()));
@@ -95,6 +143,14 @@ namespace SG16
 
         private bool isLabel(string _line)
         {
+            //The specification requires label definitions to be
+            // - All uppercase letters or _
+            // - The only thing on the line
+            // - Terminated with a :
+            //
+            //This currently does not enforce the first restriction, and will let numbers
+            //and other symbols in. Perhaps the specification SHOULD allow numbers in
+            //labels, as well as printable symbols like |, $, etc.
             bool result = false;
 
             List<string> tokens = tokenizeLine(_line);
@@ -148,6 +204,7 @@ namespace SG16
 
         private byte[] StringToMachineCode(string _input, Dictionary<string, int> _labels)
         {
+            bool _debug = false;
             byte[] instruction = new byte[8];
 
             instruction[0] = 0x00; //NULL opcode
@@ -160,6 +217,15 @@ namespace SG16
             instruction[7] = 0xFF; //RESERVED byte
 
             List<string> tokens = tokenizeLine(_input);
+
+            if (_debug)
+            {
+                Console.WriteLine("Raw:\n" + _input);
+                Console.WriteLine("Tokenized:");
+                foreach (string t in tokens) { Console.Write(" | " + t); }
+                Console.WriteLine(" |");
+                Console.ReadLine();
+            }
 
             AssemblyTable table = new AssemblyTable();
             instruction[0] = table.GetOpcode(tokens[0]);
@@ -175,188 +241,209 @@ namespace SG16
                     instruction[4] = b[0];
                     instruction[5] = b[1];
                     instruction[6] = b[2];
+
+                    if (tokens.Count > 3)
+                    {
+                        throw new Exception("Too many parameters");
+                    }
                 }
             }
             return instruction;
         }
 
+        private bool isRegister(string _token)
+        {
+            bool result = false;
+
+            if (_token == _token.ToUpper() && _token.Length >= 2 && _token.Length <= 4)//If it looks like a register
+            {
+                AssemblyTable table = new AssemblyTable();
+
+                result = table.ContainsRegister(_token);
+            }
+
+            return result;
+        }
+
         public byte[] ParseArgument(string _input, Dictionary<string, int> _labels)
         {
+            string input = _input;
+            //Console.WriteLine("Argument: " + input);
             byte[] result = new byte[3];
             result[0] = 0x01;//Failsafe value, 0x0000 literal.
             result[1] = 0x00;
             result[2] = 0x00;
 
-            if (_input[0] == 's')//ASCII literal
+            int byteMode = 0;
+
+            //If a suffix is attached, identify and remove it.
+            //NOTE: s.U is valid syntax for a 16-bit ASCII literal. Check for it!
+            if (input[input.Length - 2] == '.' && input[0] != 's')
+            {
+                if (input[input.Length - 1] == 'L')
+                {
+                    byteMode = 1;
+                }
+                else if (input[input.Length - 1] == 'U')
+                {
+                    byteMode = 2;
+                }
+                else
+                {
+                    throw new Exception("\nSyntax error in \"" + input + "\"");
+                }
+                input = input.Remove(input.Length - 2, 2);
+            }
+
+            if (input[0] == 's')//ASCII literal
+            {
+                result[0] = 0x01;
+                string raw = input.Remove(0, 1);
+                UInt16 upper = 0;
+                UInt16 lower = 0;
+                try
+                {
+                    if (raw.Length == 2)//16-bit
+                    {
+                        upper = Convert.ToUInt16(raw[0]);
+                        lower = Convert.ToUInt16(raw[1]);
+                    }
+                    else if (raw.Length == 1)//8-bit
+                    {
+                        upper = 0;
+                        lower = Convert.ToUInt16(raw[0]);
+                    }
+                    else
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    throw new Exception("\nSyntax Error in \"" + input + "\"");
+                }
+
+                result[1] = BitConverter.GetBytes(upper)[0];
+                result[2] = BitConverter.GetBytes(lower)[0];
+            }
+            else if (input[0] == 'o')//Octal literal
+            {
+                result[0] = 0x01;
+                throw new NotImplementedException();
+            }
+            else if (input[0] == 'x')//Hex literal
+            {
+                result[0] = 0x01;//Mark it as a literal type
+                string raw = input.Remove(0, 1);//Remove the type symbol
+                if (raw.Length == 2)//8-bit literal
+                {
+                    byte[] data = StringToByteArray(raw);
+                    result[1] = 0x00;
+                    result[2] = data[0];
+                }
+                else if (raw.Length == 4)//16-bit literal
+                {
+                    byte[] data = StringToByteArray(raw);
+                    result[1] = data[0];
+                    result[2] = data[1];
+                }
+                else
+                {
+                    throw new Exception("\nSyntax error in \"" + input + "\"");
+                }
+            }
+            else if (input[0] == 'd')//Decimal literal
             {
                 result[0] = 0x01;
                 UInt16 raw = 0;
                 try
                 {
-                    raw = Convert.ToUInt16(_input.Remove(0, 1)[0]);
+                    raw = Convert.ToUInt16(int.Parse(input.Remove(0, 1)));
                 }
                 catch
                 {
-                    throw new Exception("\nSyntax Error in \"" + _input + "\"");
+                    throw new Exception("\nSyntax Error in \"" + input + "\"");
                 }
 
                 byte[] data = BitConverter.GetBytes(raw);
                 result[1] = data[0];
                 result[2] = data[1];
             }
-            else if (_input[0] == 'o')//Octal literal
+            else if (input[0] == 'b')//Binary literal
             {
                 result[0] = 0x01;
                 throw new NotImplementedException();
             }
-            else if (_input[0] == 'x')//Hex literal
+            else if (input[0] == '@')//Absolute address
             {
-                result[0] = 0x01;
-                string raw = _input.Remove(0, 1);
-                byte[] data = StringToByteArray(raw);
-                result[1] = data[0];
-                result[2] = data[1];
-            }
-            else if (_input[0] == 'd')//Decimal literal
-            {
-                result[0] = 0x01;
-                UInt16 raw = 0;
-                try
+                //There's no support for an 8-bit literal address.
+                //Frankly, I'm not sure how it'd be useful.
+                string raw = input.Remove(0, 1);
+                if (!isRegister(raw))
                 {
-                    raw = Convert.ToUInt16(int.Parse(_input.Remove(0, 1)));
+                    //Translate literal hex value to address
+                    result[0] = 0x02;
+                    byte[] data = StringToByteArray(raw);
+                    result[1] = data[0];
+                    result[2] = data[1];
                 }
-                catch
+                else
                 {
-                    throw new Exception("\nSyntax Error in \"" + _input + "\"");
+                    //It's a register. Dereference it.
+                    result[0] = 0x04;
+                    result[1] = 0x00;
+                    result[2] = new AssemblyTable().GetID(raw); //Wew that's terse.
                 }
-
-                byte[] data = BitConverter.GetBytes(raw);
-                result[1] = data[0];
-                result[2] = data[1];
             }
-            else if (_input[0] == 'b')//Binary literal
+            else if (input[0] == '$')//Indirect address
             {
-                result[0] = 0x01;
-                throw new NotImplementedException();
+                //There's no support for an 8-bit literal offset.
+                //Frankly, I'm not sure how it'd be useful.
+                string raw = input.Remove(0, 1);
+                if (!isRegister(raw))
+                {
+                    //Translate literal hex value to offset
+                    result[0] = 0x03;
+                    byte[] data = StringToByteArray(raw);
+                    result[1] = data[0];
+                    result[2] = data[1];
+                }
+                else
+                {
+                    //It's a register. Dereference it.
+                    result[0] = 0x05;
+                    result[1] = 0x00;
+                    result[2] = new AssemblyTable().GetID(raw); //Wew that's terse.
+                }
             }
-            else if (_input[0] == '@')//Absolute address
+            else if (_labels.ContainsKey(input))//Label, convert it to an Absolute address
             {
+                //Console.WriteLine("\nParsing label");
                 result[0] = 0x02;
-                string raw = _input.Remove(0, 1);
-                byte[] data = StringToByteArray(raw);
-                result[1] = data[0];
-                result[2] = data[1];
-            }
-            else if (_input[0] == '$')//Indirect address
-            {
-                result[0] = 0x03;
-                throw new NotImplementedException();
-            }
-            else if (_labels.ContainsKey(_input))//Label, convert it to an Absolute address
-            {
-                Console.WriteLine("\nParsing label");
-                result[0] = 0x02;
-                string raw = _input;
-                Console.WriteLine("Label: " + raw);
+                string raw = input;
+                //Console.WriteLine("Label: " + raw);
                 byte[] data = BitConverter.GetBytes(_labels[raw]);
                 result[1] = data[0];
                 result[2] = data[1];
-                Console.WriteLine("Address: " + ByteArrayToString(data));
+                //Console.WriteLine("Address: " + ByteArrayToString(data));
             }
             else //Must be a register
             {
                 result[0] = 0x00;
-                if (_input == "PC")
+                result[1] = 0x00;
+                result[2] = new AssemblyTable().GetID(input);
+            }
+
+            //Apply upper/lower byte mode
+            if (byteMode != 0)
+            {
+                if (byteMode == 1)//Lower byte
                 {
-                    result[2] = 0x00;
+                    result[0] += 0x10;
                 }
-                else if (_input == "STAT")
+                else if (byteMode == 2)//Upper byte
                 {
-                    result[2] = 0x01;
-                }
-                else if (_input == "SUBR")
-                {
-                    result[2] = 0x02;
-                }
-                else if (_input == "PSTR")
-                {
-                    result[2] = 0x03;
-                }
-                else if (_input == "PEND")
-                {
-                    result[2] = 0x04;
-                }
-                else if (_input == "RAND")
-                {
-                    result[2] = 0x05;
-                }
-                else if (_input == "RREF")
-                {
-                    result[2] = 0x06;
-                }
-                else if (_input == "USR0")
-                {
-                    result[2] = 0xF0;
-                }
-                else if (_input == "USR1")
-                {
-                    result[2] = 0xF1;
-                }
-                else if (_input == "USR2")
-                {
-                    result[2] = 0xF2;
-                }
-                else if (_input == "USR3")
-                {
-                    result[2] = 0xF3;
-                }
-                else if (_input == "USR4")
-                {
-                    result[2] = 0xF4;
-                }
-                else if (_input == "USR5")
-                {
-                    result[2] = 0xF5;
-                }
-                else if (_input == "USR6")
-                {
-                    result[2] = 0xF6;
-                }
-                else if (_input == "USR7")
-                {
-                    result[2] = 0xF7;
-                }
-                else if (_input == "USR8")
-                {
-                    result[2] = 0xF8;
-                }
-                else if (_input == "USR9")
-                {
-                    result[2] = 0xF9;
-                }
-                else if (_input == "USRA")
-                {
-                    result[2] = 0xFA;
-                }
-                else if (_input == "USRB")
-                {
-                    result[2] = 0xFB;
-                }
-                else if (_input == "USRC")
-                {
-                    result[2] = 0xFC;
-                }
-                else if (_input == "USRD")
-                {
-                    result[2] = 0xFD;
-                }
-                else if (_input == "USRE")
-                {
-                    result[2] = 0xFE;
-                }
-                else if (_input == "USRF")
-                {
-                    result[2] = 0xFF;
+                    result[0] += 0x20;
                 }
             }
 
