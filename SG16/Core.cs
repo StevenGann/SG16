@@ -15,6 +15,19 @@ namespace SG16
         public Register PEND = (Register)0x00;
         public Register RAND = (Register)0x00; //RAND will be dealt with differently.
         public Register RREF = (Register)0x00;
+        public Register PAGE = (Register)0x00;
+        public Register MEMS = (Register)0x00;
+        public Register PEEK = (Register)0x00;
+
+        //Peripheral Configuration
+        public Register UART0 = (Register)0x00;
+
+        public Register UART1 = (Register)0x00;
+
+        //Peripheral Bus
+        public Register BUS0 = (Register)0x00;
+
+        public Register BDAT = (Register)0x00;
 
         //User Registers
         public Register USR0 = (Register)0x00;
@@ -39,11 +52,18 @@ namespace SG16
 
         private Random RNG = new Random();
 
+        private AssemblyTable Table = new AssemblyTable();
+
         public string Message = "";
+
+        public bool Debug = false;
+        public bool Fast = true;
+        public bool Verbose = false;
+        private Stopwatch sw = new Stopwatch();
 
         public long Tick()
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            if (Debug) { sw = Stopwatch.StartNew(); }
 
             //Execute Instruction
             Execute(PC.ToInt());
@@ -51,19 +71,26 @@ namespace SG16
             //Advance PC
             PC.Increment(8);
 
-            long result = sw.ElapsedMilliseconds;
-            sw.Stop();
-
-            return result;
+            if (Debug)
+            {
+                long result = sw.ElapsedMilliseconds;
+                sw.Stop();
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         private void Execute(int address)
         {
             Instruction instruction = new Instruction(RAM.Data, address);
-            Message = "Executing " + ASM.ByteArrayToString(instruction.ToArray());
+            if (Debug) { Message = "Executing " + ASM.ByteArrayToString(instruction.ToArray()); }
 
             switch (instruction.Opcode)
             {
+                //System Instructions
                 case 0x00:
                     NULL(instruction.Argument1, instruction.Argument2);
                     break;
@@ -80,6 +107,7 @@ namespace SG16
                     REF(instruction.Argument1, instruction.Argument2);
                     break;
 
+                //Memory Operations
                 case 0x11:
                     MOVE(instruction.Argument1, instruction.Argument2);
                     break;
@@ -96,6 +124,7 @@ namespace SG16
                     ROTR(instruction.Argument1, instruction.Argument2);
                     break;
 
+                //Logic Operations
                 case 0x21:
                     OR(instruction.Argument1, instruction.Argument2);
                     break;
@@ -124,6 +153,7 @@ namespace SG16
                     NOT(instruction.Argument1, instruction.Argument2);
                     break;
 
+                //Math Operations
                 case 0x31:
                     ADD(instruction.Argument1, instruction.Argument2);
                     break;
@@ -152,6 +182,7 @@ namespace SG16
                     EXPO(instruction.Argument1, instruction.Argument2);
                     break;
 
+                //Flow Control
                 case 0x41:
                     GOTO(instruction.Argument1, instruction.Argument2);
                     break;
@@ -196,12 +227,46 @@ namespace SG16
                     JMPL(instruction.Argument1, instruction.Argument2);
                     break;
 
+                //Special Operations
                 case 0x51:
                     ENQU(instruction.Argument1, instruction.Argument2);
                     break;
 
                 case 0x52:
                     DEQU(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x53:
+                    PUSH(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x54:
+                    POP(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                //Peripherals
+                case 0x61:
+                    TXD0(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x62:
+                    RXD0(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x63:
+                    TXD1(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x64:
+                    RXD1(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x65:
+                    ROMR(instruction.Argument1, instruction.Argument2);
+                    break;
+
+                case 0x66:
+                    ROMW(instruction.Argument1, instruction.Argument2);
                     break;
 
                 default:
@@ -1350,6 +1415,46 @@ namespace SG16
         }
 
         private void DEQU(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PUSH(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void POP(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void TXD0(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RXD0(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void TXD1(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RXD1(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ROMR(byte[] Arg1, byte[] Arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ROMW(byte[] Arg1, byte[] Arg2)
         {
             throw new NotImplementedException();
         }
