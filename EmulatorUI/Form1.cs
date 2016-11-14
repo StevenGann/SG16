@@ -1,15 +1,6 @@
 ﻿using SG16;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EmulatorUI
@@ -18,7 +9,6 @@ namespace EmulatorUI
     {
         private string romPath = "";
         private Core core = new Core();
-        private Terminal terminal = new Terminal();
 
         public Form1()
         {
@@ -61,11 +51,6 @@ namespace EmulatorUI
             {
                 core.LoadROM(0, romPath);
             }
-
-            //Attach terminal to 0xFF00, 0xFF02, and 0xFF04
-            terminal = new Terminal();
-            terminal.Attach(65280, 65282, 65284, core.RAM);
-            core.AttachPeripheral(terminal);
 
             updateUI();
         }
@@ -122,7 +107,6 @@ namespace EmulatorUI
             }
             else if (tabControl1.SelectedIndex == 2)
             {
-                textBoxTerminalOutput.Text = terminal.Text;
             }
         }
 
@@ -164,7 +148,6 @@ namespace EmulatorUI
         {
             if (textBoxTerminalInput.Text.Length > 0)
             {
-                terminal.Feed(textBoxTerminalInput.Text);
                 textBoxTerminalInput.Text = "";
             }
         }

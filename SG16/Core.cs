@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SG16
 {
@@ -42,8 +37,6 @@ namespace SG16
 
         public Memory RAM = new Memory();
 
-        public List<Peripheral> Peripherals = new List<Peripheral>();
-
         private Random RNG = new Random();
 
         public string Message = "";
@@ -60,14 +53,6 @@ namespace SG16
 
             long result = sw.ElapsedMilliseconds;
             sw.Stop();
-
-            if (Peripherals.Count > 0)
-            {
-                foreach (Peripheral p in Peripherals)
-                {
-                    p.Tick();
-                }
-            }
 
             return result;
         }
@@ -1630,11 +1615,6 @@ namespace SG16
         public void LoadROM(string path)
         {
             LoadROM(0, path);
-        }
-
-        public void AttachPeripheral(Peripheral _peripheral)
-        {
-            Peripherals.Add(_peripheral);
         }
 
         private static byte[] UInt16ToByteArray(UInt16 b)
