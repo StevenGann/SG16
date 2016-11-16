@@ -322,120 +322,73 @@ namespace SG16
 
         private void MOVE(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register to Register
+            //==================================
+            //MOVE Arg1 Arg2
+            //----------------------------------
+            //Supports all valid data types
+            //Copies value from Arg1 into location Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] data = getRegisterFromID(Arg1[2]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal to Register
-            {
-                byte[] data = new byte[2];
-                data[0] = Arg1[2];
-                data[1] = Arg1[1];
-                setRegisterFromID(Arg2[2], data, 0);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM to Register
-            {
-                byte[] data = new byte[2];
-                data = RAM.Get16(Arg1);
-                setRegisterFromID(Arg2[2], data, 0);
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM to Register
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
-            {
-                byte[] data = getRegisterFromID(Arg1[2]);
-                RAM.Set16(Arg2, data);
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal to Absolute RAM
-            {
-                byte[] data = new byte[2];
-                data[0] = Arg1[2];
-                data[1] = Arg1[1];
-                RAM.Set16(Arg2, data);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM to Absolute RAM
-            {
-                byte[] data = RAM.Get16(Arg1);
-                RAM.Set16(Arg2, data);
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM to Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register to Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal to Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM to Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM to Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+            else { throw new Exception("Unsupported data type"); }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void SWAP(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register Register
+            //==================================
+            //MOVE Arg1 Arg2
+            //----------------------------------
+            //Supports all data types, EXCEPT literals
+            //Swaps values between locations Arg1 and Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                //Arg1Type == 0x01 ||//Cannot swap with a literal
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                setRegisterFromID(Arg2[2], arg1Data, 0);
-                setRegisterFromID(Arg1[2], arg2Data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot swap with a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                throw new NotImplementedException();
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM, Register
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+            else { throw new Exception("Unsupported data type"); }
+
+            setDataFromParameter(Arg1, data2);
+            setDataFromParameter(Arg2, data1);
         }
 
         private void ROTL(byte[] Arg1, byte[] Arg2)
