@@ -294,7 +294,30 @@ namespace SG16
 
         private void REF(byte[] Arg1, byte[] Arg2)
         {
-            RREF = (Register)Arg1;
+            //==================================
+            //REF Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Copies value from Arg1 into RREF
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            RREF = (Register)data;
         }
 
         private void MOVE(byte[] Arg1, byte[] Arg2)
@@ -302,20 +325,20 @@ namespace SG16
             if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register to Register
             {
                 byte[] data = getRegisterFromID(Arg1[2]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal to Register
             {
                 byte[] data = new byte[2];
                 data[0] = Arg1[2];
                 data[1] = Arg1[1];
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM to Register
             {
                 byte[] data = new byte[2];
                 data = RAM.Get16(Arg1);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM to Register
             {
@@ -366,8 +389,8 @@ namespace SG16
             {
                 byte[] arg1Data = getRegisterFromID(Arg1[2]);
                 byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                setRegisterFromID(Arg2[2], arg1Data);
-                setRegisterFromID(Arg1[2], arg2Data);
+                setRegisterFromID(Arg2[2], arg1Data, 0);
+                setRegisterFromID(Arg1[2], arg2Data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -423,7 +446,7 @@ namespace SG16
                 UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
                 arg1Word = (UInt16)(arg1Word << 1);
                 byte[] result = UInt16ToByteArray(arg1Word);
-                setRegisterFromID(Arg1[2], result);
+                setRegisterFromID(Arg1[2], result, 0);
             }
         }
 
@@ -435,7 +458,7 @@ namespace SG16
                 UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
                 arg1Word = (UInt16)(arg1Word >> 1);
                 byte[] result = UInt16ToByteArray(arg1Word);
-                setRegisterFromID(Arg1[2], result);
+                setRegisterFromID(Arg1[2], result, 0);
             }
         }
 
@@ -448,7 +471,7 @@ namespace SG16
                 byte[] data = new byte[2];
                 data[0] = (byte)((int)arg1Data[0] | (int)arg2Data[0]);
                 data[1] = (byte)((int)arg1Data[1] | (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal OR Register
             {
@@ -505,7 +528,7 @@ namespace SG16
                 byte[] data = new byte[2];
                 data[0] = (byte)~((int)arg1Data[0] | (int)arg2Data[0]);
                 data[1] = (byte)~((int)arg1Data[1] | (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
         }
 
@@ -518,7 +541,7 @@ namespace SG16
                 byte[] data = new byte[2];
                 data[0] = (byte)((int)arg1Data[0] ^ (int)arg2Data[0]);
                 data[1] = (byte)((int)arg1Data[1] ^ (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal XOR Register
             {
@@ -575,7 +598,7 @@ namespace SG16
                 byte[] data = new byte[2];
                 data[0] = (byte)~((int)arg1Data[0] ^ (int)arg2Data[0]);
                 data[1] = (byte)~((int)arg1Data[1] ^ (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -632,7 +655,7 @@ namespace SG16
                 byte[] data = new byte[2];
                 data[0] = (byte)((int)arg1Data[0] & (int)arg2Data[0]);
                 data[1] = (byte)((int)arg1Data[1] & (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal AND Register
             {
@@ -689,7 +712,7 @@ namespace SG16
                 byte[] data = new byte[2];
                 data[0] = (byte)~((int)arg1Data[0] & (int)arg2Data[0]);
                 data[1] = (byte)~((int)arg1Data[1] & (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data);
+                setRegisterFromID(Arg2[2], data, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -745,7 +768,7 @@ namespace SG16
                 UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
                 arg1Word = (UInt16)~arg1Word;
                 byte[] result = UInt16ToByteArray(arg1Word);
-                setRegisterFromID(Arg1[2], result);
+                setRegisterFromID(Arg1[2], result, 0);
             }
             else if (Arg1[0] == 0x02) //Absolute RAM
             {
@@ -769,7 +792,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -783,7 +806,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
             {
@@ -794,7 +817,7 @@ namespace SG16
                 UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
                 UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
             {
@@ -844,7 +867,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -858,7 +881,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
             {
@@ -869,7 +892,7 @@ namespace SG16
                 UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
                 UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
             {
@@ -916,7 +939,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word + 1);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg1[2], result);
+                setRegisterFromID(Arg1[2], result, 0);
             }
             else if (Arg1[0] == 0x02) //Absolute RAM
             {
@@ -937,7 +960,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word - 1);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg1[2], result);
+                setRegisterFromID(Arg1[2], result, 0);
             }
             else if (Arg1[0] == 0x02) //Absolute RAM
             {
@@ -961,7 +984,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -975,7 +998,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
             {
@@ -986,7 +1009,7 @@ namespace SG16
                 UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
                 UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
             {
@@ -1036,7 +1059,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
             {
@@ -1050,7 +1073,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
             {
@@ -1061,7 +1084,7 @@ namespace SG16
                 UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
                 UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
             else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
             {
@@ -1111,7 +1134,7 @@ namespace SG16
                 UInt16 resultWord = (UInt16)(Math.Pow(arg2Word, arg1Word));
 
                 byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result);
+                setRegisterFromID(Arg2[2], result, 0);
             }
         }
 
@@ -1461,100 +1484,388 @@ namespace SG16
 
         #endregion Operations
 
-        private void setRegisterFromID(byte id, byte[] value)
+        private void setDataFromParameter(byte[] _parameter, byte[] _data)
         {
+            //Takes in a 3-byte parameter and 2-byte data
+            //Stores data where the parameter specifies
+            //ONLY considers Upper/Lower byte mode of destination.
+            //For byte modes, only stores _data[1]
+
+            int byteMode = 0;
+            if (_parameter[0] >= 0x10)
+            {
+                if (_parameter[0] >= 0x10 && _parameter[0] <= 0x1F)//Lower byte
+                {
+                    byteMode = 1;
+                }
+                else if (_parameter[0] >= 0x20 && _parameter[0] <= 0x2F)//Upper byte
+                {
+                    byteMode = 2;
+                }
+            }
+
+            if (_parameter[0] == 0x00 || _parameter[0] == 0x10 || _parameter[0] == 0x20)//Register
+            {
+                setRegisterFromID(_parameter[2], _data, byteMode);
+            }
+            else if (_parameter[0] == 0x01)//Literal, invalid
+            {
+                throw new Exception("\nCannot store data in a literal\n");
+            }
+            else if (_parameter[0] == 0x02 || _parameter[0] == 0x12 || _parameter[0] == 0x22)//Absolute RAM
+            {
+                int a = (int)(((int)_parameter[1] + 0xFF) + ((int)_parameter[2]));
+
+                if (byteMode == 0) //I use copy/paste this same if/else block several times. Maybe it should be a method.
+                {
+                    RAM[a] = _data[1];
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[0];
+                    }
+                }
+                else if (byteMode == 1)
+                {
+                    RAM[a] = _data[1];
+                }
+                else if (byteMode == 2)
+                {
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[1];
+                    }
+                }
+            }
+            else if (_parameter[0] == 0x03 || _parameter[0] == 0x13 || _parameter[0] == 0x23)//Indirect RAM
+            {
+                int a = (int)(((int)_parameter[1] + 0xFF) + ((int)_parameter[2]));
+                a += RREF.ToInt();
+                if (byteMode == 0)
+                {
+                    RAM[a] = _data[1];
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[0];
+                    }
+                }
+                else if (byteMode == 1)
+                {
+                    RAM[a] = _data[1];
+                }
+                else if (byteMode == 2)
+                {
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[1];
+                    }
+                }
+            }
+            else if (_parameter[0] == 0x04 || _parameter[0] == 0x14 || _parameter[0] == 0x24)//Direct address stored in a register
+            {
+                byte[] data = getRegisterFromID(_parameter[2]);
+                int a = (int)(((int)data[0] + 0xFF) + ((int)data[1]));
+                if (byteMode == 0)
+                {
+                    RAM[a] = _data[1];
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[0];
+                    }
+                }
+                else if (byteMode == 1)
+                {
+                    RAM[a] = _data[1];
+                }
+                else if (byteMode == 2)
+                {
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[1];
+                    }
+                }
+            }
+            else if (_parameter[0] == 0x05 || _parameter[0] == 0x15 || _parameter[0] == 0x25)//Indirect RAM stored in a register
+            {
+                byte[] data = getRegisterFromID(_parameter[2]);
+                int a = (int)(((int)data[0] + 0xFF) + ((int)data[1]));
+                a += RREF.ToInt();
+
+                if (byteMode == 0)
+                {
+                    RAM[a] = _data[1];
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[0];
+                    }
+                }
+                else if (byteMode == 1)
+                {
+                    RAM[a] = _data[1];
+                }
+                else if (byteMode == 2)
+                {
+                    a++;
+                    if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around
+                    if (a < RAM.Size)
+                    {
+                        RAM[a] = _data[1];
+                    }
+                }
+            }
+        }
+
+        private byte[] getDataFromParameter(byte[] _parameter)
+        {
+            //Takes in a 3-byte parameter and returns the 2-byte data stored at that location/register
+            byte[] result = new byte[2];
+
+            if (_parameter[0] == 0x00 || _parameter[0] == 0x10 || _parameter[0] == 0x20)//Register
+            {
+                result = getRegisterFromID(_parameter[2]);
+            }
+            else if (_parameter[0] == 0x01)//Literal
+            {
+                result[0] = _parameter[1];
+                result[1] = _parameter[2];
+            }
+            else if (_parameter[0] == 0x02 || _parameter[0] == 0x12 || _parameter[0] == 0x22)//Absolute RAM
+            {
+                int a = (int)(((int)_parameter[1] + 0xFF) + ((int)_parameter[2]));
+                result[0] = RAM[a];
+                a++;
+                if (a < RAM.Size)
+                {
+                    result[1] = RAM[a];
+                }
+            }
+            else if (_parameter[0] == 0x03 || _parameter[0] == 0x13 || _parameter[0] == 0x23)//Indirect RAM
+            {
+                int a = (int)(((int)_parameter[1] + 0xFF) + ((int)_parameter[2]));
+                a += RREF.ToInt();
+
+                if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around. We could throw an exception but it is a technically valid instruction.
+                                                     //If you overflow your offset RAM address, it's your own darn fault!
+                result[0] = RAM[a];
+                a++;
+                if (a < RAM.Size) { result[1] = RAM[a]; }
+            }
+            else if (_parameter[0] == 0x04 || _parameter[0] == 0x14 || _parameter[0] == 0x24)//Direct address stored in a register
+            {
+                byte[] data = getRegisterFromID(_parameter[2]);
+                int a = (int)(((int)data[0] + 0xFF) + ((int)data[1]));
+
+                result[0] = RAM[a];
+                a++;
+                if (a < RAM.Size)
+                {
+                    result[1] = RAM[a];
+                }
+            }
+            else if (_parameter[0] == 0x05 || _parameter[0] == 0x15 || _parameter[0] == 0x25)//Indirect RAM stored in a register
+            {
+                byte[] data = getRegisterFromID(_parameter[2]);
+                int a = (int)(((int)data[0] + 0xFF) + ((int)data[1]));
+                a += RREF.ToInt();
+
+                if (a >= RAM.Size) { a -= RAM.Size; }//Wrap around. We could throw an exception but it is a technically valid instruction.
+                                                     //If you overflow your offset RAM address, it's your own darn fault!
+                result[0] = RAM[a];
+                a++;
+                if (a < RAM.Size) { result[1] = RAM[a]; }
+            }
+
+            //Check for Byte modes
+            if (_parameter[0] >= 0x10)
+            {
+                if (_parameter[0] >= 0x10 && _parameter[0] <= 0x1F)//Lower byte
+                {
+                    result[0] = 0x00;
+                }
+                else if (_parameter[0] >= 0x20 && _parameter[0] <= 0x2F)//Upper byte
+                {
+                    result[0] = result[1];
+                    result[1] = 0x00;
+                }
+            }
+
+            return result;
+        }
+
+        private void setRegisterFromID(byte id, byte[] value, int mode)
+        {
+            //Mode:
+            // 0:   16-bit word
+            // 1:   Lower byte, value[1]
+            // 2:   Upper byte, value[0]
+
             switch (id)
             {
                 case 0x00:
-                    PC = (Register)value;
+                    if (mode == 0) { PC = (Register)value; }
+                    else if (mode == 1) { PC.LowerByte = value[1]; }
+                    else if (mode == 2) { PC.UpperByte = value[1]; }
                     break;
 
                 case 0x01:
-                    STAT = (StatusRegister)value;
+                    if (mode == 0) { STAT = (StatusRegister)value; }
+                    else if (mode == 1) { STAT.LowerByte = value[1]; }
+                    else if (mode == 2) { STAT.UpperByte = value[1]; }
                     break;
 
                 case 0x02:
-                    SUBR = (Register)value;
+                    if (mode == 0) { SUBR = (Register)value; }
+                    else if (mode == 1) { SUBR.LowerByte = value[1]; }
+                    else if (mode == 2) { SUBR.UpperByte = value[1]; }
                     break;
 
                 case 0x03:
-                    PSTR = (Register)value;
+                    if (mode == 0) { PSTR = (Register)value; }
+                    else if (mode == 1) { PSTR.LowerByte = value[1]; }
+                    else if (mode == 2) { PSTR.UpperByte = value[1]; }
                     break;
 
                 case 0x04:
-                    PEND = (Register)value;
+                    if (mode == 0) { PEND = (Register)value; }
+                    else if (mode == 1) { PEND.LowerByte = value[1]; }
+                    else if (mode == 2) { PEND.UpperByte = value[1]; }
                     break;
 
                 case 0x05:
-                    RAND = (Register)value;
-                    break;
+                    throw new Exception("\nCannot store data in RAND\n");
+                //break;
 
                 case 0x06:
-                    RREF = (Register)value;
+                    if (mode == 0) { RREF = (Register)value; }
+                    else if (mode == 1) { RREF.LowerByte = value[1]; }
+                    else if (mode == 2) { RREF.UpperByte = value[1]; }
+                    break;
+
+                case 0x07:
+                    if (mode == 0) { PAGE = (Register)value; }
+                    else if (mode == 1) { PAGE.LowerByte = value[1]; }
+                    else if (mode == 2) { PAGE.UpperByte = value[1]; }
+                    break;
+
+                case 0x08:
+                    if (mode == 0) { MEMS = (Register)value; }
+                    else if (mode == 1) { MEMS.LowerByte = value[1]; }
+                    else if (mode == 2) { MEMS.UpperByte = value[1]; }
+                    break;
+
+                case 0x09:
+                    if (mode == 0) { PEEK = (Register)value; }
+                    else if (mode == 1) { PEEK.LowerByte = value[1]; }
+                    else if (mode == 2) { PEEK.UpperByte = value[1]; }
                     break;
 
                 case 0xF0:
-                    USR0 = (Register)value;
+                    if (mode == 0) { USR0 = (Register)value; }
+                    else if (mode == 1) { USR0.LowerByte = value[1]; }
+                    else if (mode == 2) { USR0.UpperByte = value[1]; }
                     break;
 
                 case 0xF1:
-                    USR1 = (Register)value;
+                    if (mode == 0) { USR1 = (Register)value; }
+                    else if (mode == 1) { USR1.LowerByte = value[1]; }
+                    else if (mode == 2) { USR1.UpperByte = value[1]; }
                     break;
 
                 case 0xF2:
-                    USR2 = (Register)value;
+                    if (mode == 0) { USR2 = (Register)value; }
+                    else if (mode == 1) { USR2.LowerByte = value[1]; }
+                    else if (mode == 2) { USR2.UpperByte = value[1]; }
                     break;
 
                 case 0xF3:
-                    USR3 = (Register)value;
+                    if (mode == 0) { USR3 = (Register)value; }
+                    else if (mode == 1) { USR3.LowerByte = value[1]; }
+                    else if (mode == 2) { USR3.UpperByte = value[1]; }
                     break;
 
                 case 0xF4:
-                    USR4 = (Register)value;
+                    if (mode == 0) { USR4 = (Register)value; }
+                    else if (mode == 1) { USR4.LowerByte = value[1]; }
+                    else if (mode == 2) { USR4.UpperByte = value[1]; }
                     break;
 
                 case 0xF5:
-                    USR5 = (Register)value;
+                    if (mode == 0) { USR5 = (Register)value; }
+                    else if (mode == 1) { USR5.LowerByte = value[1]; }
+                    else if (mode == 2) { USR5.UpperByte = value[1]; }
                     break;
 
                 case 0xF6:
-                    USR6 = (Register)value;
+                    if (mode == 0) { USR6 = (Register)value; }
+                    else if (mode == 1) { USR6.LowerByte = value[1]; }
+                    else if (mode == 2) { USR6.UpperByte = value[1]; }
                     break;
 
                 case 0xF7:
-                    USR7 = (Register)value;
+                    if (mode == 0) { USR7 = (Register)value; }
+                    else if (mode == 1) { USR7.LowerByte = value[1]; }
+                    else if (mode == 2) { USR7.UpperByte = value[1]; }
                     break;
 
                 case 0xF8:
-                    USR8 = (Register)value;
+                    if (mode == 0) { USR8 = (Register)value; }
+                    else if (mode == 1) { USR8.LowerByte = value[1]; }
+                    else if (mode == 2) { USR8.UpperByte = value[1]; }
                     break;
 
                 case 0xF9:
-                    USR9 = (Register)value;
+                    if (mode == 0) { USR9 = (Register)value; }
+                    else if (mode == 1) { USR9.LowerByte = value[1]; }
+                    else if (mode == 2) { USR9.UpperByte = value[1]; }
                     break;
 
                 case 0xFA:
-                    USRA = (Register)value;
+                    if (mode == 0) { USRA = (Register)value; }
+                    else if (mode == 1) { USRA.LowerByte = value[1]; }
+                    else if (mode == 2) { USRA.UpperByte = value[1]; }
                     break;
 
                 case 0xFB:
-                    USRB = (Register)value;
+                    if (mode == 0) { USRB = (Register)value; }
+                    else if (mode == 1) { USRB.LowerByte = value[1]; }
+                    else if (mode == 2) { USRB.UpperByte = value[1]; }
                     break;
 
                 case 0xFC:
-                    USRC = (Register)value;
+                    if (mode == 0) { USRC = (Register)value; }
+                    else if (mode == 1) { USRC.LowerByte = value[1]; }
+                    else if (mode == 2) { USRC.UpperByte = value[1]; }
                     break;
 
                 case 0xFD:
-                    USRD = (Register)value;
+                    if (mode == 0) { USRD = (Register)value; }
+                    else if (mode == 1) { USRD.LowerByte = value[1]; }
+                    else if (mode == 2) { USRD.UpperByte = value[1]; }
                     break;
 
                 case 0xFE:
-                    USRE = (Register)value;
+                    if (mode == 0) { USRE = (Register)value; }
+                    else if (mode == 1) { USRE.LowerByte = value[1]; }
+                    else if (mode == 2) { USRE.UpperByte = value[1]; }
                     break;
 
                 case 0xFF:
-                    USRF = (Register)value;
+                    if (mode == 0) { USRF = (Register)value; }
+                    else if (mode == 1) { USRF.LowerByte = value[1]; }
+                    else if (mode == 2) { USRF.UpperByte = value[1]; }
                     break;
 
                 default:

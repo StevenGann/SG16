@@ -68,6 +68,11 @@ instruction.
 NOTE: Writing to @PC is a bad idea.
 	MOVE x0000 @PC	# Don't do that.
 
+NOTE: The flexible nature of indirect addressing makes it entirely
+possible to reference an address far beyond the maximum address of
+0xFFFF, all the way to 0x1FFFE. Adresses above 0xFFFF should simply
+wrap back around to 0x0000. 
+
 --------------------------Status Flags Register
 Lower Byte
 Bit-----Name------------Description
