@@ -897,344 +897,374 @@ namespace SG16
 
         private void ADD(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+            //==================================
+            //ADD Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Stores the sum of Arg1 and Arg2 at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data1 = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
+            {
+                data2 = getDataFromParameter(Arg2);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    int result = data1[1] + data2[1];
+                    if (result > (int)byte.MaxValue) { result -= (int)byte.MaxValue; }
+                    data[1] = (byte)result;
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    int result = data1[0] + data2[0];
+                    if (result > (int)byte.MaxValue) { result -= (int)byte.MaxValue; }
+                    data[1] = (byte)result;
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
+                UInt16 arg2Word = (UInt16)(data2[0] << 8 | data2[1]);
                 UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
 
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
+                data = UInt16ToByteArray(resultWord);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
-
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = RAM.Get16(Arg2);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word + arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
+            setDataFromParameter(Arg2, data);
         }
 
         private void SUBT(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            //==================================
+            //SUBT Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Stores (Arg2 - Arg1) at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
-
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
-
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
             {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    int result = data2[1] - data1[1];
+                    if (result < 0) { result = (int)byte.MaxValue - result; }
+                    data[1] = (byte)result;
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    int result = data2[0] - data1[0];
+                    if (result < 0) { result = (int)byte.MaxValue - result; }
+                    data[1] = (byte)result;
+                }
             }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            else
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = RAM.Get16(Arg1);
+                UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
+                UInt16 arg2Word = (UInt16)(data2[0] << 8 | data2[1]);
+                UInt16 resultWord = (UInt16)(arg2Word - arg1Word);
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
+                data = UInt16ToByteArray(resultWord);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = RAM.Get16(Arg1);
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = RAM.Get16(Arg2);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
+            setDataFromParameter(Arg2, data);
         }
 
         private void INCR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //ADD Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Stores the sum of Arg1 and Arg2 at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                data1 = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data1;
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    int result = data1[1] + 1;
+                    if (result > (int)byte.MaxValue) { result -= (int)byte.MaxValue; }
+                    data[1] = (byte)result;
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    int result = data1[0] + 1;
+                    if (result > (int)byte.MaxValue) { result -= (int)byte.MaxValue; }
+                    data[1] = (byte)result;
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
                 UInt16 resultWord = (UInt16)(arg1Word + 1);
 
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg1[2], result, 0);
+                data = UInt16ToByteArray(resultWord);
             }
-            else if (Arg1[0] == 0x02) //Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word + 1);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg1, result);
-            }
+
+            setDataFromParameter(Arg1, data);
         }
 
         private void DECR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //ADD Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Stores the sum of Arg1 and Arg2 at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                data1 = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data1;
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    int result = data1[1] - 1;
+                    if (result < 0) { result = (int)byte.MaxValue - result; }
+                    data[1] = (byte)result;
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    int result = data1[0] - 1;
+                    if (result < 0) { result = (int)byte.MaxValue - result; }
+                    data[1] = (byte)result;
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
                 UInt16 resultWord = (UInt16)(arg1Word - 1);
 
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg1[2], result, 0);
+                data = UInt16ToByteArray(resultWord);
             }
-            else if (Arg1[0] == 0x02) //Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word - 1);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg1, result);
-            }
+
+            setDataFromParameter(Arg1, data);
         }
 
         private void MULT(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+            //==================================
+            //ADD Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Stores the sum of Arg1 and Arg2 at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data1 = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
+            {
+                data2 = getDataFromParameter(Arg2);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    int result = data1[1] * data2[1];
+                    while (result > (int)byte.MaxValue) { result -= (int)byte.MaxValue; }
+                    data[1] = (byte)result;
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    int result = data1[0] * data2[0];
+                    while (result > (int)byte.MaxValue) { result -= (int)byte.MaxValue; }
+                    data[1] = (byte)result;
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
+                UInt16 arg2Word = (UInt16)(data2[0] << 8 | data2[1]);
                 UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
 
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
+                data = UInt16ToByteArray(resultWord);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
-
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = RAM.Get16(Arg2);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg1Word * arg2Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
+            setDataFromParameter(Arg2, data);
         }
 
         private void DIVI(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+            //==================================
+            //ADD Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Stores the sum of Arg1 and Arg2 at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data1 = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
+            {
+                data2 = getDataFromParameter(Arg2);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    int result = data2[1] / data1[1];
+                    data[1] = (byte)result;
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    int result = data2[0] / data1[0];
+                    data[1] = (byte)result;
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
+                UInt16 arg2Word = (UInt16)(data2[0] << 8 | data2[1]);
                 UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
 
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
+                data = UInt16ToByteArray(resultWord);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
 
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
-
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = RAM.Get16(Arg2);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(arg2Word / arg1Word);
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg2, result);
-            }
+            setDataFromParameter(Arg2, data);
         }
 
         private void EXPO(byte[] Arg1, byte[] Arg2)
