@@ -350,7 +350,7 @@ namespace SG16
         private void SWAP(byte[] Arg1, byte[] Arg2)
         {
             //==================================
-            //MOVE Arg1 Arg2
+            //SWAP Arg1 Arg2
             //----------------------------------
             //Supports all data types, EXCEPT literals
             //Swaps values between locations Arg1 and Arg2
@@ -393,344 +393,506 @@ namespace SG16
 
         private void ROTL(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //ROTL Arg1
+            //----------------------------------
+            //Supports all data types EXCEPT literals
+            //Binary rotates left
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||//
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg1Word = (UInt16)(arg1Word << 1);
-                byte[] result = UInt16ToByteArray(arg1Word);
-                setRegisterFromID(Arg1[2], result, 0);
+                data = getDataFromParameter(Arg1);
             }
+            else { throw new Exception("Unsupported data type"); }
+
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)(data[1] << 1);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)(data[0] << 1);
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data[1] << 8 | data[0]);
+                arg1Word = (UInt16)(arg1Word << 1);
+                data = UInt16ToByteArray(arg1Word);
+            }
+
+            setDataFromParameter(Arg1, data);
         }
 
         private void ROTR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //ROTR Arg1
+            //----------------------------------
+            //Supports all data types EXCEPT literals
+            //Binary rotates right
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||//
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg1Word = (UInt16)(arg1Word >> 1);
-                byte[] result = UInt16ToByteArray(arg1Word);
-                setRegisterFromID(Arg1[2], result, 0);
+                data = getDataFromParameter(Arg1);
             }
+            else { throw new Exception("Unsupported data type"); }
+
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)(data[1] >> 1);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)(data[0] >> 1);
+                }
+            }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data[1] << 8 | data[0]);
+                arg1Word = (UInt16)(arg1Word >> 1);
+                data = UInt16ToByteArray(arg1Word);
+            }
+
+            setDataFromParameter(Arg1, data);
         }
 
         private void OR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register OR Register
+            //==================================
+            //OR Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Logic OR of Arg1 and Arg2 is stored at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                byte[] data = new byte[2];
-                data[0] = (byte)((int)arg1Data[0] | (int)arg2Data[0]);
-                data[1] = (byte)((int)arg1Data[1] | (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal OR Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                throw new NotImplementedException();
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM OR Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
             {
-                throw new NotImplementedException();
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)((int)data1[1] | (int)data2[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)((int)data1[0] | (int)data2[0]);
+                }
             }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM OR Register
+            else
             {
-                throw new NotImplementedException();
+                data[0] = (byte)((int)data1[0] | (int)data2[0]);
+                data[1] = (byte)((int)data1[1] | (int)data2[1]);
             }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register OR Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal OR Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM OR Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM OR Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register OR Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal OR Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM OR Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM OR Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void NOR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            //==================================
+            //NOR Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Logical NOR of Arg1 and Arg2 is stored at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                byte[] data = new byte[2];
-                data[0] = (byte)~((int)arg1Data[0] | (int)arg2Data[0]);
-                data[1] = (byte)~((int)arg1Data[1] | (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
+            {
+                data2 = getDataFromParameter(Arg2);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
+            {
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)~((int)data1[1] | (int)data2[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)~((int)data1[0] | (int)data2[0]);
+                }
+            }
+            else
+            {
+                data[0] = (byte)~((int)data1[0] | (int)data2[0]);
+                data[1] = (byte)~((int)data1[1] | (int)data2[1]);
+            }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void XOR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register XOR Register
+            //==================================
+            //XOR Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Logical XOR of Arg1 and Arg2 is stored at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                byte[] data = new byte[2];
-                data[0] = (byte)((int)arg1Data[0] ^ (int)arg2Data[0]);
-                data[1] = (byte)((int)arg1Data[1] ^ (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal XOR Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                throw new NotImplementedException();
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute XOR AND Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
             {
-                throw new NotImplementedException();
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)((int)data1[1] ^ (int)data2[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)((int)data1[0] ^ (int)data2[0]);
+                }
             }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect XOR AND Register
+            else
             {
-                throw new NotImplementedException();
+                data[0] = (byte)((int)data1[0] ^ (int)data2[0]);
+                data[1] = (byte)((int)data1[1] ^ (int)data2[1]);
             }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register XOR Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal XOR Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute XOR AND Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect XOR AND Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register XOR Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal XOR Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute XOR AND Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect XOR AND Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void XNOR(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            //==================================
+            //XNOR Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Logical XNOR of Arg1 and Arg2 is stored at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                byte[] data = new byte[2];
-                data[0] = (byte)~((int)arg1Data[0] ^ (int)arg2Data[0]);
-                data[1] = (byte)~((int)arg1Data[1] ^ (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                throw new NotImplementedException();
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
             {
-                throw new NotImplementedException();
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)~((int)data1[1] ^ (int)data2[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)~((int)data1[0] ^ (int)data2[0]);
+                }
             }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM, Register
+            else
             {
-                throw new NotImplementedException();
+                data[0] = (byte)~((int)data1[0] ^ (int)data2[0]);
+                data[1] = (byte)~((int)data1[1] ^ (int)data2[1]);
             }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void AND(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register AND Register
+            //==================================
+            //AND Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Logical AND of Arg1 and Arg2 is stored at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                byte[] data = new byte[2];
-                data[0] = (byte)((int)arg1Data[0] & (int)arg2Data[0]);
-                data[1] = (byte)((int)arg1Data[1] & (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal AND Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                throw new NotImplementedException();
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM AND Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
             {
-                throw new NotImplementedException();
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)((int)data1[1] & (int)data2[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)((int)data1[0] & (int)data2[0]);
+                }
             }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM AND Register
+            else
             {
-                throw new NotImplementedException();
+                data[0] = (byte)((int)data1[0] & (int)data2[0]);
+                data[1] = (byte)((int)data1[1] & (int)data2[1]);
             }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register AND Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal AND Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM AND Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM AND Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register AND Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal AND Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM AND Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM AND Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void NAND(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
+            //==================================
+            //NAND Arg1 Arg2
+            //----------------------------------
+            //Supports all data types
+            //Logical NAND of Arg1 and Arg2 is stored at Arg2
+            //==================================
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-                byte[] data = new byte[2];
-                data[0] = (byte)~((int)arg1Data[0] & (int)arg2Data[0]);
-                data[1] = (byte)~((int)arg1Data[1] & (int)arg2Data[1]);
-                setRegisterFromID(Arg2[2], data, 0);
+                data1 = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                //Arg2Type == 0x01 ||//Cannot store result in a literal
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                throw new NotImplementedException();
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            else { throw new Exception("Unsupported data type"); }
+
+            byte[] data = data2;
+            if (Arg1[0] >= 0x10)
             {
-                throw new NotImplementedException();
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)~((int)data1[1] & (int)data2[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)~((int)data1[0] & (int)data2[0]);
+                }
             }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x00) //Indirect RAM, Register
+            else
             {
-                throw new NotImplementedException();
+                data[0] = (byte)~((int)data1[0] & (int)data2[0]);
+                data[1] = (byte)~((int)data1[1] & (int)data2[1]);
             }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x02) //Indirect RAM, Absolute RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x03) //Register, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x03) //Literal, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x03) //Absolute RAM, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
-            else if (Arg1[0] == 0x03 && Arg2[0] == 0x03) //Indirect RAM, Indirect RAM
-            {
-                throw new NotImplementedException();
-            }
+
+            setDataFromParameter(Arg2, data1);
         }
 
         private void NOT(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //NOT Arg1
+            //----------------------------------
+            //Supports all data types EXCEPT literals
+            //Inverts the data stored in Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                //Arg1Type == 0x01 ||//Cannot store the result in a literal
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg1Word = (UInt16)~arg1Word;
-                byte[] result = UInt16ToByteArray(arg1Word);
-                setRegisterFromID(Arg1[2], result, 0);
+                data = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x02) //Absolute RAM
+            else { throw new Exception("Unsupported data type"); }
+
+            if (Arg1[0] >= 0x10)
             {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 resultWord = (UInt16)~arg1Word;
-                byte[] result = UInt16ToByteArray(resultWord);
-                RAM.Set16(Arg1, result);
+                if (Arg1[0] >= 0x10 && Arg1[0] <= 0x1F)//Lower byte
+                {
+                    data[1] = (byte)(~data[1]);
+                }
+                else if (Arg1[0] >= 0x20 && Arg1[0] <= 0x2F)//Upper byte
+                {
+                    data[1] = (byte)(~data[0]);
+                }
             }
+            else
+            {
+                UInt16 arg1Word = (UInt16)(data[1] << 8 | data[0]);
+                arg1Word = (UInt16)(~arg1Word);
+                data = UInt16ToByteArray(arg1Word);
+            }
+
+            setDataFromParameter(Arg1, data);
         }
 
         private void ADD(byte[] Arg1, byte[] Arg2)
