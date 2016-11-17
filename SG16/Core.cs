@@ -1269,64 +1269,63 @@ namespace SG16
 
         private void EXPO(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
-
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                UInt16 arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-                UInt16 resultWord = (UInt16)(Math.Pow(arg2Word, arg1Word));
-
-                byte[] result = UInt16ToByteArray(resultWord);
-                setRegisterFromID(Arg2[2], result, 0);
-            }
+            throw new NotImplementedException();
         }
 
         private void GOTO(byte[] Arg1, byte[] Arg2)
         {
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //GOTO Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Copies value from Arg1 into PC
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                PC = (Register)arg1Word;
+                data = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01) //Literal
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                PC = (Register)arg1Word;
-            }
-            else if (Arg1[0] == 0x02) //Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                PC = (Register)arg1Word;
-            }
+            else { throw new Exception("Unsupported data type"); }
+
+            PC = (Register)data;
         }
 
         private void EVAL(byte[] Arg1, byte[] Arg2)
         {
-            UInt16 arg1Word = 0;
-            if (Arg1[0] == 0x00) //Register
+            //==================================
+            //EVAL Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Evaluates the data at Arg1 and sets STAT accordingly
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
+                data = getDataFromParameter(Arg1);
             }
-            else if (Arg1[0] == 0x01) //Literal
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-            }
-            else if (Arg1[0] == 0x02) //Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-            }
+            else { throw new Exception("Unsupported data type"); }
+
+            UInt16 arg1Word = (UInt16)(data[0] << 8 | data[1]);
 
             if (arg1Word == 0x00)
             {
