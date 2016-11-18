@@ -1343,59 +1343,45 @@ namespace SG16
 
         private void COMP(byte[] Arg1, byte[] Arg2)
         {
-            UInt16 arg1Word = 0;
-            UInt16 arg2Word = 0;
-            if (Arg1[0] == 0x00 && Arg2[0] == 0x00) //Register, Register
-            {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+            //==================================
+            //COMP Arg1 Arg2
+            //----------------------------------
+            //Supports all valid data types
+            //Compares Arg1 against Arg2 and sets STAT accordingly
+            //==================================
 
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-            }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x00) //Literal, Register
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+            byte[] data1 = new byte[2];
+            data1[0] = 0x00;
+            data1[1] = 0x00;
+            byte[] data2 = new byte[2];
+            data2[0] = 0x00;
+            data2[1] = 0x00;
 
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x00) //Absolute RAM, Register
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
             {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = getRegisterFromID(Arg2[2]);
+                data1 = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+            UInt16 arg1Word = (UInt16)(data1[0] << 8 | data1[1]);
 
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-            }
-            else if (Arg1[0] == 0x00 && Arg2[0] == 0x02) //Register to Absolute RAM
+            byte Arg2Type = Arg2[0];
+            if (Arg2Type == 0x00 || Arg2Type == 0x10 || Arg2Type == 0x20 ||
+                Arg2Type == 0x01 ||
+                Arg2Type == 0x02 || Arg2Type == 0x12 || Arg2Type == 0x22 ||
+                Arg2Type == 0x03 || Arg2Type == 0x13 || Arg2Type == 0x23 ||
+                Arg2Type == 0x04 || Arg2Type == 0x14 || Arg2Type == 0x24 ||
+                Arg2Type == 0x05 || Arg2Type == 0x15 || Arg2Type == 0x25)
             {
-                byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
+                data2 = getDataFromParameter(Arg2);
             }
-            else if (Arg1[0] == 0x01 && Arg2[0] == 0x02) //Literal, Absolute RAM
-            {
-                byte[] arg1Data = new byte[2];
-                arg1Data[0] = Arg1[2];
-                arg1Data[1] = Arg1[1];
-                byte[] arg2Data = RAM.Get16(Arg1);
-
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-            }
-            else if (Arg1[0] == 0x02 && Arg2[0] == 0x02) //Absolute RAM, Absolute RAM
-            {
-                byte[] arg1Data = RAM.Get16(Arg1);
-                byte[] arg2Data = RAM.Get16(Arg2);
-                arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                arg2Word = (UInt16)(arg2Data[1] << 8 | arg2Data[0]);
-            }
+            else { throw new Exception("Unsupported data type"); }
+            UInt16 arg2Word = (UInt16)(data2[0] << 8 | data2[1]);
 
             STAT.Z = (arg1Word == 0);
             STAT.E = (arg1Word == arg2Word);
@@ -1405,174 +1391,227 @@ namespace SG16
 
         private void JMPZ(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //JMPZ Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //If the Z flag is set, PC is set to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
             if (STAT.Z)
             {
-                if (Arg1[0] == 0x00) //Register
-                {
-                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x01) //Literal
-                {
-                    byte[] arg1Data = new byte[2];
-                    arg1Data[0] = Arg1[2];
-                    arg1Data[1] = Arg1[1];
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x02) //Absolute RAM
-                {
-                    byte[] arg1Data = RAM.Get16(Arg1);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
+                PC = (Register)data;
             }
         }
 
         private void JMGZ(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //JMPZ Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //If the Z flag is not set, PC is set to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
             if (!STAT.Z)
             {
-                if (Arg1[0] == 0x00) //Register
-                {
-                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x01) //Literal
-                {
-                    byte[] arg1Data = new byte[2];
-                    arg1Data[0] = Arg1[2];
-                    arg1Data[1] = Arg1[1];
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x02) //Absolute RAM
-                {
-                    byte[] arg1Data = RAM.Get16(Arg1);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
+                PC = (Register)data;
             }
         }
 
         private void JMLZ(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //JMLZ Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //If the N flag is set, PC is set to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
             if (STAT.N)
             {
-                if (Arg1[0] == 0x00) //Register
-                {
-                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x01) //Literal
-                {
-                    byte[] arg1Data = new byte[2];
-                    arg1Data[0] = Arg1[2];
-                    arg1Data[1] = Arg1[1];
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x02) //Absolute RAM
-                {
-                    byte[] arg1Data = RAM.Get16(Arg1);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
+                PC = (Register)data;
             }
         }
 
         private void GSUB(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //GSUB Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Stores PC in SUBR, sets PC to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            UInt16 arg1Word = (UInt16)(data[0] << 8 | data[1]);
             SUBR = (Register)PC.ToInt();
-            PC = (Register)Arg1;
+            PC = (Register)arg1Word;
         }
 
         private void RTRN(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //RTRN
+            //----------------------------------
+            //Sets PC to the address after SUBR
+            //==================================
             PC = (Register)(SUBR.ToInt() + 1);
         }
 
         private void JMPE(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //JMPE Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //If the E flag is set, PC is set to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
             if (STAT.E)
             {
-                if (Arg1[0] == 0x00) //Register
-                {
-                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x01) //Literal
-                {
-                    byte[] arg1Data = new byte[2];
-                    arg1Data[0] = Arg1[2];
-                    arg1Data[1] = Arg1[1];
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x02) //Absolute RAM
-                {
-                    byte[] arg1Data = RAM.Get16(Arg1);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
+                PC = (Register)data;
             }
         }
 
         private void JMPG(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //JMPG Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //If the G flag is set, PC is set to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
             if (STAT.G)
             {
-                if (Arg1[0] == 0x00) //Register
-                {
-                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x01) //Literal
-                {
-                    byte[] arg1Data = new byte[2];
-                    arg1Data[0] = Arg1[2];
-                    arg1Data[1] = Arg1[1];
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x02) //Absolute RAM
-                {
-                    byte[] arg1Data = RAM.Get16(Arg1);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
+                PC = (Register)data;
             }
         }
 
         private void JMPL(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
+            //JMPL Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //If the L flag is set but not E, PC is set to Arg1
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
             if (STAT.L && !STAT.E)
             {
-                if (Arg1[0] == 0x00) //Register
-                {
-                    byte[] arg1Data = getRegisterFromID(Arg1[2]);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x01) //Literal
-                {
-                    byte[] arg1Data = new byte[2];
-                    arg1Data[0] = Arg1[2];
-                    arg1Data[1] = Arg1[1];
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
-                else if (Arg1[0] == 0x02) //Absolute RAM
-                {
-                    byte[] arg1Data = RAM.Get16(Arg1);
-                    UInt16 arg1Word = (UInt16)(arg1Data[1] << 8 | arg1Data[0]);
-                    PC = (Register)arg1Word;
-                }
+                PC = (Register)data;
             }
         }
 
