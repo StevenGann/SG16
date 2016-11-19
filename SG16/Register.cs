@@ -11,8 +11,6 @@ namespace SG16
         public byte UpperByte = 0x00;
         public byte LowerByte = 0x00;
 
-        
-
         public void Increment(uint d)
         {
             if ((d + (uint)LowerByte) <= 255)
@@ -44,7 +42,7 @@ namespace SG16
         public static explicit operator Register(UInt16 b)
         {
             Register result = new Register();
-            
+
             if (b <= 0xFF)
             {
                 result.LowerByte = Convert.ToByte(b);
@@ -102,7 +100,6 @@ namespace SG16
             {
                 return UnsetBit(b, pos);
             }
-
         }
     }
 }

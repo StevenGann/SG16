@@ -13,7 +13,7 @@ namespace SG16
         public Register SUBR = (Register)0x00;
         public Register PSTR = (Register)0x00;
         public Register PEND = (Register)0x00;
-        public Register RAND = (Register)0x00; //RAND will be dealt with differently.
+        public RandomRegister RAND = new RandomRegister();
         public Register RREF = (Register)0x00;
         public Register PAGE = (Register)0x00;
         public Register MEMS = (Register)0x00;
@@ -50,7 +50,9 @@ namespace SG16
 
         public Memory RAM = new Memory();
 
-        private Random RNG = new Random();
+        public Memory ROM = new Memory();
+
+        private int lastPAGE = 0;
 
         private AssemblyTable Table = new AssemblyTable();
 
@@ -65,11 +67,18 @@ namespace SG16
         {
             if (Debug) { sw = Stopwatch.StartNew(); }
 
+            lastPAGE = PAGE.ToInt();
+
             //Execute Instruction
             Execute(PC.ToInt());
 
             //Advance PC
             PC.Increment(8);
+
+            if (PAGE.ToInt() != lastPAGE)
+            {
+                //Swap RAM pages
+            }
 
             if (Debug)
             {
@@ -2088,7 +2097,8 @@ namespace SG16
                     break;
 
                 case 0x05:
-                    RNG.NextBytes(result);
+                    result[0] = RAND.LowerByte;
+                    result[1] = RAND.UpperByte;
                     break;
 
                 case 0x06:
@@ -2195,8 +2205,8 @@ namespace SG16
                     int n = 0;
                     for (int i = 0; i < length; i++)
                     {
-                        RAM[i + offset] = reader.ReadByte();
-                        chunk[n] = RAM[i + offset];
+                        ROM[i + offset] = reader.ReadByte();
+                        chunk[n] = ROM[i + offset];
                         n++;
                         if (n >= 8)
                         {
