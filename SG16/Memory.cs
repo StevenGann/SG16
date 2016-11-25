@@ -8,9 +8,6 @@ namespace SG16
 {
     public class Memory
     {
-        //I don't like having an array this gigantic.
-        //I've wrapped it in a class so that I can later make it more intelligent.
-        //Perhaps I could store the data in a file?
         public byte[] Data = new byte[65536];
         public int Size = 65536;
 

@@ -57,11 +57,15 @@ namespace SG16
         private AssemblyTable Table = new AssemblyTable();
 
         public string Message = "";
-
-        public bool Debug = false;
+        public string CachePath = Directory.GetCurrentDirectory() + "/cache/";
+        public bool Debug = true;
         public bool Fast = true;
         public bool Verbose = false;
         private Stopwatch sw = new Stopwatch();
+
+        static Core()
+        {
+        }
 
         public long Tick()
         {
@@ -78,6 +82,38 @@ namespace SG16
             if (PAGE.ToInt() != lastPAGE)
             {
                 //Swap RAM pages
+                string oldRAMFile = CachePath + "RAM_Page." + lastPAGE.ToString("00000") + ".dat";
+                using (BinaryWriter writer = new BinaryWriter(File.Open(oldRAMFile, FileMode.Create)))
+                {
+                    for (int i = 0; i < RAM.Size; i++)
+                    {
+                        writer.Write(RAM[i]);
+                    }
+                }
+
+                RAM = new Memory();
+                string newRAMFile = CachePath + "RAM_Page." + PAGE.ToInt().ToString("00000") + ".dat";
+                if (File.Exists(newRAMFile))
+                {
+                    //Load file
+                    using (BinaryReader reader = new BinaryReader(File.Open(newRAMFile, FileMode.Open)))
+                    {
+                        int length = (int)reader.BaseStream.Length;
+                        byte[] chunk = new byte[8];
+                        int n = 0;
+                        for (int i = 0; i < length; i++)
+                        {
+                            ROM[i] = reader.ReadByte();
+                            chunk[n] = ROM[i];
+                            n++;
+                            if (n >= 8 && Debug)
+                            {
+                                n = 0;
+                                Message = "Loaded " + ASM.ByteArrayToString(chunk);
+                            }
+                        }
+                    }
+                }
             }
 
             if (Debug)
@@ -89,6 +125,34 @@ namespace SG16
             else
             {
                 return 0;
+            }
+        }
+
+        public void Initialize()
+        {
+            int i = 0;
+            int j = 0;
+            bool ended = false;
+
+            byte[] chunk = new byte[8];
+
+            while (!ended)
+            {
+                RAM[i] = ROM[i];
+                chunk[j] = ROM[i];
+                i++;
+                j++;
+
+                if (j >= 8)
+                {
+                    j = 0;
+                    if (Table.GetInstruction(chunk[0]) == "END")
+                    {
+                        ended = true;
+                    }
+                }
+
+                if (i >= ROM.Size) { throw new Exception("Unterminated Bootloader"); }
             }
         }
 

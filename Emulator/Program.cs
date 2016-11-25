@@ -23,6 +23,7 @@ namespace Emulator
                     core.LoadROM(0, args[0]);
                     Console.WriteLine("Done!");
                     long time = 0;
+                    core.Initialize();
                     while (core.PC.ToInt() < core.RAM.Data.Length)
                     {
                         time = core.Tick();
