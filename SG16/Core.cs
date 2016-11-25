@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -49,8 +50,12 @@ namespace SG16
         public Register USRF = (Register)0x00;
 
         public Memory RAM = new Memory();
-
         public Memory ROM = new Memory();
+
+        public List<Byte> TXD0buffer = new List<byte>();
+        public List<Byte> TXD1buffer = new List<byte>();
+        public List<Byte> RXD0buffer = new List<byte>();
+        public List<Byte> RXD1buffer = new List<byte>();
 
         private int lastPAGE = 0;
 
