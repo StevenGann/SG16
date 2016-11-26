@@ -52,10 +52,12 @@ namespace SG16
         public Memory RAM = new Memory();
         public Memory ROM = new Memory();
 
-        public List<Byte> TXD0buffer = new List<byte>();
-        public List<Byte> TXD1buffer = new List<byte>();
-        public List<Byte> RXD0buffer = new List<byte>();
-        public List<Byte> RXD1buffer = new List<byte>();
+        public List<byte> TXD0buffer = new List<byte>();
+        public List<byte> TXD1buffer = new List<byte>();
+        public List<byte> RXD0buffer = new List<byte>();
+        public List<byte> RXD1buffer = new List<byte>();
+        public Stack<byte> Stack0 = new Stack<byte>();
+        public Queue<byte> Queue0 = new Queue<byte>();
 
         private int lastPAGE = 0;
 
@@ -1695,7 +1697,37 @@ namespace SG16
 
         private void ENQU(byte[] Arg1, byte[] Arg2)
         {
-            throw new NotImplementedException();
+            //ENQU Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Copies value from Arg1 into the hardware queue
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            if (Arg1Type < 0x10)
+            {
+                Queue0.Enqueue(data[0]);
+                Queue0.Enqueue(data[1]);
+            }
+            else
+            {
+                Queue0.Enqueue(data[1]);
+            }
         }
 
         private void DEQU(byte[] Arg1, byte[] Arg2)
@@ -1705,7 +1737,37 @@ namespace SG16
 
         private void PUSH(byte[] Arg1, byte[] Arg2)
         {
-            throw new NotImplementedException();
+            //PUSH Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Copies value from Arg1 into the hardware stack
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            if (Arg1Type < 0x10)
+            {
+                Stack0.Push(data[0]);
+                Stack0.Push(data[1]);
+            }
+            else
+            {
+                Stack0.Push(data[1]);
+            }
         }
 
         private void POP(byte[] Arg1, byte[] Arg2)
