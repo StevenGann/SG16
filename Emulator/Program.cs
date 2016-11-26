@@ -35,6 +35,12 @@ namespace Emulator
                             Console.Write(" - Took " + Convert.ToString(time) + "ms");
                             Console.Write("\n");
                         }
+
+                        while (core.TXD0buffer.Count > 0)
+                        {
+                            Console.Write((char)core.TXD0buffer[0]);
+                            core.TXD0buffer.RemoveAt(0);
+                        }
                     }
                 }
                 else
