@@ -1817,7 +1817,37 @@ namespace SG16
 
         private void TXD1(byte[] Arg1, byte[] Arg2)
         {
-            throw new NotImplementedException();
+            //TXD1 Arg1
+            //----------------------------------
+            //Supports all valid data types
+            //Copies value from Arg1 into UART1's TX buffer
+            //==================================
+
+            byte[] data = new byte[2];
+            data[0] = 0x00;
+            data[1] = 0x00;
+
+            byte Arg1Type = Arg1[0];
+            if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
+                Arg1Type == 0x01 ||
+                Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
+                Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
+                Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
+                Arg1Type == 0x05 || Arg1Type == 0x15 || Arg1Type == 0x25)
+            {
+                data = getDataFromParameter(Arg1);
+            }
+            else { throw new Exception("Unsupported data type"); }
+
+            if (Arg1Type < 0x10)
+            {
+                TXD1buffer.Add(data[0]);
+                TXD1buffer.Add(data[1]);
+            }
+            else
+            {
+                TXD1buffer.Add(data[1]);
+            }
         }
 
         private void RXD1(byte[] Arg1, byte[] Arg2)
