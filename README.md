@@ -5,7 +5,14 @@
 - Transitioning from a memory-mapped IO model to a data-bus model
 - Eliminating internal RAM (a la microcontroller) in favor of an external RAM interface
 - Heavier focus on future hardware implementation
-- Undoing a LOT of the emulator core
+- Refactoring a LOT of the emulator core
+
+**v1.0:**
+
+- All I/O was memory-mapped and managed almost directly by the ALU
+- Internal RAM restricted to 64kb
+- Designed with TTL logic in mind, limited knowledge of FPGA/CPLD abilities
+- Targeted for microcontroller application, a la MSP-430
 
 # Hardware Description
 
@@ -59,19 +66,19 @@ In a similar vein as multiple execution, I'm trying to picture how multiple CPUs
 
 For a couple years I've kicked around the idea of building a CPU from scratch out of discrete logic gates, but mostly ruled it out as impractical. Instead, I'm working on building an emulator while designing the CPU architecture from the Assembly language level down and then up. As the project has progressed, I've discovered flaws in my designs and learned from experience why classic architectures (486, 68k, Z80) made certain choices.
 
-- [ ] Define Assembly language specification
-- [x] Define processor architecture (in flux)
-- [ ] Assembler
+- [x] Define Assembly language specification
+- [x] Define processor architecture
+- [x] Assembler
 - [ ] Disassembler
-- [ ] Emulator core
+- [x] Emulator core
 - [x] Emulator GUI
 - [ ] Peripheral emulators
 - [ ] Software tools (C, BASIC compilers)
 - [ ] Embedded hardware emulation (Possibly on an ARM MCU)
-- [ ] Physical prototype
+- [ ] Physical prototype (FPGA or CPLD)
 
 **Emulator GUI Features**
-- [ ] Core emulation
+- [x] Core emulation
 - [x] Live view of registers
 - [ ] Peripheral bus emulation
 - [ ] Disassembled view of program code
