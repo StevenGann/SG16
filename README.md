@@ -7,7 +7,7 @@
 - Heavier focus on future hardware implementation
 - Undoing a LOT of the emulator core
 
-#Hardware Description
+# Hardware Description
 
 **CPU:**
 
@@ -90,7 +90,7 @@ For a couple years I've kicked around the idea of building a CPU from scratch ou
 
 As the pure software emulation grows, I am planning out approaches to hardware implementation. A low-end ARM microprocessor should be sufficient to implement an embedded emulator. I have been experimenting with a cheap Altera CPLD, and I hope to work my way up to a full implementation of SG16 on a proper FPGA. A full ASIC is the end goal, but that's stretching into fantasy.
 
-#Implemented Instructions
+# Implemented Instructions
 
 **The instruction set is currently in flux as I plan out the transition to external RAM.**
 
@@ -102,20 +102,22 @@ As the pure software emulation grows, I am planning out approaches to hardware i
 
 |      | R R | L R | A R | I R | R A | L A | A A | I A | R I | L I | A I | I I |
 |-----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| MOVE |  ✔  |  ✔  |  ✔  |    |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
-| SWAP |  ✔  | N/A |     |     |     | N/A |     |     |     | N/A |     |     |       
-|   OR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-|  NOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-|  XOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-| XNOR |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-|  AND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-| NAND |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-|  ADD |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
-| SUBT |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |        
-| MULT |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |        
-| DIVI |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |         
-| EXPO |  ✔  |     |     |     |     |     |     |     |     |     |     |     |       
-| COMP |  ✔  |  ✔  |  ✔  |     |  ✔  |  ✔  |  ✔  |     |     |     |     |     |       
+| MOVE |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |       
+| SWAP |  ✔  | N/A |  ✔  |  ✔  |  ✔  | N/A |  ✔  |  ✔  |  ✔  | N/A |  ✔  |  ✔  |       
+|   OR |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |      
+|  NOR |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |    
+|  XOR |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |    
+| XNOR |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |       
+|  AND |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |      
+| NAND |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  | 
+|  ADD |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |    
+| SUBT |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |      
+| MULT |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |       
+| DIVI |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |       
+| EXPO |     |     |     |     |     |     |     |     |     |     |     |     |       
+| COMP |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |  ✔  |   
+| ROMR |     |     |     |     |     |     |     |     |     |     |     |     |       
+| ROMW |     |     |     |     |     |     |     |     |     |     |     |     |       
 
 **Single Argument**
 - **R** Register
@@ -125,23 +127,31 @@ As the pure software emulation grows, I am planning out approaches to hardware i
 
 |      | R | L | A | I |
 |-----:|:-:|:-:|:-:|:-:|
-|  REF |   | ✔ |
-| ROTL | ✔ |N/A|
-| ROTR | ✔ |N/A|
-|  NOT | ✔ |N/A| ✔ |
-| INCR | ✔ |N/A| ✔ |
-| DECR | ✔ |N/A| ✔ |
-| GOTO | ✔ | ✔ | ✔ |
-| EVAL |
-| JMPZ | ✔ | ✔ | ✔ |
-| JMGZ | ✔ | ✔ | ✔ |
-| JMLZ | ✔ | ✔ | ✔ |
-| GSUB |   | ✔ |
-| JMPE | ✔ | ✔ | ✔ |
-| JMPG | ✔ | ✔ | ✔ |
-| JMPL | ✔ | ✔ | ✔ |
-| ENQU |
-| DEQU |
+|  REF | ✔ | ✔ | ✔ | ✔ |
+| ROTL | ✔ |N/A| ✔ | ✔ |
+| ROTR | ✔ |N/A| ✔ | ✔ |
+|  NOT | ✔ |N/A| ✔ | ✔ |
+| INCR | ✔ |N/A| ✔ | ✔ |
+| DECR | ✔ |N/A| ✔ | ✔ |
+| GOTO | ✔ | ✔ | ✔ | ✔ |
+| EVAL | ✔ | ✔ | ✔ | ✔ |
+| JMPZ | ✔ | ✔ | ✔ | ✔ |
+| JMGZ | ✔ | ✔ | ✔ | ✔ |
+| JMLZ | ✔ | ✔ | ✔ | ✔ |
+| GSUB | ✔ | ✔ | ✔ | ✔ |
+| JMPE | ✔ | ✔ | ✔ | ✔ |
+| JMPG | ✔ | ✔ | ✔ | ✔ |
+| JMPL | ✔ | ✔ | ✔ | ✔ |
+| ENQU | ✔ | ✔ | ✔ | ✔ |
+| DEQU |  |  |  |  |
+| PUSH | ✔ | ✔ | ✔ | ✔ |
+|  POP |  |  |  |  |
+| TXD0 | ✔ | ✔ | ✔ | ✔ |
+| RXD0 |  |  |  |  |
+| TXD1 | ✔ | ✔ | ✔ | ✔ |
+| RXD1 |  |  |  |  |
+
+NOTE: Not all STAT flags are fully implemented yet.
 
 **No Arguments**
 

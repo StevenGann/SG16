@@ -486,7 +486,7 @@ namespace SG16
 
             byte Arg1Type = Arg1[0];
             if (Arg1Type == 0x00 || Arg1Type == 0x10 || Arg1Type == 0x20 ||
-                Arg1Type == 0x01 ||//
+                Arg1Type == 0x01 ||
                 Arg1Type == 0x02 || Arg1Type == 0x12 || Arg1Type == 0x22 ||
                 Arg1Type == 0x03 || Arg1Type == 0x13 || Arg1Type == 0x23 ||
                 Arg1Type == 0x04 || Arg1Type == 0x14 || Arg1Type == 0x24 ||
@@ -1114,10 +1114,10 @@ namespace SG16
         private void INCR(byte[] Arg1, byte[] Arg2)
         {
             //==================================
-            //ADD Arg1 Arg2
+            //INCR Arg1
             //----------------------------------
             //Supports all data types
-            //Stores the sum of Arg1 and Arg2 at Arg2
+            //Increments the contents of Arg1
             //==================================
             byte[] data1 = new byte[2];
             data1[0] = 0x00;
@@ -1165,10 +1165,10 @@ namespace SG16
         private void DECR(byte[] Arg1, byte[] Arg2)
         {
             //==================================
-            //ADD Arg1 Arg2
+            //DECR Arg1
             //----------------------------------
             //Supports all data types
-            //Stores the sum of Arg1 and Arg2 at Arg2
+            //Decrements the contents of Arg1
             //==================================
             byte[] data1 = new byte[2];
             data1[0] = 0x00;
@@ -1216,10 +1216,10 @@ namespace SG16
         private void MULT(byte[] Arg1, byte[] Arg2)
         {
             //==================================
-            //ADD Arg1 Arg2
+            //MULT Arg1 Arg2
             //----------------------------------
             //Supports all data types
-            //Stores the sum of Arg1 and Arg2 at Arg2
+            //Multiplies Arg1 by Arg2 and stores the result in Arg2
             //==================================
             byte[] data1 = new byte[2];
             data1[0] = 0x00;
@@ -1284,10 +1284,10 @@ namespace SG16
         private void DIVI(byte[] Arg1, byte[] Arg2)
         {
             //==================================
-            //ADD Arg1 Arg2
+            //DIVI Arg1 Arg2
             //----------------------------------
             //Supports all data types
-            //Stores the sum of Arg1 and Arg2 at Arg2
+            //Divides Arg1 by Arg2 and stores the result in Arg2
             //==================================
             byte[] data1 = new byte[2];
             data1[0] = 0x00;
@@ -1405,6 +1405,8 @@ namespace SG16
             }
             else { throw new Exception("Unsupported data type"); }
 
+            //TODO: Implement all status flags
+
             UInt16 arg1Word = (UInt16)(data[0] << 8 | data[1]);
 
             if (arg1Word == 0x00)
@@ -1503,7 +1505,7 @@ namespace SG16
         private void JMGZ(byte[] Arg1, byte[] Arg2)
         {
             //==================================
-            //JMPZ Arg1
+            //JMGZ Arg1
             //----------------------------------
             //Supports all valid data types
             //If the Z flag is not set, PC is set to Arg1
@@ -1697,6 +1699,7 @@ namespace SG16
 
         private void ENQU(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
             //ENQU Arg1
             //----------------------------------
             //Supports all valid data types
@@ -1737,6 +1740,7 @@ namespace SG16
 
         private void PUSH(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
             //PUSH Arg1
             //----------------------------------
             //Supports all valid data types
@@ -1777,6 +1781,7 @@ namespace SG16
 
         private void TXD0(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
             //TXD0 Arg1
             //----------------------------------
             //Supports all valid data types
@@ -1817,6 +1822,7 @@ namespace SG16
 
         private void TXD1(byte[] Arg1, byte[] Arg2)
         {
+            //==================================
             //TXD1 Arg1
             //----------------------------------
             //Supports all valid data types
@@ -2252,7 +2258,8 @@ namespace SG16
                     break;
 
                 default:
-                    break;
+                    throw new Exception("\nUnrecognized Register!\n");
+                    //break;
             }
         }
 
