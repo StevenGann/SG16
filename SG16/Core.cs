@@ -165,7 +165,13 @@ namespace SG16
 
         private void Execute(int address)
         {
-            Instruction instruction = new Instruction(RAM.Data, address);
+            Instruction instruction;
+            //If stat.MM == 1
+            //instruction = new Instruction(RAM.Data, address);
+            //else
+            instruction = new Instruction(ROM.Data, address);
+
+
             if (Debug) { Message = "Executing " + ASM.ByteArrayToString(instruction.ToArray()); }
 
             switch (instruction.Opcode)
@@ -2161,6 +2167,18 @@ namespace SG16
                     else if (mode == 2) { PEEK.UpperByte = value[1]; }
                     break;
 
+                case 0xA0:
+                    if (mode == 0) { UART0 = (Register)value; }
+                    else if (mode == 1) { UART0.LowerByte = value[1]; }
+                    else if (mode == 2) { UART0.UpperByte = value[1]; }
+                    break;
+
+                case 0xA1:
+                    if (mode == 0) { UART1 = (Register)value; }
+                    else if (mode == 1) { UART1.LowerByte = value[1]; }
+                    else if (mode == 2) { UART1.UpperByte = value[1]; }
+                    break;
+
                 case 0xF0:
                     if (mode == 0) { USR0 = (Register)value; }
                     else if (mode == 1) { USR0.LowerByte = value[1]; }
@@ -2429,6 +2447,18 @@ namespace SG16
             byte[] result = new byte[2];
 
             result = BitConverter.GetBytes(b);
+
+            return result;
+        }
+
+        public static string BufferToString(List<byte> _buffer)
+        {
+            string result = "";
+
+            foreach(byte b in _buffer)
+            {
+                result += Convert.ToString(Convert.ToChar(b));
+            }
 
             return result;
         }

@@ -68,7 +68,7 @@ namespace EmulatorUI
             }
             else
             {
-                MessageBox.Show("Program Counter has reached the end of RAM");
+                MessageBox.Show("Program Counter has reached the end of memory");
             }
             updateUI();
         }
@@ -107,6 +107,7 @@ namespace EmulatorUI
             }
             else if (tabControl1.SelectedIndex == 2)
             {
+                textBoxTXD0.Text = Core.BufferToString(core.TXD0buffer);
             }
         }
 

@@ -98,6 +98,17 @@ namespace EmulatorUI
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.textBoxRXD0 = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBoxTXD0 = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.textBoxRXD1 = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.textBoxTXD1 = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -111,6 +122,9 @@ namespace EmulatorUI
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabPage7.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -220,6 +234,7 @@ namespace EmulatorUI
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 53);
@@ -681,10 +696,12 @@ namespace EmulatorUI
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.byteViewerRAM.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.Dock = System.Windows.Forms.DockStyle.Fill;
             this.byteViewerRAM.Location = new System.Drawing.Point(3, 3);
             this.byteViewerRAM.Name = "byteViewerRAM";
             this.byteViewerRAM.RowCount = 1;
+            this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.byteViewerRAM.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -806,6 +823,126 @@ namespace EmulatorUI
             this.panel1.Size = new System.Drawing.Size(652, 29);
             this.panel1.TabIndex = 9;
             // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.panel3);
+            this.tabPage7.Controls.Add(this.panel2);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(644, 559);
+            this.tabPage7.TabIndex = 3;
+            this.tabPage7.Text = "Buffers";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.textBoxRXD0);
+            this.panel2.Controls.Add(this.label24);
+            this.panel2.Controls.Add(this.textBoxTXD0);
+            this.panel2.Controls.Add(this.label23);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(638, 84);
+            this.panel2.TabIndex = 4;
+            // 
+            // textBoxRXD0
+            // 
+            this.textBoxRXD0.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxRXD0.Location = new System.Drawing.Point(0, 46);
+            this.textBoxRXD0.Multiline = true;
+            this.textBoxRXD0.Name = "textBoxRXD0";
+            this.textBoxRXD0.ReadOnly = true;
+            this.textBoxRXD0.Size = new System.Drawing.Size(634, 20);
+            this.textBoxRXD0.TabIndex = 7;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label24.Location = new System.Drawing.Point(0, 33);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(36, 13);
+            this.label24.TabIndex = 6;
+            this.label24.Text = "RXD0";
+            // 
+            // textBoxTXD0
+            // 
+            this.textBoxTXD0.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTXD0.Location = new System.Drawing.Point(0, 13);
+            this.textBoxTXD0.Multiline = true;
+            this.textBoxTXD0.Name = "textBoxTXD0";
+            this.textBoxTXD0.ReadOnly = true;
+            this.textBoxTXD0.Size = new System.Drawing.Size(634, 20);
+            this.textBoxTXD0.TabIndex = 5;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label23.Location = new System.Drawing.Point(0, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(35, 13);
+            this.label23.TabIndex = 4;
+            this.label23.Text = "TXD0";
+            // 
+            // panel3
+            // 
+            this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel3.Controls.Add(this.textBoxRXD1);
+            this.panel3.Controls.Add(this.label25);
+            this.panel3.Controls.Add(this.textBoxTXD1);
+            this.panel3.Controls.Add(this.label26);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(3, 87);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(638, 84);
+            this.panel3.TabIndex = 8;
+            // 
+            // textBoxRXD1
+            // 
+            this.textBoxRXD1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxRXD1.Location = new System.Drawing.Point(0, 46);
+            this.textBoxRXD1.Multiline = true;
+            this.textBoxRXD1.Name = "textBoxRXD1";
+            this.textBoxRXD1.ReadOnly = true;
+            this.textBoxRXD1.Size = new System.Drawing.Size(634, 20);
+            this.textBoxRXD1.TabIndex = 7;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label25.Location = new System.Drawing.Point(0, 33);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(36, 13);
+            this.label25.TabIndex = 6;
+            this.label25.Text = "RXD1";
+            // 
+            // textBoxTXD1
+            // 
+            this.textBoxTXD1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTXD1.Location = new System.Drawing.Point(0, 13);
+            this.textBoxTXD1.Multiline = true;
+            this.textBoxTXD1.Name = "textBoxTXD1";
+            this.textBoxTXD1.ReadOnly = true;
+            this.textBoxTXD1.Size = new System.Drawing.Size(634, 20);
+            this.textBoxTXD1.TabIndex = 5;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label26.Location = new System.Drawing.Point(0, 0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(35, 13);
+            this.label26.TabIndex = 4;
+            this.label26.Text = "TXD1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -836,6 +973,11 @@ namespace EmulatorUI
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.tabPage7.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -911,6 +1053,17 @@ namespace EmulatorUI
         private System.Windows.Forms.TextBox textBoxTerminalInput;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TextBox textBoxRXD1;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox textBoxTXD1;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TextBox textBoxRXD0;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBoxTXD0;
+        private System.Windows.Forms.Label label23;
     }
 }
 

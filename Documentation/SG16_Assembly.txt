@@ -89,7 +89,7 @@ Upper Byte
 Bit-----Name------------Description
 8		QO				Set if queue is full
 9		SO				Set if stack is full
-A						[RESERVED]
+A		MM				Set if executing instructions from RAM, unset if from ROM
 B						[RESERVED]
 C						[RESERVED]
 D						[RESERVED]
