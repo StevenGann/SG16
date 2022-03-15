@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembler", "Assembler\Asse
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator", "Emulator\Emulator.csproj", "{51CC3E7B-9A83-4360-85CF-D068F012F8AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmulatorUI", "EmulatorUI\EmulatorUI.csproj", "{EA156A83-D942-410B-8E76-97642AF426C4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disassembler", "Disassembler\Disassembler.csproj", "{485B33C7-5995-4006-B0AB-13292DF0DDA5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,14 +27,6 @@ Global
 		{51CC3E7B-9A83-4360-85CF-D068F012F8AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51CC3E7B-9A83-4360-85CF-D068F012F8AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51CC3E7B-9A83-4360-85CF-D068F012F8AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA156A83-D942-410B-8E76-97642AF426C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA156A83-D942-410B-8E76-97642AF426C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA156A83-D942-410B-8E76-97642AF426C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA156A83-D942-410B-8E76-97642AF426C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{485B33C7-5995-4006-B0AB-13292DF0DDA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{485B33C7-5995-4006-B0AB-13292DF0DDA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{485B33C7-5995-4006-B0AB-13292DF0DDA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{485B33C7-5995-4006-B0AB-13292DF0DDA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
